@@ -1,0 +1,2288 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>terribledevice — V3 TEAL/AMBER</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;0,900;1,300;1,400;1,600&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+            rel="stylesheet"
+        />
+
+        <style>
+            /* ─── RESET ──────────────────────────────────────────────── */
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            html {
+                scroll-behavior: smooth;
+            }
+
+            /* ─── PALETTE ─────────────────────────────────────────────── */
+            :root {
+                --charcoal: #1c2020;
+                --charcoal-mid: #222828;
+                --charcoal-light: #2a3232;
+                --card-bg: #1e2424;
+                --card-border: #2e3a3a;
+
+                --teal: #22978d;
+                --teal-light: #2eb8ac;
+                --teal-dim: #155f5a;
+                --teal-faint: #0d3533;
+
+                --amber: #c8833a;
+                --amber-light: #e0a050;
+                --amber-dim: #7a4f22;
+                --amber-faint: #3a2410;
+
+                --rust: #8b3520;
+                --rust-faint: #2e1208;
+
+                --text-primary: #dde8e6;
+                --text-secondary: #8aa09e;
+                --text-dim: #4a5e5c;
+
+                --rule: #2a3636;
+
+                --font-display: "Zen Dots", sans-serif;
+                --font-ui: "Orbitron", sans-serif;
+                --font-body: "Barlow Condensed", sans-serif;
+                --font-mono: "Space Mono", monospace;
+            }
+
+            /* ─── BASE ────────────────────────────────────────────────── */
+            body {
+                background-color: var(--charcoal);
+                color: var(--text-primary);
+                font-family: var(--font-body);
+                font-size: 16px;
+                line-height: 1.5;
+                min-height: 100vh;
+                overflow-x: hidden;
+            }
+
+            /* ─── SCANLINE OVERLAY ────────────────────────────────────── */
+            body::before {
+                content: "";
+                position: fixed;
+                inset: 0;
+                background: repeating-linear-gradient(
+                    to bottom,
+                    transparent 0px,
+                    transparent 3px,
+                    rgba(0, 0, 0, 0.06) 3px,
+                    rgba(0, 0, 0, 0.06) 4px
+                );
+                pointer-events: none;
+                z-index: 9999;
+            }
+
+            /* ─── NOISE TEXTURE ───────────────────────────────────────── */
+            body::after {
+                content: "";
+                position: fixed;
+                inset: 0;
+                background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+                pointer-events: none;
+                opacity: 0.5;
+                z-index: 9998;
+            }
+
+            /* ─── TICKER ──────────────────────────────────────────────── */
+            .ticker-wrap {
+                background: var(--teal-dim);
+                border-bottom: 1px solid var(--teal-faint);
+                overflow: hidden;
+                white-space: nowrap;
+                position: relative;
+                z-index: 100;
+            }
+            .ticker-inner {
+                display: inline-block;
+                animation: ticker 34s linear infinite;
+                padding: 7px 0;
+            }
+            .ticker-inner span {
+                font-family: var(--font-mono);
+                font-size: 10px;
+                letter-spacing: 0.12em;
+                color: var(--teal-light);
+                text-transform: uppercase;
+                margin-right: 4rem;
+            }
+            .ticker-inner span b {
+                color: var(--amber-light);
+                margin-right: 0.5rem;
+            }
+            @keyframes ticker {
+                0% {
+                    transform: translateX(0);
+                }
+                100% {
+                    transform: translateX(-50%);
+                }
+            }
+
+            /* ─── NAV ─────────────────────────────────────────────────── */
+            .site-nav {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 2rem;
+                height: 56px;
+                border-bottom: 1px solid var(--rule);
+                background: rgba(28, 32, 32, 0.97);
+                backdrop-filter: blur(12px);
+                position: sticky;
+                top: 0;
+                z-index: 200;
+            }
+
+            .nav-wordmark {
+                font-family: var(--font-display);
+                font-size: 18px;
+                text-decoration: none;
+                letter-spacing: 0.02em;
+                background: linear-gradient(
+                    90deg,
+                    var(--amber-light) 0%,
+                    var(--amber) 50%,
+                    var(--teal-light) 100%
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                position: relative;
+            }
+            .nav-wordmark::after {
+                content: "";
+                position: absolute;
+                bottom: -3px;
+                left: 0;
+                width: 100%;
+                height: 1px;
+                background: linear-gradient(
+                    90deg,
+                    var(--amber-dim),
+                    var(--teal-dim),
+                    transparent
+                );
+            }
+
+            .nav-links {
+                display: flex;
+                align-items: center;
+                gap: 2rem;
+                list-style: none;
+            }
+            .nav-links a {
+                font-family: var(--font-ui);
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: 0.18em;
+                text-transform: uppercase;
+                text-decoration: none;
+                color: var(--text-secondary);
+                transition: color 0.15s;
+            }
+            .nav-links a:hover {
+                color: var(--teal-light);
+            }
+            .nav-links a.active {
+                color: var(--teal-light);
+            }
+
+            .nav-pill {
+                display: flex;
+                align-items: center;
+                gap: 0.6rem;
+            }
+            .nav-dot {
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+            }
+            .nav-dot.screen {
+                background: var(--teal);
+                box-shadow: 0 0 6px var(--teal);
+            }
+            .nav-dot.sound {
+                background: var(--amber);
+                box-shadow: 0 0 6px var(--amber);
+            }
+            .nav-dot.iact {
+                background: var(--rust);
+                box-shadow: 0 0 6px var(--rust);
+            }
+
+            .nav-meta {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.1em;
+            }
+
+            /* ─── HERO ────────────────────────────────────────────────── */
+            .hero {
+                position: relative;
+                min-height: 500px;
+                display: flex;
+                align-items: center;
+                overflow: hidden;
+                border-bottom: 1px solid var(--rule);
+            }
+
+            .hero-bg {
+                position: absolute;
+                inset: 0;
+                background:
+                    radial-gradient(
+                        ellipse 70% 80% at 100% 20%,
+                        rgba(34, 151, 141, 0.3) 0%,
+                        transparent 65%
+                    ),
+                    radial-gradient(
+                        ellipse 50% 55% at 0% 100%,
+                        rgba(139, 53, 32, 0.4) 0%,
+                        transparent 60%
+                    ),
+                    radial-gradient(
+                        ellipse 40% 40% at 50% 0%,
+                        rgba(200, 131, 58, 0.08) 0%,
+                        transparent 70%
+                    ),
+                    var(--charcoal);
+            }
+
+            /* subtle grid */
+            .hero-grid {
+                position: absolute;
+                inset: 0;
+                background-image:
+                    linear-gradient(
+                        rgba(34, 151, 141, 0.05) 1px,
+                        transparent 1px
+                    ),
+                    linear-gradient(
+                        90deg,
+                        rgba(34, 151, 141, 0.05) 1px,
+                        transparent 1px
+                    );
+                background-size: 52px 52px;
+            }
+
+            /* diagonal slash */
+            .hero-slash {
+                position: absolute;
+                top: 0;
+                right: 32%;
+                width: 4px;
+                height: 100%;
+                background: linear-gradient(
+                    180deg,
+                    var(--teal-light) 0%,
+                    var(--amber) 100%
+                );
+                transform: skewX(-8deg);
+                opacity: 0.8;
+                box-shadow: 0 0 20px rgba(34, 151, 141, 0.5);
+            }
+
+            .hero-inner {
+                position: relative;
+                z-index: 10;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0;
+                width: 100%;
+                max-width: 1400px;
+                margin: 0 auto;
+                padding: 4.5rem 2rem;
+            }
+
+            .hero-left {
+                padding-right: 4rem;
+                border-right: 1px solid rgba(34, 151, 141, 0.2);
+            }
+
+            .hero-eyebrow {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                margin-bottom: 1.75rem;
+            }
+            .hero-eyebrow-tag {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                color: var(--teal-light);
+                border: 1px solid var(--teal-dim);
+                padding: 3px 9px;
+            }
+            .hero-eyebrow-line {
+                flex: 1;
+                height: 1px;
+                background: linear-gradient(
+                    90deg,
+                    var(--teal-dim),
+                    transparent
+                );
+            }
+
+            .hero-datecode {
+                font-family: var(--font-ui);
+                font-size: 96px;
+                font-weight: 900;
+                line-height: 0.85;
+                letter-spacing: -0.05em;
+                color: var(--charcoal-light);
+                position: absolute;
+                top: 2.5rem;
+                left: 2rem;
+                pointer-events: none;
+                user-select: none;
+                opacity: 0.8;
+            }
+
+            .hero-title {
+                font-family: var(--font-display);
+                font-size: clamp(28px, 3.5vw, 48px);
+                line-height: 1.15;
+                letter-spacing: 0.02em;
+                color: var(--text-primary);
+                margin-bottom: 1.5rem;
+                position: relative;
+            }
+            .hero-title .accent {
+                background: linear-gradient(
+                    90deg,
+                    var(--amber-light),
+                    var(--amber),
+                    var(--teal-light)
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+
+            .hero-deck {
+                font-family: var(--font-body);
+                font-size: 18px;
+                font-weight: 300;
+                font-style: italic;
+                line-height: 1.65;
+                color: var(--text-secondary);
+                max-width: 480px;
+                margin-bottom: 2rem;
+            }
+
+            .hero-meta-row {
+                display: flex;
+                align-items: center;
+                gap: 1.25rem;
+                flex-wrap: wrap;
+                margin-bottom: 2rem;
+            }
+            .hero-pillar-badge {
+                font-family: var(--font-ui);
+                font-size: 8px;
+                font-weight: 700;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                padding: 4px 10px;
+                border: 1px solid var(--teal-dim);
+                color: var(--teal-light);
+            }
+            .hero-author {
+                font-family: var(--font-mono);
+                font-size: 10px;
+                color: var(--amber);
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+            }
+            .hero-read-time {
+                font-family: var(--font-mono);
+                font-size: 10px;
+                color: var(--text-dim);
+                letter-spacing: 0.08em;
+            }
+
+            .hero-cta {
+                display: inline-block;
+                font-family: var(--font-ui);
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                text-decoration: none;
+                color: var(--charcoal);
+                background: linear-gradient(
+                    90deg,
+                    var(--amber),
+                    var(--amber-light)
+                );
+                padding: 12px 26px;
+                transition:
+                    opacity 0.15s,
+                    box-shadow 0.15s;
+            }
+            .hero-cta:hover {
+                opacity: 0.88;
+                box-shadow: 0 0 20px rgba(200, 131, 58, 0.4);
+            }
+
+            /* HUD corners */
+            .hud-corner {
+                position: absolute;
+                width: 16px;
+                height: 16px;
+                pointer-events: none;
+            }
+            .hud-corner.tl {
+                top: 0;
+                left: 0;
+                border-top: 2px solid var(--amber);
+                border-left: 2px solid var(--amber);
+            }
+            .hud-corner.tr {
+                top: 0;
+                right: 0;
+                border-top: 2px solid var(--amber);
+                border-right: 2px solid var(--amber);
+            }
+            .hud-corner.bl {
+                bottom: 0;
+                left: 0;
+                border-bottom: 2px solid var(--amber);
+                border-left: 2px solid var(--amber);
+            }
+            .hud-corner.br {
+                bottom: 0;
+                right: 0;
+                border-bottom: 2px solid var(--amber);
+                border-right: 2px solid var(--amber);
+            }
+
+            .hud-corner.tl.teal {
+                border-color: var(--teal);
+            }
+            .hud-corner.br.teal {
+                border-color: var(--teal);
+            }
+
+            .hero-right {
+                padding-left: 3rem;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            .hero-secondary-label {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.15em;
+                text-transform: uppercase;
+                margin-bottom: 0.25rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            .hero-secondary-label::before {
+                content: "";
+                display: block;
+                width: 18px;
+                height: 1px;
+                background: var(--teal-dim);
+            }
+
+            .hero-secondary-card {
+                background: rgba(30, 36, 36, 0.8);
+                border: 1px solid var(--card-border);
+                padding: 1.25rem;
+                text-decoration: none;
+                color: inherit;
+                display: block;
+                position: relative;
+                transition:
+                    border-color 0.15s,
+                    background 0.15s;
+            }
+            .hero-secondary-card:hover {
+                border-color: var(--teal-dim);
+                background: rgba(34, 151, 141, 0.04);
+            }
+
+            .secondary-card-pillar {
+                font-family: var(--font-ui);
+                font-size: 8px;
+                font-weight: 700;
+                letter-spacing: 0.18em;
+                text-transform: uppercase;
+                margin-bottom: 0.4rem;
+            }
+            .secondary-card-pillar.sound {
+                color: var(--amber);
+            }
+            .secondary-card-pillar.screen {
+                color: var(--teal-light);
+            }
+            .secondary-card-pillar.iact {
+                color: var(--rust);
+            }
+
+            .secondary-card-title {
+                font-family: var(--font-body);
+                font-size: 15px;
+                font-weight: 700;
+                line-height: 1.35;
+                color: var(--text-primary);
+                margin-bottom: 0.4rem;
+            }
+            .secondary-card-meta {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.07em;
+            }
+
+            /* ─── MAIN LAYOUT ─────────────────────────────────────────── */
+            .site-body {
+                max-width: 1400px;
+                margin: 0 auto;
+                padding: 0 2rem;
+                display: grid;
+                grid-template-columns: 1fr 320px;
+                gap: 0;
+            }
+
+            /* ─── CONTENT AREA ────────────────────────────────────────── */
+            .content-area {
+                border-right: 1px solid var(--rule);
+                padding-right: 2.5rem;
+                padding-top: 3rem;
+                padding-bottom: 4rem;
+            }
+
+            /* ─── SECTION HEADER ──────────────────────────────────────── */
+            .section-header {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                margin-bottom: 2rem;
+                padding-bottom: 0.85rem;
+                border-bottom: 1px solid var(--rule);
+            }
+            .section-header-label {
+                font-family: var(--font-ui);
+                font-size: 10px;
+                font-weight: 700;
+                letter-spacing: 0.22em;
+                text-transform: uppercase;
+                color: var(--teal-light);
+            }
+            .section-header-rule {
+                flex: 1;
+                height: 1px;
+                background: linear-gradient(
+                    90deg,
+                    var(--teal-dim),
+                    transparent
+                );
+            }
+            .section-header-count {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.1em;
+            }
+
+            /* ─── PILLAR COLUMNS ──────────────────────────────────────── */
+            .pillar-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0;
+                border: 1px solid var(--rule);
+                margin-bottom: 3rem;
+            }
+
+            .pillar-col {
+                border-right: 1px solid var(--rule);
+            }
+            .pillar-col:last-child {
+                border-right: none;
+            }
+
+            .pillar-col-header {
+                padding: 0.75rem 1.25rem;
+                border-bottom: 1px solid var(--rule);
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                background: rgba(30, 36, 36, 0.6);
+            }
+            .pillar-col-dot {
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                flex-shrink: 0;
+            }
+            .pillar-col-dot.screen {
+                background: var(--teal);
+                box-shadow: 0 0 7px var(--teal);
+            }
+            .pillar-col-dot.sound {
+                background: var(--amber);
+                box-shadow: 0 0 7px var(--amber);
+            }
+            .pillar-col-dot.iact {
+                background: var(--rust);
+                box-shadow: 0 0 7px var(--rust);
+            }
+
+            .pillar-col-name {
+                font-family: var(--font-ui);
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                color: var(--text-secondary);
+            }
+            .pillar-col-num {
+                font-family: var(--font-mono);
+                font-size: 8px;
+                color: var(--text-dim);
+                margin-left: auto;
+            }
+
+            /* ─── ARTICLE CARD ────────────────────────────────────────── */
+            .article-card {
+                padding: 1.25rem;
+                border-bottom: 1px solid var(--rule);
+                text-decoration: none;
+                color: inherit;
+                display: block;
+                position: relative;
+                transition: background 0.15s;
+                background: transparent;
+            }
+            .article-card:last-child {
+                border-bottom: none;
+            }
+            .article-card:hover {
+                background: rgba(34, 151, 141, 0.04);
+            }
+
+            /* L-bracket corners on hover */
+            .article-card::before,
+            .article-card::after {
+                content: "";
+                position: absolute;
+                width: 10px;
+                height: 10px;
+                opacity: 0;
+                transition: opacity 0.15s;
+            }
+            .article-card::before {
+                top: 6px;
+                left: 6px;
+                border-top: 1px solid var(--amber);
+                border-left: 1px solid var(--amber);
+            }
+            .article-card::after {
+                bottom: 6px;
+                right: 6px;
+                border-bottom: 1px solid var(--amber);
+                border-right: 1px solid var(--amber);
+            }
+            .article-card:hover::before,
+            .article-card:hover::after {
+                opacity: 1;
+            }
+
+            .card-pillar {
+                font-family: var(--font-ui);
+                font-size: 8px;
+                font-weight: 700;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                margin-bottom: 0.45rem;
+            }
+            .card-pillar.screen {
+                color: var(--teal-light);
+            }
+            .card-pillar.sound {
+                color: var(--amber-light);
+            }
+            .card-pillar.iact {
+                color: var(--rust);
+            }
+
+            .card-title {
+                font-family: var(--font-body);
+                font-size: 15px;
+                font-weight: 700;
+                line-height: 1.35;
+                color: var(--text-primary);
+                margin-bottom: 0.5rem;
+            }
+
+            .card-excerpt {
+                font-family: var(--font-body);
+                font-size: 13px;
+                font-weight: 300;
+                font-style: italic;
+                color: var(--text-secondary);
+                line-height: 1.5;
+                margin-bottom: 0.75rem;
+            }
+
+            .card-meta {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+            }
+            .card-meta span {
+                font-family: var(--font-mono);
+                font-size: 8px;
+                color: var(--text-dim);
+                letter-spacing: 0.07em;
+            }
+            .card-meta .divider {
+                color: var(--rule);
+            }
+
+            /* ─── FEATURED STRIP ──────────────────────────────────────── */
+            .featured-strip {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1px;
+                background: var(--rule);
+                border: 1px solid var(--rule);
+                margin-bottom: 3rem;
+            }
+            .featured-strip-card {
+                background: var(--card-bg);
+                padding: 1.5rem;
+                text-decoration: none;
+                color: inherit;
+                position: relative;
+                transition: background 0.15s;
+            }
+            .featured-strip-card:hover {
+                background: rgba(34, 151, 141, 0.04);
+            }
+            .featured-strip-card::before,
+            .featured-strip-card::after {
+                content: "";
+                position: absolute;
+                width: 12px;
+                height: 12px;
+                opacity: 0;
+                transition: opacity 0.15s;
+            }
+            .featured-strip-card::before {
+                top: 8px;
+                left: 8px;
+                border-top: 1px solid var(--amber);
+                border-left: 1px solid var(--amber);
+            }
+            .featured-strip-card::after {
+                bottom: 8px;
+                right: 8px;
+                border-bottom: 1px solid var(--amber);
+                border-right: 1px solid var(--amber);
+            }
+            .featured-strip-card:hover::before,
+            .featured-strip-card:hover::after {
+                opacity: 1;
+            }
+
+            .fsc-num {
+                font-family: var(--font-ui);
+                font-size: 30px;
+                font-weight: 900;
+                color: var(--charcoal-light);
+                line-height: 1;
+                margin-bottom: 0.75rem;
+                letter-spacing: -0.04em;
+            }
+            .fsc-pillar {
+                font-family: var(--font-ui);
+                font-size: 8px;
+                font-weight: 700;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                margin-bottom: 0.5rem;
+            }
+            .fsc-pillar.screen {
+                color: var(--teal-light);
+            }
+            .fsc-pillar.sound {
+                color: var(--amber-light);
+            }
+            .fsc-pillar.iact {
+                color: var(--rust);
+            }
+
+            .fsc-title {
+                font-family: var(--font-body);
+                font-size: 16px;
+                font-weight: 700;
+                line-height: 1.3;
+                color: var(--text-primary);
+                margin-bottom: 0.75rem;
+            }
+            .fsc-meta {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.07em;
+            }
+
+            /* ─── ARTICLE LIST ────────────────────────────────────────── */
+            .article-list {
+                margin-bottom: 3rem;
+            }
+
+            .article-list-item {
+                display: grid;
+                grid-template-columns: 36px 1fr auto;
+                gap: 1rem;
+                align-items: start;
+                padding: 1rem 0;
+                border-bottom: 1px solid var(--rule);
+                text-decoration: none;
+                color: inherit;
+                transition: background 0.15s;
+            }
+            .article-list-item:last-child {
+                border-bottom: none;
+            }
+            .article-list-item:hover .list-title {
+                color: var(--teal-light);
+            }
+
+            .list-number {
+                font-family: var(--font-mono);
+                font-size: 10px;
+                color: var(--text-dim);
+                letter-spacing: 0.07em;
+                padding-top: 2px;
+            }
+
+            .list-pillar {
+                font-family: var(--font-ui);
+                font-size: 8px;
+                font-weight: 700;
+                letter-spacing: 0.18em;
+                text-transform: uppercase;
+                margin-bottom: 0.25rem;
+            }
+            .list-pillar.screen {
+                color: var(--teal);
+            }
+            .list-pillar.sound {
+                color: var(--amber);
+            }
+            .list-pillar.iact {
+                color: var(--rust);
+            }
+
+            .list-title {
+                font-family: var(--font-body);
+                font-size: 16px;
+                font-weight: 700;
+                line-height: 1.3;
+                color: var(--text-primary);
+                margin-bottom: 0.25rem;
+                transition: color 0.15s;
+            }
+
+            .list-meta {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.06em;
+            }
+
+            .list-wordcount {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--teal-dim);
+                letter-spacing: 0.06em;
+                white-space: nowrap;
+                padding-top: 2px;
+            }
+
+            /* ─── SIDEBAR ─────────────────────────────────────────────── */
+            .sidebar {
+                padding-left: 2.5rem;
+                padding-top: 3rem;
+                padding-bottom: 4rem;
+            }
+
+            .sidebar-block {
+                margin-bottom: 2.5rem;
+            }
+
+            .sidebar-label {
+                font-family: var(--font-ui);
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: 0.22em;
+                text-transform: uppercase;
+                color: var(--teal-light);
+                margin-bottom: 1rem;
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+            }
+            .sidebar-label::after {
+                content: "";
+                flex: 1;
+                height: 1px;
+                background: linear-gradient(
+                    90deg,
+                    var(--teal-dim),
+                    transparent
+                );
+            }
+
+            /* newsletter */
+            .newsletter-block {
+                background: linear-gradient(
+                    135deg,
+                    rgba(34, 151, 141, 0.12) 0%,
+                    rgba(200, 131, 58, 0.07) 100%
+                );
+                border: 1px solid var(--teal-faint);
+                padding: 1.5rem;
+                position: relative;
+            }
+
+            .newsletter-block p {
+                font-family: var(--font-body);
+                font-size: 14px;
+                font-weight: 300;
+                font-style: italic;
+                color: var(--text-secondary);
+                line-height: 1.6;
+                margin-bottom: 1.25rem;
+            }
+
+            .newsletter-form {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .newsletter-input {
+                background: rgba(28, 32, 32, 0.9);
+                border: 1px solid var(--card-border);
+                color: var(--text-primary);
+                font-family: var(--font-mono);
+                font-size: 11px;
+                padding: 10px 12px;
+                letter-spacing: 0.08em;
+                outline: none;
+                transition: border-color 0.15s;
+            }
+            .newsletter-input::placeholder {
+                color: var(--text-dim);
+            }
+            .newsletter-input:focus {
+                border-color: var(--teal-dim);
+            }
+
+            /* sidebar posts */
+            .sidebar-post {
+                padding: 0.85rem 0;
+                border-bottom: 1px solid var(--rule);
+                text-decoration: none;
+                color: inherit;
+                display: block;
+                transition: padding-left 0.15s;
+            }
+            .sidebar-post:first-child {
+                padding-top: 0;
+            }
+            .sidebar-post:last-child {
+                border-bottom: none;
+            }
+            .sidebar-post:hover {
+                padding-left: 6px;
+            }
+            .sidebar-post:hover .sp-title {
+                color: var(--teal-light);
+            }
+
+            .sp-pillar {
+                font-family: var(--font-ui);
+                font-size: 7px;
+                font-weight: 700;
+                letter-spacing: 0.18em;
+                text-transform: uppercase;
+                margin-bottom: 0.2rem;
+            }
+            .sp-pillar.screen {
+                color: var(--teal);
+            }
+            .sp-pillar.sound {
+                color: var(--amber);
+            }
+            .sp-pillar.iact {
+                color: var(--rust);
+            }
+
+            .sp-title {
+                font-family: var(--font-body);
+                font-size: 14px;
+                font-weight: 600;
+                color: var(--text-primary);
+                line-height: 1.3;
+                transition: color 0.15s;
+            }
+
+            /* tag cloud */
+            .tag-cloud {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.4rem;
+            }
+            .tag {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                border: 1px solid var(--rule);
+                padding: 3px 8px;
+                text-decoration: none;
+                letter-spacing: 0.06em;
+                transition:
+                    color 0.15s,
+                    border-color 0.15s;
+            }
+            .tag:hover {
+                color: var(--teal-light);
+                border-color: var(--teal-dim);
+            }
+
+            /* manifest */
+            .manifest {
+                background: rgba(28, 32, 32, 0.7);
+                border: 1px solid var(--rule);
+                padding: 1rem;
+            }
+            .manifest-row {
+                display: flex;
+                justify-content: space-between;
+                padding: 0.3rem 0;
+                border-bottom: 1px solid rgba(42, 54, 54, 0.5);
+            }
+            .manifest-row:last-child {
+                border-bottom: none;
+            }
+            .manifest-key {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.08em;
+            }
+            .manifest-val {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--teal-light);
+                letter-spacing: 0.06em;
+            }
+            .manifest-val.amber {
+                color: var(--amber);
+            }
+
+            /* ─── STATUS BAR ──────────────────────────────────────────── */
+            .status-bar {
+                background: var(--charcoal);
+                border-top: 1px solid var(--rule);
+                padding: 0 2rem;
+                height: 36px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .status-bar-left,
+            .status-bar-right {
+                display: flex;
+                align-items: center;
+                gap: 2rem;
+            }
+            .status-item {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.1em;
+                display: flex;
+                align-items: center;
+                gap: 0.4rem;
+            }
+            .status-item .dot {
+                width: 5px;
+                height: 5px;
+                border-radius: 50%;
+                background: var(--teal);
+                animation: pulse 2.5s ease-in-out infinite;
+            }
+            .status-item .dot.amber {
+                background: var(--amber);
+            }
+            @keyframes pulse {
+                0%,
+                100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.25;
+                }
+            }
+            .status-item span.val {
+                color: var(--text-secondary);
+            }
+
+            /* ─── BOTTOM TICKER ───────────────────────────────────────── */
+            .bottom-ticker {
+                background: var(--charcoal-mid);
+                border-top: 1px solid var(--amber-dim);
+                overflow: hidden;
+                white-space: nowrap;
+            }
+            .bottom-ticker .ticker-inner {
+                animation: ticker 55s linear infinite;
+                padding: 9px 0;
+            }
+            .bottom-ticker .ticker-inner span {
+                color: var(--text-dim);
+            }
+            .bottom-ticker .ticker-inner span b {
+                color: var(--amber-dim);
+            }
+
+            /* ─── CTA GLITCH EFFECTS ──────────────────────────────────── */
+
+            /* Shared keyframes */
+            @keyframes cta-sweep {
+                0% {
+                    left: -75%;
+                }
+                100% {
+                    left: 150%;
+                }
+            }
+
+            @keyframes cta-glitch-bar {
+                0% {
+                    top: 15%;
+                    height: 2px;
+                    opacity: 0.9;
+                }
+                20% {
+                    top: 55%;
+                    height: 4px;
+                    opacity: 0.6;
+                }
+                40% {
+                    top: 35%;
+                    height: 2px;
+                    opacity: 0.8;
+                }
+                60% {
+                    top: 75%;
+                    height: 5px;
+                    opacity: 0.4;
+                }
+                80% {
+                    top: 25%;
+                    height: 2px;
+                    opacity: 0.6;
+                }
+                100% {
+                    top: 50%;
+                    height: 0;
+                    opacity: 0;
+                }
+            }
+
+            @keyframes cta-hover-glitch {
+                0% {
+                    clip-path: inset(0 0 0 0);
+                    transform: none;
+                }
+                15% {
+                    clip-path: inset(12% 0 72% 0);
+                    transform: translateX(-5px);
+                }
+                30% {
+                    clip-path: inset(62% 0 12% 0);
+                    transform: translateX(5px);
+                }
+                45% {
+                    clip-path: inset(35% 0 45% 0);
+                    transform: translateX(-3px);
+                }
+                60% {
+                    clip-path: inset(0 0 0 0);
+                    transform: translateX(2px);
+                }
+                75% {
+                    clip-path: inset(80% 0 5% 0);
+                    transform: translateX(-2px);
+                }
+                90% {
+                    clip-path: inset(0 0 0 0);
+                    transform: none;
+                }
+                100% {
+                    clip-path: inset(0 0 0 0);
+                    transform: none;
+                }
+            }
+
+            @keyframes cta-idle-glitch {
+                0%,
+                89%,
+                100% {
+                    clip-path: inset(0 0 0 0);
+                    transform: none;
+                    box-shadow: none;
+                }
+                90% {
+                    clip-path: inset(10% 0 78% 0);
+                    transform: translateX(-4px);
+                    box-shadow:
+                        4px 0 0 var(--teal-light),
+                        -4px 0 0 var(--rust);
+                }
+                91% {
+                    clip-path: inset(58% 0 14% 0);
+                    transform: translateX(4px);
+                    box-shadow:
+                        -4px 0 0 var(--teal-light),
+                        4px 0 0 var(--rust);
+                }
+                92% {
+                    clip-path: inset(32% 0 42% 0);
+                    transform: translateX(-2px);
+                    box-shadow:
+                        2px 0 0 var(--teal),
+                        -2px 0 0 var(--rust);
+                }
+                93% {
+                    clip-path: inset(0 0 0 0);
+                    transform: none;
+                    box-shadow: 0 0 14px rgba(34, 151, 141, 0.55);
+                }
+                94% {
+                    box-shadow: none;
+                }
+            }
+
+            /* Hero CTA */
+            .hero-cta {
+                position: relative;
+                overflow: hidden;
+                isolation: isolate;
+                display: inline-block;
+                font-family: var(--font-ui);
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                text-decoration: none;
+                color: var(--charcoal);
+                background: linear-gradient(
+                    90deg,
+                    var(--amber),
+                    var(--amber-light)
+                );
+                padding: 12px 26px;
+                transition: box-shadow 0.15s;
+                animation: cta-idle-glitch 9s 2s infinite;
+            }
+
+            /* Shimmer sweep */
+            .hero-cta::before {
+                content: "";
+                position: absolute;
+                top: -50%;
+                left: -75%;
+                width: 45%;
+                height: 200%;
+                background: linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.28),
+                    transparent
+                );
+                transform: skewX(-15deg);
+                pointer-events: none;
+                z-index: 2;
+            }
+
+            /* Glitch noise bar */
+            .hero-cta::after {
+                content: "";
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 50%;
+                height: 0;
+                background: var(--teal-light);
+                mix-blend-mode: screen;
+                opacity: 0;
+                pointer-events: none;
+                z-index: 3;
+            }
+
+            .hero-cta:hover {
+                box-shadow:
+                    0 0 22px rgba(200, 131, 58, 0.45),
+                    3px 0 0 var(--teal-light),
+                    -3px 0 0 var(--rust);
+                animation:
+                    cta-hover-glitch 0.45s steps(1, end) forwards,
+                    cta-idle-glitch 9s 0.5s infinite;
+            }
+
+            .hero-cta:hover::before {
+                animation: cta-sweep 0.38s ease-out forwards;
+            }
+
+            .hero-cta:hover::after {
+                animation: cta-glitch-bar 0.45s steps(1, end) forwards;
+            }
+
+            /* Newsletter button */
+            .newsletter-btn {
+                -webkit-appearance: none;
+                appearance: none;
+                position: relative;
+                overflow: hidden;
+                isolation: isolate;
+                display: block;
+                width: 100%;
+                background: linear-gradient(
+                    90deg,
+                    var(--amber),
+                    var(--amber-light)
+                );
+                color: var(--charcoal);
+                border: none;
+                font-family: var(--font-ui);
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                padding: 11px;
+                cursor: pointer;
+                transition: box-shadow 0.15s;
+            }
+
+            /* Shimmer sweep */
+            .newsletter-btn::before {
+                content: "";
+                position: absolute;
+                top: -50%;
+                left: -75%;
+                width: 45%;
+                height: 200%;
+                background: linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.28),
+                    transparent
+                );
+                transform: skewX(-15deg);
+                pointer-events: none;
+                z-index: 2;
+            }
+
+            /* Glitch noise bar */
+            .newsletter-btn::after {
+                content: "";
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 50%;
+                height: 0;
+                background: rgba(46, 184, 172, 0.6);
+                opacity: 0;
+                pointer-events: none;
+                z-index: 3;
+            }
+
+            .newsletter-btn:hover {
+                opacity: 1;
+                box-shadow:
+                    0 0 18px rgba(200, 131, 58, 0.4),
+                    2px 0 0 var(--teal-light),
+                    -2px 0 0 var(--rust);
+                animation: cta-hover-glitch 0.4s steps(1, end) forwards;
+            }
+
+            .newsletter-btn:hover::before {
+                animation: cta-sweep 0.38s ease-out forwards;
+            }
+
+            .newsletter-btn:hover::after {
+                animation: cta-glitch-bar 0.4s steps(1, end) forwards;
+            }
+
+            /* ─── HAMBURGER ───────────────────────────────────────────── */
+            .nav-hamburger {
+                display: none;
+                flex-direction: column;
+                gap: 5px;
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 6px 4px;
+                flex-shrink: 0;
+            }
+            .nav-hamburger span {
+                display: block;
+                width: 22px;
+                height: 2px;
+                background: var(--text-secondary);
+                transition: background 0.15s;
+            }
+            .nav-hamburger:hover span {
+                background: var(--teal-light);
+            }
+            .nav-hamburger.open span:nth-child(1) {
+                transform: translateY(7px) rotate(45deg);
+                transition: transform 0.2s;
+            }
+            .nav-hamburger.open span:nth-child(2) {
+                opacity: 0;
+            }
+            .nav-hamburger.open span:nth-child(3) {
+                transform: translateY(-7px) rotate(-45deg);
+                transition: transform 0.2s;
+            }
+
+            /* ─── RESPONSIVE: TABLET (≤1024px) ───────────────────────── */
+            @media (max-width: 1024px) {
+                .hero-slash {
+                    display: none;
+                }
+
+                .hero-inner {
+                    grid-template-columns: 1fr;
+                    padding: 3rem 2rem;
+                }
+                .hero-left {
+                    border-right: none;
+                    padding-right: 0;
+                    padding-bottom: 2.5rem;
+                    border-bottom: 1px solid rgba(34, 151, 141, 0.2);
+                }
+                .hero-right {
+                    padding-left: 0;
+                    padding-top: 2rem;
+                }
+
+                .site-body {
+                    grid-template-columns: 1fr;
+                }
+                .content-area {
+                    border-right: none;
+                    padding-right: 0;
+                }
+                .sidebar {
+                    padding-left: 0;
+                    padding-top: 2.5rem;
+                    border-top: 1px solid var(--rule);
+                }
+
+                .pillar-grid {
+                    grid-template-columns: 1fr;
+                }
+                .pillar-col {
+                    border-right: none;
+                    border-bottom: 1px solid var(--rule);
+                }
+                .pillar-col:last-child {
+                    border-bottom: none;
+                }
+
+                .featured-strip {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            /* ─── RESPONSIVE: MOBILE (≤768px) ────────────────────────── */
+            @media (max-width: 768px) {
+                .site-nav {
+                    padding: 0 1.25rem;
+                }
+                .nav-links {
+                    display: none;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 1.25rem;
+                    position: absolute;
+                    top: 56px;
+                    left: 0;
+                    right: 0;
+                    background: rgba(28, 32, 32, 0.99);
+                    backdrop-filter: blur(12px);
+                    border-bottom: 1px solid var(--rule);
+                    padding: 1.5rem 1.25rem;
+                    z-index: 199;
+                }
+                .nav-links.open {
+                    display: flex;
+                }
+                .nav-hamburger {
+                    display: flex;
+                }
+                .nav-meta {
+                    display: none;
+                }
+
+                .hero-inner {
+                    padding: 2.5rem 1.25rem;
+                }
+                .hero-datecode {
+                    font-size: 64px;
+                    opacity: 0.5;
+                }
+                .hero-title {
+                    font-size: clamp(24px, 7vw, 36px);
+                }
+                .hero-deck {
+                    font-size: 16px;
+                }
+                .hero-right {
+                    display: none;
+                }
+
+                .site-body {
+                    padding: 0 1.25rem;
+                }
+                .content-area {
+                    padding-top: 2rem;
+                    padding-bottom: 2rem;
+                }
+                .sidebar {
+                    padding-top: 2rem;
+                    padding-bottom: 2rem;
+                }
+
+                .status-bar {
+                    padding: 0 1.25rem;
+                }
+                .status-bar-right {
+                    display: none;
+                }
+            }
+
+            /* ─── RESPONSIVE: SMALL MOBILE (≤480px) ──────────────────── */
+            @media (max-width: 480px) {
+                .site-nav {
+                    padding: 0 1rem;
+                }
+                .hero-inner {
+                    padding: 2rem 1rem;
+                }
+                .hero-datecode {
+                    display: none;
+                }
+                .hero-cta {
+                    display: block;
+                    text-align: center;
+                }
+                .hero-meta-row {
+                    gap: 0.75rem;
+                }
+
+                .site-body {
+                    padding: 0 1rem;
+                }
+
+                .article-list-item {
+                    grid-template-columns: 28px 1fr;
+                }
+                .list-wordcount {
+                    display: none;
+                }
+
+                .pillar-col-header {
+                    padding: 0.6rem 1rem;
+                }
+                .article-card {
+                    padding: 1rem;
+                }
+
+                .newsletter-block {
+                    padding: 1.25rem 1rem;
+                }
+
+                .status-bar {
+                    padding: 0 1rem;
+                }
+                .status-bar-left {
+                    gap: 1rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- ─── NAV ──────────────────────────────────────────────── -->
+        <nav class="site-nav">
+            <a href="#" class="nav-wordmark">terribledevice</a>
+
+            <ul class="nav-links">
+                <li class="nav-pill">
+                    <span class="nav-dot screen"></span>
+                    <a href="#" class="active">SCREEN</a>
+                </li>
+                <li class="nav-pill">
+                    <span class="nav-dot sound"></span>
+                    <a href="#">SOUND</a>
+                </li>
+                <li class="nav-pill">
+                    <span class="nav-dot iact"></span>
+                    <a href="#">INTERACTIVE</a>
+                </li>
+                <li><a href="#">ARCHIVE</a></li>
+                <li><a href="#">ABOUT</a></li>
+            </ul>
+
+            <span class="nav-meta">REV.02 // 2026</span>
+            <button
+                class="nav-hamburger"
+                aria-label="Toggle navigation"
+                aria-expanded="false"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+
+        <!-- ─── HERO ──────────────────────────────────────────────── -->
+        <header class="hero">
+            <div class="hero-bg"></div>
+            <div class="hero-grid"></div>
+            <div class="hero-slash"></div>
+            <div class="hero-datecode" aria-hidden="true">26</div>
+
+            <div class="hero-inner">
+                <!-- LEFT -->
+                <div class="hero-left">
+                    <div class="hero-eyebrow">
+                        <span class="hero-eyebrow-tag">Featured Essay</span>
+                        <div class="hero-eyebrow-line"></div>
+                    </div>
+
+                    <h1 class="hero-title">
+                        The <span class="accent">Imagined</span> City:<br />
+                        How Cyberpunk Became<br />
+                        Its Own Nostalgia
+                    </h1>
+
+                    <p class="hero-deck">
+                        Forty years after Neuromancer, the genre that once
+                        predicted the future now mourns it — and the most
+                        interesting work is happening in the gap between what
+                        was promised and what arrived.
+                    </p>
+
+                    <div class="hero-meta-row">
+                        <span class="hero-pillar-badge">SCREEN</span>
+                        <span class="hero-author">— M. VOSS</span>
+                        <span class="hero-read-time"
+                            >4,200 WORDS // 18 MIN READ</span
+                        >
+                    </div>
+
+                    <a href="#" class="hero-cta">Read Essay →</a>
+
+                    <span class="hud-corner tl"></span>
+                    <span class="hud-corner br"></span>
+                </div>
+
+                <!-- RIGHT -->
+                <div class="hero-right">
+                    <div class="hero-secondary-label">Also Publishing</div>
+
+                    <a href="#" class="hero-secondary-card">
+                        <span class="hud-corner tl teal"></span>
+                        <span class="hud-corner br teal"></span>
+                        <div class="secondary-card-pillar sound">▸ SOUND</div>
+                        <div class="secondary-card-title">
+                            Burial's Untrue and the Archaeology of the
+                            Dancefloor
+                        </div>
+                        <div class="secondary-card-meta">
+                            2026-03-21 // 3,100 WORDS
+                        </div>
+                    </a>
+
+                    <a href="#" class="hero-secondary-card">
+                        <span class="hud-corner tl teal"></span>
+                        <span class="hud-corner br teal"></span>
+                        <div class="secondary-card-pillar screen">▸ SCREEN</div>
+                        <div class="secondary-card-title">
+                            Ghost in the Shell (1995): The Body That Wasn't
+                            There
+                        </div>
+                        <div class="secondary-card-meta">
+                            2026-03-14 // 5,400 WORDS
+                        </div>
+                    </a>
+
+                    <a href="#" class="hero-secondary-card">
+                        <span class="hud-corner tl teal"></span>
+                        <span class="hud-corner br teal"></span>
+                        <div class="secondary-card-pillar iact">
+                            ▸ INTERACTIVE
+                        </div>
+                        <div class="secondary-card-title">
+                            Disco Elysium and the Failure-State as Narrative
+                            Engine
+                        </div>
+                        <div class="secondary-card-meta">
+                            2026-03-07 // 4,800 WORDS
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- ─── MAIN BODY ──────────────────────────────────────────── -->
+        <div class="site-body">
+            <main class="content-area">
+                <!-- PILLAR COLUMNS -->
+                <div class="section-header">
+                    <span class="section-header-label">By Pillar</span>
+                    <div class="section-header-rule"></div>
+                    <span class="section-header-count"
+                        >ALL CHANNELS ACTIVE</span
+                    >
+                </div>
+
+                <div class="pillar-grid">
+                    <!-- SCREEN -->
+                    <div class="pillar-col">
+                        <div class="pillar-col-header">
+                            <span class="pillar-col-dot screen"></span>
+                            <span class="pillar-col-name">Screen</span>
+                            <span class="pillar-col-num">12 ENTRIES</span>
+                        </div>
+                        <a href="#" class="article-card">
+                            <div class="card-pillar screen">SCREEN</div>
+                            <div class="card-title">
+                                Blade Runner 2049 and the Ethics of Memory
+                            </div>
+                            <div class="card-excerpt">
+                                What does it mean to remember something that
+                                never happened to you?
+                            </div>
+                            <div class="card-meta">
+                                <span>2026-03-28</span>
+                                <span class="divider">//</span>
+                                <span>3,800 WDS</span>
+                            </div>
+                        </a>
+                        <a href="#" class="article-card">
+                            <div class="card-pillar screen">SCREEN</div>
+                            <div class="card-title">
+                                Akira at 35: The City as Protagonist
+                            </div>
+                            <div class="card-excerpt">
+                                Neo-Tokyo doesn't just contain the story — it
+                                drives it.
+                            </div>
+                            <div class="card-meta">
+                                <span>2026-03-15</span>
+                                <span class="divider">//</span>
+                                <span>4,100 WDS</span>
+                            </div>
+                        </a>
+                        <a href="#" class="article-card">
+                            <div class="card-pillar screen">SCREEN</div>
+                            <div class="card-title">
+                                The Matrix Resurrections: A Film About Sequels
+                            </div>
+                            <div class="card-excerpt">
+                                Lana Wachowski made a movie about being forced
+                                to make a movie.
+                            </div>
+                            <div class="card-meta">
+                                <span>2026-03-02</span>
+                                <span class="divider">//</span>
+                                <span>2,700 WDS</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- SOUND -->
+                    <div class="pillar-col">
+                        <div class="pillar-col-header">
+                            <span class="pillar-col-dot sound"></span>
+                            <span class="pillar-col-name">Sound</span>
+                            <span class="pillar-col-num">09 ENTRIES</span>
+                        </div>
+                        <a href="#" class="article-card">
+                            <div class="card-pillar sound">SOUND</div>
+                            <div class="card-title">
+                                Autechre and the Grammar of Machine Time
+                            </div>
+                            <div class="card-excerpt">
+                                Thirty years of deconstructed rhythm and what
+                                it's actually about.
+                            </div>
+                            <div class="card-meta">
+                                <span>2026-03-22</span>
+                                <span class="divider">//</span>
+                                <span>5,200 WDS</span>
+                            </div>
+                        </a>
+                        <a href="#" class="article-card">
+                            <div class="card-pillar sound">SOUND</div>
+                            <div class="card-title">
+                                Vangelis and the Sound of a Future That Never
+                                Came
+                            </div>
+                            <div class="card-excerpt">
+                                The Blade Runner OST promised us something we're
+                                still waiting for.
+                            </div>
+                            <div class="card-meta">
+                                <span>2026-03-10</span>
+                                <span class="divider">//</span>
+                                <span>3,300 WDS</span>
+                            </div>
+                        </a>
+                        <a href="#" class="article-card">
+                            <div class="card-pillar sound">SOUND</div>
+                            <div class="card-title">
+                                Drexciya: Afrofuturism Beneath the Waves
+                            </div>
+                            <div class="card-excerpt">
+                                The mythology was never a gimmick. It was the
+                                whole point.
+                            </div>
+                            <div class="card-meta">
+                                <span>2026-02-28</span>
+                                <span class="divider">//</span>
+                                <span>4,600 WDS</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- INTERACTIVE -->
+                    <div class="pillar-col">
+                        <div class="pillar-col-header">
+                            <span class="pillar-col-dot iact"></span>
+                            <span class="pillar-col-name">Interactive</span>
+                            <span class="pillar-col-num">07 ENTRIES</span>
+                        </div>
+                        <a href="#" class="article-card">
+                            <div class="card-pillar iact">INTERACTIVE</div>
+                            <div class="card-title">
+                                Control and the New Weird in Game Design
+                            </div>
+                            <div class="card-excerpt">
+                                The Federal Bureau of Control is not a
+                                government agency. It's a haunted house.
+                            </div>
+                            <div class="card-meta">
+                                <span>2026-03-25</span>
+                                <span class="divider">//</span>
+                                <span>3,600 WDS</span>
+                            </div>
+                        </a>
+                        <a href="#" class="article-card">
+                            <div class="card-pillar iact">INTERACTIVE</div>
+                            <div class="card-title">
+                                System Shock and the Architecture of Dread
+                            </div>
+                            <div class="card-excerpt">
+                                SHODAN is effective not because she's powerful —
+                                because she's everywhere.
+                            </div>
+                            <div class="card-meta">
+                                <span>2026-03-18</span>
+                                <span class="divider">//</span>
+                                <span>4,000 WDS</span>
+                            </div>
+                        </a>
+                        <a href="#" class="article-card">
+                            <div class="card-pillar iact">INTERACTIVE</div>
+                            <div class="card-title">
+                                Cyberpunk 2077 After the Patch: What Remains
+                            </div>
+                            <div class="card-excerpt">
+                                The bugs are gone. The emptiness at the centre
+                                of Night City is still there.
+                            </div>
+                            <div class="card-meta">
+                                <span>2026-03-05</span>
+                                <span class="divider">//</span>
+                                <span>3,900 WDS</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- EDITOR'S PICKS -->
+                <div class="section-header">
+                    <span class="section-header-label">Editor's Picks</span>
+                    <div class="section-header-rule"></div>
+                    <span class="section-header-count">03 SELECTED</span>
+                </div>
+
+                <div class="featured-strip">
+                    <a href="#" class="featured-strip-card">
+                        <div class="fsc-num">01</div>
+                        <div class="fsc-pillar screen">SCREEN</div>
+                        <div class="fsc-title">
+                            Strange Days (1995): The Camera That Eats Its
+                            Operator
+                        </div>
+                        <div class="fsc-meta">
+                            5,100 WORDS // KATHRYN BIGELOW
+                        </div>
+                    </a>
+                    <a href="#" class="featured-strip-card">
+                        <div class="fsc-num">02</div>
+                        <div class="fsc-pillar sound">SOUND</div>
+                        <div class="fsc-title">
+                            The Chemical Brothers and the Architecture of the
+                            Drop
+                        </div>
+                        <div class="fsc-meta">
+                            3,800 WORDS // BIG BEAT REVISIONISM
+                        </div>
+                    </a>
+                    <a href="#" class="featured-strip-card">
+                        <div class="fsc-num">03</div>
+                        <div class="fsc-pillar iact">INTERACTIVE</div>
+                        <div class="fsc-title">
+                            Planescape Torment and the Question It Never Answers
+                        </div>
+                        <div class="fsc-meta">
+                            6,200 WORDS // WHAT CAN CHANGE THE NATURE OF A MAN
+                        </div>
+                    </a>
+                </div>
+
+                <!-- RECENT -->
+                <div class="section-header">
+                    <span class="section-header-label">Recent</span>
+                    <div class="section-header-rule"></div>
+                    <span class="section-header-count">ALL PILLARS</span>
+                </div>
+
+                <div class="article-list">
+                    <a href="#" class="article-list-item">
+                        <span class="list-number">001</span>
+                        <div>
+                            <div class="list-pillar screen">SCREEN</div>
+                            <div class="list-title">
+                                The Imagined City: How Cyberpunk Became Its Own
+                                Nostalgia
+                            </div>
+                            <div class="list-meta">2026-03-28 // M. VOSS</div>
+                        </div>
+                        <span class="list-wordcount">4,200 WDS</span>
+                    </a>
+                    <a href="#" class="article-list-item">
+                        <span class="list-number">002</span>
+                        <div>
+                            <div class="list-pillar sound">SOUND</div>
+                            <div class="list-title">
+                                Burial's Untrue and the Archaeology of the
+                                Dancefloor
+                            </div>
+                            <div class="list-meta">2026-03-21 // J. HARKER</div>
+                        </div>
+                        <span class="list-wordcount">3,100 WDS</span>
+                    </a>
+                    <a href="#" class="article-list-item">
+                        <span class="list-number">003</span>
+                        <div>
+                            <div class="list-pillar iact">INTERACTIVE</div>
+                            <div class="list-title">
+                                Control and the New Weird in Game Design
+                            </div>
+                            <div class="list-meta">
+                                2026-03-25 // C. DELACROIX
+                            </div>
+                        </div>
+                        <span class="list-wordcount">3,600 WDS</span>
+                    </a>
+                    <a href="#" class="article-list-item">
+                        <span class="list-number">004</span>
+                        <div>
+                            <div class="list-pillar screen">SCREEN</div>
+                            <div class="list-title">
+                                Akira at 35: The City as Protagonist
+                            </div>
+                            <div class="list-meta">2026-03-15 // M. VOSS</div>
+                        </div>
+                        <span class="list-wordcount">4,100 WDS</span>
+                    </a>
+                    <a href="#" class="article-list-item">
+                        <span class="list-number">005</span>
+                        <div>
+                            <div class="list-pillar sound">SOUND</div>
+                            <div class="list-title">
+                                Autechre and the Grammar of Machine Time
+                            </div>
+                            <div class="list-meta">2026-03-22 // J. HARKER</div>
+                        </div>
+                        <span class="list-wordcount">5,200 WDS</span>
+                    </a>
+                    <a href="#" class="article-list-item">
+                        <span class="list-number">006</span>
+                        <div>
+                            <div class="list-pillar iact">INTERACTIVE</div>
+                            <div class="list-title">
+                                System Shock and the Architecture of Dread
+                            </div>
+                            <div class="list-meta">
+                                2026-03-18 // C. DELACROIX
+                            </div>
+                        </div>
+                        <span class="list-wordcount">4,000 WDS</span>
+                    </a>
+                </div>
+            </main>
+
+            <!-- ─── SIDEBAR ────────────────────────────────────────────── -->
+            <aside class="sidebar">
+                <!-- NEWSLETTER -->
+                <div class="sidebar-block">
+                    <div class="sidebar-label">Transmission</div>
+                    <div class="newsletter-block">
+                        <span class="hud-corner tl"></span>
+                        <span class="hud-corner br"></span>
+                        <p>
+                            New essays, signal-boosted links, and the occasional
+                            dispatch from the neon-lit edges of pop culture. No
+                            noise.
+                        </p>
+                        <form class="newsletter-form" onsubmit="return false;">
+                            <input
+                                class="newsletter-input"
+                                type="email"
+                                placeholder="your@address.here"
+                                aria-label="Email address"
+                            />
+                            <button class="newsletter-btn" type="submit">
+                                Subscribe →
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- RECENT -->
+                <div class="sidebar-block">
+                    <div class="sidebar-label">Recent Transmissions</div>
+                    <a href="#" class="sidebar-post">
+                        <div class="sp-pillar screen">SCREEN</div>
+                        <div class="sp-title">
+                            The Imagined City: Cyberpunk as Nostalgia
+                        </div>
+                    </a>
+                    <a href="#" class="sidebar-post">
+                        <div class="sp-pillar sound">SOUND</div>
+                        <div class="sp-title">
+                            Burial and the Archaeology of the Dancefloor
+                        </div>
+                    </a>
+                    <a href="#" class="sidebar-post">
+                        <div class="sp-pillar iact">INTERACTIVE</div>
+                        <div class="sp-title">
+                            Control and the New Weird in Game Design
+                        </div>
+                    </a>
+                    <a href="#" class="sidebar-post">
+                        <div class="sp-pillar screen">SCREEN</div>
+                        <div class="sp-title">
+                            Ghost in the Shell: The Body That Wasn't There
+                        </div>
+                    </a>
+                    <a href="#" class="sidebar-post">
+                        <div class="sp-pillar sound">SOUND</div>
+                        <div class="sp-title">
+                            Drexciya: Afrofuturism Beneath the Waves
+                        </div>
+                    </a>
+                </div>
+
+                <!-- TAGS -->
+                <div class="sidebar-block">
+                    <div class="sidebar-label">Index</div>
+                    <div class="tag-cloud">
+                        <a href="#" class="tag">cyberpunk</a>
+                        <a href="#" class="tag">sci-fi</a>
+                        <a href="#" class="tag">IDM</a>
+                        <a href="#" class="tag">anime</a>
+                        <a href="#" class="tag">game design</a>
+                        <a href="#" class="tag">film</a>
+                        <a href="#" class="tag">afrofuturism</a>
+                        <a href="#" class="tag">ambient</a>
+                        <a href="#" class="tag">transhumanism</a>
+                        <a href="#" class="tag">noir</a>
+                        <a href="#" class="tag">retrowave</a>
+                        <a href="#" class="tag">hauntology</a>
+                        <a href="#" class="tag">worldbuilding</a>
+                        <a href="#" class="tag">AI</a>
+                        <a href="#" class="tag">80s</a>
+                    </div>
+                </div>
+
+                <!-- MANIFEST -->
+                <div class="sidebar-block">
+                    <div class="sidebar-label">Coordinates</div>
+                    <div class="manifest">
+                        <div class="manifest-row">
+                            <span class="manifest-key">DESIGNATION</span>
+                            <span class="manifest-val">terribledevice</span>
+                        </div>
+                        <div class="manifest-row">
+                            <span class="manifest-key">REVISION</span>
+                            <span class="manifest-val">03</span>
+                        </div>
+                        <div class="manifest-row">
+                            <span class="manifest-key">FOCUS</span>
+                            <span class="manifest-val"
+                                >CYBERPUNK // SCI-FI</span
+                            >
+                        </div>
+                        <div class="manifest-row">
+                            <span class="manifest-key">ERA</span>
+                            <span class="manifest-val">1980s – PRESENT</span>
+                        </div>
+                        <div class="manifest-row">
+                            <span class="manifest-key">PALETTE</span>
+                            <span class="manifest-val amber">TEAL × AMBER</span>
+                        </div>
+                        <div class="manifest-row">
+                            <span class="manifest-key">ENTRIES</span>
+                            <span class="manifest-val">28 INDEXED</span>
+                        </div>
+                        <div class="manifest-row">
+                            <span class="manifest-key">STATUS</span>
+                            <span class="manifest-val">ONLINE</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- ─── STATUS BAR ────────────────────────────────────────── -->
+        <div class="status-bar">
+            <div class="status-bar-left">
+                <span class="status-item">
+                    <span class="dot"></span>
+                    <span>LIVE</span>
+                </span>
+                <span class="status-item">
+                    LAST UPDATED // <span class="val">2026-03-28</span>
+                </span>
+                <span class="status-item">
+                    ENTRIES // <span class="val">28</span>
+                </span>
+            </div>
+            <div class="status-bar-right">
+                <span class="status-item">
+                    BUILD // <span class="val">V3-TEAL</span>
+                </span>
+                <span class="status-item">
+                    <span class="dot amber"></span>
+                    <span>CHARCOAL × TEAL × AMBER</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- ─── BOTTOM TICKER ──────────────────────────────────────── -->
+        <div class="bottom-ticker" aria-hidden="true">
+            <div class="ticker-inner">
+                <span
+                    ><b>TD //</b> NAVIGATING THE NEON-LIT ALLEYS OF POP
+                    CULTURE</span
+                >
+                <span
+                    ><b>SCREEN //</b> BLADE RUNNER — AKIRA — GHOST IN THE SHELL
+                    — STRANGE DAYS — THE MATRIX</span
+                >
+                <span
+                    ><b>SOUND //</b> AUTECHRE — BURIAL — DREXCIYA — VANGELIS —
+                    THE CHEMICAL BROTHERS</span
+                >
+                <span
+                    ><b>INTERACTIVE //</b> SYSTEM SHOCK — CONTROL — DISCO
+                    ELYSIUM — PLANESCAPE — CYBERPUNK 2077</span
+                >
+                <span
+                    ><b>TD //</b> NAVIGATING THE NEON-LIT ALLEYS OF POP
+                    CULTURE</span
+                >
+                <span
+                    ><b>SCREEN //</b> BLADE RUNNER — AKIRA — GHOST IN THE SHELL
+                    — STRANGE DAYS — THE MATRIX</span
+                >
+                <span
+                    ><b>SOUND //</b> AUTECHRE — BURIAL — DREXCIYA — VANGELIS —
+                    THE CHEMICAL BROTHERS</span
+                >
+                <span
+                    ><b>INTERACTIVE //</b> SYSTEM SHOCK — CONTROL — DISCO
+                    ELYSIUM — PLANESCAPE — CYBERPUNK 2077</span
+                >
+            </div>
+        </div>
+        <script>
+            const hamburger = document.querySelector(".nav-hamburger");
+            const navLinks = document.querySelector(".nav-links");
+            hamburger.addEventListener("click", () => {
+                const isOpen = navLinks.classList.toggle("open");
+                hamburger.classList.toggle("open", isOpen);
+                hamburger.setAttribute("aria-expanded", isOpen);
+            });
+            // Close menu on link click
+            navLinks.querySelectorAll("a").forEach((link) => {
+                link.addEventListener("click", () => {
+                    navLinks.classList.remove("open");
+                    hamburger.classList.remove("open");
+                    hamburger.setAttribute("aria-expanded", "false");
+                });
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>terribledevice // V4 // Magenta & Cyan</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    /* From the reference image — Cyberpunk 2077 store UI */
+    --bg-deep:   #1A0A14;   /* deep near-black with magenta tint */
+    --bg-mid:    #2A1020;   /* mid dark, warm */
+    --bg-card:   #0D0A10;   /* near-black card surface */
+    --mag:       #8B1A4A;   /* deep magenta */
+    --mag2:      #C02060;   /* brighter magenta */
+    --cyan:      #00E8D0;   /* the reference's primary teal/cyan */
+    --cyan2:     #00C4B0;   /* slightly deeper */
+    --cyan3:     rgba(0,232,208,0.12);
+    --amb:       #F0C040;   /* amber/yellow highlight — the selected state */
+    --amb2:      #D4A030;
+    --hi:        #E0DCE8;   /* near-white, slightly cool */
+    --mid:       #7A6A80;
+    --dim:       #2A2030;
+    --dim2:      #3A2A40;
+    --mono:      'Share Tech Mono', monospace;
+    --orb:       'Orbitron', sans-serif;
+    --body:      'Barlow', sans-serif;
+  }
+
+  body {
+    /* The signature gradient from the reference — magenta to dark, top to bottom */
+    background:
+      radial-gradient(ellipse at 60% 0%, #6B1040 0%, #2A0820 35%, #0D0810 70%),
+      radial-gradient(ellipse at 0% 100%, #1A1040 0%, #0A0810 60%);
+    background-attachment: fixed;
+    color: var(--hi);
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* Subtle scan noise */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px
+    );
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  /* ── MASTHEAD ── */
+  .masthead {
+    position: relative;
+    background: rgba(10, 6, 16, 0.85);
+    backdrop-filter: blur(4px);
+    border-bottom: 1px solid var(--cyan2);
+    height: 54px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: stretch;
+    overflow: hidden;
+  }
+
+  /* Cyan glow line at top — like the reference UI borders */
+  .masthead::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(to right, transparent, var(--cyan), transparent);
+  }
+
+  .mast-brand {
+    display: flex; align-items: center;
+    padding: 0 24px; gap: 14px;
+    border-right: 1px solid var(--cyan2);
+  }
+
+  .mast-slash {
+    width: 3px; height: 32px;
+    background: linear-gradient(to bottom, var(--cyan), var(--cyan2));
+    transform: skewX(-14deg);
+    flex-shrink: 0;
+  }
+
+  .mast-wordmark {
+    font-family: var(--orb);
+    font-size: 14px; font-weight: 900;
+    letter-spacing: 0.06em;
+    color: var(--hi); text-transform: uppercase; line-height: 1;
+  }
+
+  .mast-wordmark span { color: var(--cyan); }
+
+  .mast-nav { display: flex; align-items: center; padding-left: 4px; }
+
+  .mnav {
+    font-family: var(--orb);
+    font-size: 7px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--mid);
+    padding: 0 16px; height: 100%;
+    display: flex; align-items: center;
+    border-right: 1px solid rgba(0,232,208,0.08);
+    cursor: pointer; transition: color 0.12s;
+  }
+
+  .mnav:first-child { border-left: 1px solid rgba(0,232,208,0.08); }
+  .mnav:hover { color: var(--cyan); }
+  .mnav.on { color: var(--amb); }  /* amber = active, like yellow selected state in ref */
+
+  .mast-right {
+    display: flex; align-items: center;
+    padding: 0 20px; gap: 12px;
+    border-left: 1px solid var(--cyan2);
+  }
+
+  .mast-sig {
+    font-family: var(--orb);
+    font-size: 7px; letter-spacing: 0.2em; color: var(--mid);
+  }
+
+  .live-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 10px var(--cyan);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    height: 240px;
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    border-bottom: 1px solid var(--cyan2);
+    overflow: hidden;
+  }
+
+  /* Layered gradients like the reference's warm-to-dark background */
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(139,26,74,0.3) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 30%, rgba(0,196,176,0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 100%, rgba(240,192,64,0.05) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
+  /* Corner bracket decoration — like reference's card frames */
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 16px; left: 16px; right: 16px; bottom: 16px;
+    border: 1px solid rgba(0,232,208,0.1);
+    pointer-events: none;
+  }
+
+  .hero-left {
+    padding: 36px 40px 30px 36px;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    position: relative; z-index: 2;
+  }
+
+  .hero-ann {
+    font-family: var(--mono);
+    font-size: 7px; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--cyan);
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .hero-ann::before {
+    content: ''; display: block;
+    width: 20px; height: 1px; background: var(--cyan);
+  }
+
+  .hero-hed {
+    font-family: var(--orb);
+    font-size: clamp(26px, 4vw, 50px);
+    font-weight: 900;
+    letter-spacing: 0.02em; text-transform: uppercase;
+    line-height: 1.0;
+    flex: 1; display: flex; align-items: center;
+  }
+
+  .hero-hed em {
+    font-style: normal;
+    /* amber gradient text — like the yellow selected state in reference */
+    background: linear-gradient(135deg, var(--amb) 0%, #FFF0A0 50%, var(--amb2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+  }
+
+  .hero-meta {
+    display: flex; gap: 0;
+    font-family: var(--orb);
+    font-size: 6px; letter-spacing: 0.2em; text-transform: uppercase;
+  }
+
+  .hm {
+    color: var(--mid);
+    padding-right: 12px; margin-right: 12px;
+    border-right: 1px solid var(--dim2);
+  }
+
+  .hm:last-child { border: none; }
+
+  .hero-divider { background: var(--cyan2); opacity: 0.4; }
+
+  .hero-right {
+    padding: 30px 36px 30px 44px;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    position: relative; z-index: 2;
+  }
+
+  /* Cyan glow panel on right side */
+  .hero-right::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(0,196,176,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .feat-label {
+    font-family: var(--orb);
+    font-size: 6px; font-weight: 700;
+    letter-spacing: 0.26em; text-transform: uppercase;
+    color: var(--amb);
+    display: flex; align-items: center; gap: 7px;
+    margin-bottom: 14px; position: relative;
+  }
+
+  .feat-label::before { content: '▶'; font-size: 6px; }
+
+  .feat-hed {
+    font-family: var(--orb);
+    font-size: clamp(13px, 1.8vw, 18px); font-weight: 900;
+    letter-spacing: 0.03em; color: var(--hi);
+    text-transform: uppercase; line-height: 1.2;
+    margin-bottom: 12px; cursor: pointer;
+    position: relative; flex: 1;
+    transition: color 0.15s;
+  }
+
+  .feat-hed:hover { color: var(--cyan); }
+
+  .feat-deck {
+    font-family: var(--body);
+    font-size: 12px; font-weight: 300; font-style: italic;
+    color: var(--mid); line-height: 1.65; position: relative;
+  }
+
+  .feat-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 14px;
+    border-top: 1px solid rgba(0,232,208,0.15);
+    margin-top: 14px; position: relative;
+  }
+
+  /* Pills — cyan bordered like the ref's UI elements */
+  .pill {
+    font-family: var(--orb);
+    font-size: 6px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    padding: 3px 8px; border: 1px solid;
+  }
+
+  .pill-s { color: var(--cyan);  border-color: rgba(0,232,208,0.5); }
+  .pill-m { color: var(--mid);   border-color: rgba(122,106,128,0.4); }
+  .pill-i { color: var(--amb);   border-color: rgba(240,192,64,0.5); }
+
+  .read-link {
+    font-family: var(--orb);
+    font-size: 7px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--cyan); cursor: pointer; transition: color 0.15s;
+  }
+
+  .read-link:hover { color: var(--amb); }
+
+  /* Cyan accent line */
+  .acc-line {
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--cyan), var(--cyan2), transparent);
+  }
+
+  /* ── MAIN GRID ── */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 42px 1fr 1fr 1fr 196px;
+    border-bottom: 1px solid var(--cyan2);
+  }
+
+  .spine {
+    border-right: 1px solid var(--cyan2);
+    background: rgba(0,0,0,0.4);
+    display: flex; flex-direction: column;
+    align-items: center; padding: 14px 0; gap: 16px;
+  }
+
+  .spine-txt {
+    font-family: var(--orb);
+    font-size: 6px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(0,232,208,0.3);
+    writing-mode: vertical-rl; transform: rotate(180deg);
+  }
+
+  .spine-num {
+    font-family: var(--orb);
+    font-size: 8px; font-weight: 900; color: var(--dim2);
+  }
+
+  .spine-line { width: 18px; height: 1px; background: var(--dim2); }
+
+  /* Cyan pip — like the reference's small square markers */
+  .cy-pip {
+    width: 5px; height: 5px;
+    background: var(--cyan);
+    box-shadow: 0 0 6px var(--cyan);
+  }
+
+  /* Columns */
+  .col { border-right: 1px solid var(--dim2); display: flex; flex-direction: column; }
+
+  .col-head {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--dim2);
+    background: rgba(0,0,0,0.4);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .col-id {
+    font-family: var(--orb);
+    font-size: 6px; font-weight: 700;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  .col-dot { width: 5px; height: 5px; border-radius: 50%; }
+  .col-num { font-family: var(--mono); font-size: 7px; color: var(--mid); }
+
+  .col-s .col-id { color: var(--cyan); }  .col-s .col-dot { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
+  .col-m .col-id { color: var(--mid); }   .col-m .col-dot { background: var(--mid); }
+  .col-i .col-id { color: var(--amb); }   .col-i .col-dot { background: var(--amb); box-shadow: 0 0 6px var(--amb); }
+
+  /* Article cards — dark near-black like ref's card surfaces */
+  .acard {
+    padding: 18px 16px;
+    border-bottom: 1px solid rgba(0,232,208,0.06);
+    cursor: pointer; transition: background 0.12s;
+    position: relative; overflow: hidden;
+    background: rgba(0,0,0,0.25);
+  }
+
+  .acard:hover { background: rgba(0,232,208,0.05); }
+
+  .acard.top-c { border-top: 1px solid var(--cyan); }
+  .acard.top-a { border-top: 1px solid var(--amb); }
+  .acard.top-m { border-top: 1px solid var(--mid); }
+
+  /* Corner bracket like reference card frames */
+  .acard::before {
+    content: '';
+    position: absolute; top: 8px; right: 8px;
+    width: 10px; height: 10px;
+    border-top: 1px solid rgba(0,232,208,0.4);
+    border-right: 1px solid rgba(0,232,208,0.4);
+  }
+
+  .acard-date {
+    font-family: var(--mono);
+    font-size: 7px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--mid); margin-bottom: 8px;
+  }
+
+  .acard-hed {
+    font-family: var(--orb);
+    font-size: 11px; font-weight: 900;
+    letter-spacing: 0.02em; text-transform: uppercase;
+    color: var(--hi); line-height: 1.3;
+    margin-bottom: 8px; transition: color 0.12s;
+  }
+
+  .acard:hover .acard-hed { color: var(--cyan); }
+
+  .acard-deck {
+    font-family: var(--body);
+    font-size: 11px; font-weight: 300;
+    color: var(--mid); line-height: 1.55; margin-bottom: 12px;
+  }
+
+  .acard-foot { display: flex; align-items: center; justify-content: space-between; }
+
+  .wc {
+    font-family: var(--orb);
+    font-size: 6px; letter-spacing: 0.1em;
+    color: var(--dim2); border: 1px solid var(--dim2); padding: 1px 5px;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar { background: rgba(0,0,0,0.4); display: flex; flex-direction: column; }
+
+  .sb { padding: 16px; border-bottom: 1px solid var(--dim2); }
+
+  .sb-label {
+    font-family: var(--orb);
+    font-size: 6px; font-weight: 700;
+    letter-spacing: 0.26em; text-transform: uppercase;
+    color: var(--cyan); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 7px;
+  }
+
+  .sb-label::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(to right, rgba(0,232,208,0.4), transparent);
+  }
+
+  .sig-hed {
+    font-family: var(--orb);
+    font-size: 13px; font-weight: 900;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--hi); line-height: 1.15; margin-bottom: 6px;
+  }
+
+  .sig-body {
+    font-family: var(--body);
+    font-size: 10px; font-weight: 300; font-style: italic;
+    color: var(--mid); line-height: 1.6; margin-bottom: 12px;
+  }
+
+  .sig-input {
+    width: 100%;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid var(--dim2);
+    border-top: 1px solid rgba(0,232,208,0.4);
+    color: var(--hi); font-family: var(--mono); font-size: 9px;
+    padding: 8px 10px; margin-bottom: 8px;
+    outline: none; transition: border-color 0.15s;
+  }
+
+  .sig-input:focus { border-color: var(--cyan); }
+  .sig-input::placeholder { color: var(--mid); }
+
+  .sig-btn {
+    width: 100%; background: transparent;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    font-family: var(--orb); font-size: 6px; font-weight: 700;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    padding: 9px; cursor: pointer; transition: all 0.15s;
+    position: relative; overflow: hidden;
+  }
+
+  .sig-btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(0,232,208,0.08), transparent);
+  }
+
+  .sig-btn:hover {
+    background: rgba(0,232,208,0.1);
+    color: var(--amb);
+    border-color: var(--amb);
+  }
+
+  .tag-wrap { display: flex; flex-wrap: wrap; gap: 5px; }
+
+  .tag {
+    font-family: var(--orb);
+    font-size: 6px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--mid); border: 1px solid var(--dim2);
+    padding: 2px 7px; cursor: pointer; transition: all 0.12s;
+  }
+
+  .tag:hover { color: var(--cyan); border-color: rgba(0,232,208,0.4); }
+
+  .mfst-row {
+    display: flex; justify-content: space-between; padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    font-family: var(--orb); font-size: 6px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--mid);
+  }
+
+  .mfst-row:last-child { border: none; }
+  .mfst-val { color: var(--hi); }
+  .mfst-val.live { color: var(--cyan); }
+
+  /* ── STATUS STRIP ── */
+  .status {
+    height: 28px;
+    background: rgba(0,0,0,0.6);
+    border-top: 1px solid var(--cyan2);
+    display: flex; align-items: center;
+    padding-left: 42px; overflow: hidden;
+  }
+
+  /* Cyan glow along top of status */
+  .status::before {
+    content: '';
+    position: absolute; left: 0; right: 0;
+    height: 1px; top: 0;
+    background: linear-gradient(to right, transparent, var(--cyan), transparent);
+  }
+
+  .ss-seg {
+    font-family: var(--orb);
+    font-size: 6px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--mid); padding: 0 16px; height: 100%;
+    display: flex; align-items: center;
+    border-right: 1px solid rgba(0,232,208,0.1);
+    white-space: nowrap;
+  }
+
+  .ss-seg.on { color: var(--cyan); }
+
+  .ss-ticker { flex: 1; overflow: hidden; }
+
+  .ticker {
+    display: inline-flex; gap: 32px; white-space: nowrap;
+    animation: scroll 24s linear infinite;
+    font-family: var(--orb); font-size: 6px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--dim2);
+  }
+
+  @keyframes scroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="mast-brand">
+    <div class="mast-slash"></div>
+    <div class="mast-wordmark">terrible<span>device</span></div>
+  </div>
+  <nav class="mast-nav">
+    <div class="mnav on">Index</div>
+    <div class="mnav">Screen</div>
+    <div class="mnav">Sound</div>
+    <div class="mnav">Interactive</div>
+    <div class="mnav">Essays</div>
+    <div class="mnav">Archive</div>
+  </nav>
+  <div class="mast-right">
+    <span class="mast-sig">SIG.02 // 2026</span>
+    <div class="live-dot"></div>
+  </div>
+</header>
+
+<!-- CYAN ACCENT LINE -->
+<div class="acc-line"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div>
+      <div class="hero-ann">Pop culture criticism — cyberpunk / sci-fi</div>
+      <div class="hero-hed">
+        The future<br>was always<br><em>imagined.</em>
+      </div>
+    </div>
+    <div class="hero-meta">
+      <div class="hm">Cyberpunk</div>
+      <div class="hm">Sci-fi</div>
+      <div class="hm">1980s → now</div>
+      <div class="hm">terribledevice.net</div>
+    </div>
+  </div>
+
+  <div class="hero-divider"></div>
+
+  <div class="hero-right">
+    <div>
+      <div class="feat-label">Featured essay — Screen</div>
+      <div class="feat-hed">Blade Runner 2049 Is Not a Sequel. It's a Postmortem.</div>
+      <div class="feat-deck">Villeneuve's continuation works precisely because it refuses to restore what the original spent two hours carefully destroying. The neon is still there. So is the rot. Neither is the point.</div>
+    </div>
+    <div class="feat-footer">
+      <div style="display:flex; gap:7px; align-items:center;">
+        <span class="pill pill-s">Screen</span>
+        <span style="font-family:'Share Tech Mono',monospace; font-size:7px; letter-spacing:0.14em; color:var(--mid);">Mar 22 · 2,400w</span>
+      </div>
+      <span class="read-link">Read →</span>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN GRID -->
+<div class="main-grid">
+
+  <div class="spine">
+    <div class="cy-pip"></div>
+    <span class="spine-txt">terribledevice</span>
+    <div class="spine-line"></div>
+    <span class="spine-num">01</span>
+    <span class="spine-num">02</span>
+    <span class="spine-num">03</span>
+    <div class="spine-line"></div>
+    <span class="spine-txt">rev.02</span>
+    <div class="cy-pip"></div>
+  </div>
+
+  <!-- SCREEN -->
+  <div class="col col-s">
+    <div class="col-head">
+      <div class="col-id"><div class="col-dot"></div>Screen</div>
+      <span class="col-num">Col.01</span>
+    </div>
+    <div class="acard top-c">
+      <div class="acard-date">Mar 19</div>
+      <div class="acard-hed">Ghost in the Shell (1995): Read the City, Not the Plot</div>
+      <div class="acard-deck">Oshii built a film that argues the urban environment is the only character who matters. The Major is asking the wrong question. The city already answered it.</div>
+      <div class="acard-foot"><span class="pill pill-s">Screen</span><span class="wc">1,600w</span></div>
+    </div>
+    <div class="acard">
+      <div class="acard-date">Mar 12</div>
+      <div class="acard-hed">Why Robocop Is the Most Accurate Film About 1987 America</div>
+      <div class="acard-deck">Verhoeven didn't satirise American capitalism. He filmed it with the contrast turned up until everything visible became true.</div>
+      <div class="acard-foot"><span class="pill pill-s">Screen</span><span class="wc">980w</span></div>
+    </div>
+    <div class="acard">
+      <div class="acard-date">Mar 04</div>
+      <div class="acard-hed">The TDR × Wipeout Aesthetic: When Design Was the Product</div>
+      <div class="acard-deck">Sheffield's most dangerous studio built a visual system so complete that the actual game became secondary infrastructure.</div>
+      <div class="acard-foot"><span class="pill pill-s">Screen</span><span class="wc">550w</span></div>
+    </div>
+  </div>
+
+  <!-- SOUND -->
+  <div class="col col-m">
+    <div class="col-head">
+      <div class="col-id"><div class="col-dot"></div>Sound</div>
+      <span class="col-num">Col.02</span>
+    </div>
+    <div class="acard top-m">
+      <div class="acard-date">Mar 22</div>
+      <div class="acard-hed">Aphex Twin's SAW Vol. II Is Not Ambient Music</div>
+      <div class="acard-deck">It's a threat. Twenty-four untitled pieces that function less as listening than as a weather system you cannot leave.</div>
+      <div class="acard-foot"><span class="pill pill-m">Sound</span><span class="wc">580w</span></div>
+    </div>
+    <div class="acard">
+      <div class="acard-date">Mar 15</div>
+      <div class="acard-hed">Boards of Canada Are Not Nostalgic: A Correction</div>
+      <div class="acard-deck">The VHS-decay palette has been misread for three decades. What Geogaddi is actually doing is considerably more unsettling than memory.</div>
+      <div class="acard-foot"><span class="pill pill-m">Sound</span><span class="wc">950w</span></div>
+    </div>
+    <div class="acard">
+      <div class="acard-date">Mar 08</div>
+      <div class="acard-hed">Vangelis's Blade Runner Score Still Sounds Like the Future</div>
+      <div class="acard-deck">Four decades of imitation and the original remains unmatched. A close listen to what the Yamaha CS-80 communicated about Los Angeles 2019.</div>
+      <div class="acard-foot"><span class="pill pill-m">Sound</span><span class="wc">720w</span></div>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE -->
+  <div class="col col-i">
+    <div class="col-head">
+      <div class="col-id"><div class="col-dot"></div>Interactive</div>
+      <span class="col-num">Col.03</span>
+    </div>
+    <div class="acard top-a">
+      <div class="acard-date">Mar 20</div>
+      <div class="acard-hed">Disco Elysium as Political Document</div>
+      <div class="acard-deck">ZA/UM built a failure state so precisely calibrated it feels inevitable rather than unfair. What the Revachol questionnaire gets structurally correct about collapse.</div>
+      <div class="acard-foot"><span class="pill pill-i">Interactive</span><span class="wc">1,800w</span></div>
+    </div>
+    <div class="acard">
+      <div class="acard-date">Mar 13</div>
+      <div class="acard-hed">Deus Ex (2000) Predicted Fourteen Things. We Checked.</div>
+      <div class="acard-deck">Ion Storm's anxiety-as-game-design is now a historical document. Some of the predictions hit with uncomfortable precision.</div>
+      <div class="acard-foot"><span class="pill pill-i">Interactive</span><span class="wc">490w</span></div>
+    </div>
+    <div class="acard">
+      <div class="acard-date">Mar 01</div>
+      <div class="acard-hed">Observer's Cracow: When the Environment Is the Antagonist</div>
+      <div class="acard-deck">Bloober's underrated horror understands that cyberpunk is fundamentally about architecture as oppression. The tenement block does not want you here.</div>
+      <div class="acard-foot"><span class="pill pill-i">Interactive</span><span class="wc">610w</span></div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb">
+      <div class="sb-label">Signal</div>
+      <div class="sig-hed">The Terrible<br>Device Signal</div>
+      <div class="sig-body">2–3 dispatches per week. No hype. No aggregation. The signal only.</div>
+      <input class="sig-input" type="email" placeholder="address@domain.net">
+      <button class="sig-btn">Transmit ↗</button>
+    </div>
+    <div class="sb">
+      <div class="sb-label">Index</div>
+      <div class="tag-wrap">
+        <div class="tag">IDM</div>
+        <div class="tag">Blade Runner</div>
+        <div class="tag">Anime</div>
+        <div class="tag">Glitch</div>
+        <div class="tag">Wipeout</div>
+        <div class="tag">Akira</div>
+        <div class="tag">Synth</div>
+        <div class="tag">Essay</div>
+        <div class="tag">Deus Ex</div>
+        <div class="tag">1980s</div>
+        <div class="tag">Aphex Twin</div>
+        <div class="tag">New Wave</div>
+        <div class="tag">Score</div>
+        <div class="tag">PKD</div>
+        <div class="tag">Autechre</div>
+      </div>
+    </div>
+    <div class="sb" style="flex:1">
+      <div class="sb-label">Manifest</div>
+      <div class="mfst-row"><span>Domain</span><span class="mfst-val">terribledevice.net</span></div>
+      <div class="mfst-row"><span>Status</span><span class="mfst-val live">Active</span></div>
+      <div class="mfst-row"><span>Rev</span><span class="mfst-val">02 // 2026</span></div>
+      <div class="mfst-row"><span>Cadence</span><span class="mfst-val">2–3 / wk</span></div>
+      <div class="mfst-row"><span>Format</span><span class="mfst-val">Essay + Review</span></div>
+      <div class="mfst-row"><span>Signal</span><span class="mfst-val live">Transmitting</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- STATUS STRIP -->
+<footer class="status">
+  <div class="ss-seg on">Live</div>
+  <div class="ss-seg">terribledevice.net</div>
+  <div class="ss-seg">Rev.02</div>
+  <div class="ss-ticker">
+    <div class="ticker">
+      <span>Screen // Sound // Interactive</span>
+      <span>//</span>
+      <span>Cyberpunk · Sci-fi · Retro Pop Culture</span>
+      <span>//</span>
+      <span>1980s → Present</span>
+      <span>//</span>
+      <span>The future was always being imagined</span>
+      <span>//</span>
+      <span>terribledevice.net · Est. 2026</span>
+      <span>//</span>
+      <span>Screen // Sound // Interactive</span>
+      <span>//</span>
+      <span>Cyberpunk · Sci-fi · Retro Pop Culture</span>
+      <span>//</span>
+      <span>1980s → Present</span>
+      <span>//</span>
+      <span>The future was always being imagined</span>
+      <span>//</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
