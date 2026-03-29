@@ -1,0 +1,1770 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>About — terribledevice</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;0,900;1,300;1,400;1,600&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+            rel="stylesheet"
+        />
+
+        <style>
+            /* ─── RESET ───────────────────────────────────────────── */
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            html {
+                scroll-behavior: smooth;
+            }
+
+            /* ─── PALETTE ─────────────────────────────────────────── */
+            :root {
+                --charcoal: #1c2020;
+                --charcoal-mid: #222828;
+                --charcoal-light: #2a3232;
+                --card-bg: #1e2424;
+                --card-border: #2e3a3a;
+
+                --teal: #22978d;
+                --teal-light: #2eb8ac;
+                --teal-dim: #155f5a;
+                --teal-faint: #0d3533;
+
+                --amber: #c8833a;
+                --amber-light: #e0a050;
+                --amber-dim: #7a4f22;
+
+                --rust: #8b3520;
+                --rust-faint: #2e1208;
+
+                --text-primary: #dde8e6;
+                --text-secondary: #8aa09e;
+                --text-dim: #4a5e5c;
+
+                --rule: #2a3636;
+
+                --font-display: "Zen Dots", sans-serif;
+                --font-ui: "Orbitron", sans-serif;
+                --font-body: "Barlow Condensed", sans-serif;
+                --font-mono: "Space Mono", monospace;
+            }
+
+            /* ─── BASE ────────────────────────────────────────────── */
+            body {
+                background-color: var(--charcoal);
+                color: var(--text-primary);
+                font-family: var(--font-body);
+                font-size: 16px;
+                line-height: 1.5;
+                min-height: 100vh;
+                overflow-x: hidden;
+            }
+
+            /* ─── SCANLINE ────────────────────────────────────────── */
+            body::before {
+                content: "";
+                position: fixed;
+                inset: 0;
+                background: repeating-linear-gradient(
+                    to bottom,
+                    transparent 0px,
+                    transparent 3px,
+                    rgba(0, 0, 0, 0.06) 3px,
+                    rgba(0, 0, 0, 0.06) 4px
+                );
+                pointer-events: none;
+                z-index: 9999;
+            }
+
+            /* ─── NOISE ───────────────────────────────────────────── */
+            body::after {
+                content: "";
+                position: fixed;
+                inset: 0;
+                background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+                pointer-events: none;
+                opacity: 0.5;
+                z-index: 9998;
+            }
+
+            /* ─── NAV ─────────────────────────────────────────────── */
+            .site-nav {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 2rem;
+                height: 56px;
+                border-bottom: 1px solid var(--rule);
+                background: rgba(28, 32, 32, 0.97);
+                backdrop-filter: blur(12px);
+                position: sticky;
+                top: 0;
+                z-index: 200;
+            }
+
+            .nav-wordmark {
+                font-family: var(--font-display);
+                font-size: 18px;
+                text-decoration: none;
+                letter-spacing: 0.02em;
+                background: linear-gradient(
+                    90deg,
+                    var(--amber-light) 0%,
+                    var(--amber) 50%,
+                    var(--teal-light) 100%
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                position: relative;
+            }
+            .nav-wordmark::after {
+                content: "";
+                position: absolute;
+                bottom: -3px;
+                left: 0;
+                width: 100%;
+                height: 1px;
+                background: linear-gradient(
+                    90deg,
+                    var(--amber-dim),
+                    var(--teal-dim),
+                    transparent
+                );
+            }
+
+            .nav-links {
+                display: flex;
+                align-items: center;
+                gap: 2rem;
+                list-style: none;
+            }
+            .nav-links a {
+                font-family: var(--font-ui);
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: 0.18em;
+                text-transform: uppercase;
+                text-decoration: none;
+                color: var(--text-secondary);
+                transition: color 0.15s;
+            }
+            .nav-links a:hover {
+                color: var(--teal-light);
+            }
+            .nav-links a.active {
+                color: var(--teal-light);
+            }
+
+            .nav-pill {
+                display: flex;
+                align-items: center;
+                gap: 0.6rem;
+            }
+            .nav-dot {
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+            }
+            .nav-dot.screen {
+                background: var(--teal);
+                box-shadow: 0 0 6px var(--teal);
+            }
+            .nav-dot.sound {
+                background: var(--amber);
+                box-shadow: 0 0 6px var(--amber);
+            }
+            .nav-dot.iact {
+                background: var(--rust);
+                box-shadow: 0 0 6px var(--rust);
+            }
+
+            .nav-meta {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.1em;
+            }
+
+            .nav-hamburger {
+                display: none;
+                flex-direction: column;
+                gap: 5px;
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 6px 4px;
+            }
+            .nav-hamburger span {
+                display: block;
+                width: 22px;
+                height: 2px;
+                background: var(--text-secondary);
+                transition: background 0.15s;
+            }
+            .nav-hamburger:hover span {
+                background: var(--teal-light);
+            }
+
+            /* ─── ABOUT HERO ──────────────────────────────────────── */
+            .about-hero {
+                position: relative;
+                overflow: hidden;
+                border-bottom: 1px solid var(--rule);
+                padding: 6rem 2rem 5rem;
+            }
+
+            .about-hero-bg {
+                position: absolute;
+                inset: 0;
+                background:
+                    radial-gradient(
+                        ellipse 60% 90% at 100% 0%,
+                        rgba(34, 151, 141, 0.2) 0%,
+                        transparent 65%
+                    ),
+                    radial-gradient(
+                        ellipse 40% 55% at 0% 100%,
+                        rgba(139, 53, 32, 0.25) 0%,
+                        transparent 60%
+                    ),
+                    radial-gradient(
+                        ellipse 70% 40% at 50% 50%,
+                        rgba(200, 131, 58, 0.04) 0%,
+                        transparent 70%
+                    ),
+                    var(--charcoal);
+            }
+            .about-hero-grid {
+                position: absolute;
+                inset: 0;
+                background-image:
+                    linear-gradient(
+                        rgba(34, 151, 141, 0.04) 1px,
+                        transparent 1px
+                    ),
+                    linear-gradient(
+                        90deg,
+                        rgba(34, 151, 141, 0.04) 1px,
+                        transparent 1px
+                    );
+                background-size: 52px 52px;
+            }
+            .about-hero-slash {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                right: 36%;
+                width: 4px;
+                background: linear-gradient(
+                    180deg,
+                    var(--teal-light) 0%,
+                    var(--amber) 100%
+                );
+                transform: skewX(-8deg);
+                opacity: 0.7;
+                box-shadow: 0 0 18px rgba(34, 151, 141, 0.4);
+            }
+
+            .about-hero-inner {
+                position: relative;
+                z-index: 10;
+                max-width: 1200px;
+                margin: 0 auto;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0;
+                align-items: center;
+            }
+
+            .about-hero-left {
+                padding-right: 5rem;
+                border-right: 1px solid rgba(34, 151, 141, 0.15);
+            }
+
+            .about-hero-eyebrow {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                color: var(--teal-light);
+                border: 1px solid var(--teal-dim);
+                display: inline-block;
+                padding: 3px 9px;
+                margin-bottom: 2rem;
+            }
+
+            .about-hero-wordmark {
+                font-family: var(--font-display);
+                font-size: clamp(42px, 6vw, 80px);
+                line-height: 1;
+                letter-spacing: 0.02em;
+                background: linear-gradient(
+                    135deg,
+                    var(--amber-light) 0%,
+                    var(--amber) 45%,
+                    var(--teal-light) 100%
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                margin-bottom: 1.5rem;
+            }
+
+            .about-hero-tagline {
+                font-family: var(--font-body);
+                font-size: 22px;
+                font-weight: 300;
+                font-style: italic;
+                line-height: 1.6;
+                color: var(--text-secondary);
+                max-width: 480px;
+            }
+
+            .about-hero-right {
+                padding-left: 4rem;
+            }
+
+            .about-hero-statement {
+                font-family: var(--font-body);
+                font-size: 19px;
+                font-weight: 400;
+                line-height: 1.75;
+                color: var(--text-secondary);
+                margin-bottom: 1.75rem;
+            }
+            .about-hero-statement strong {
+                color: var(--text-primary);
+                font-weight: 700;
+            }
+            .about-hero-statement em {
+                color: var(--amber-light);
+                font-style: italic;
+            }
+
+            .about-hero-meta {
+                display: flex;
+                gap: 2rem;
+                padding-top: 1.5rem;
+                border-top: 1px solid var(--rule);
+            }
+            .about-stat-label {
+                font-family: var(--font-mono);
+                font-size: 8px;
+                color: var(--text-dim);
+                letter-spacing: 0.16em;
+                text-transform: uppercase;
+                margin-bottom: 0.3rem;
+            }
+            .about-stat-value {
+                font-family: var(--font-ui);
+                font-size: 14px;
+                font-weight: 700;
+                letter-spacing: 0.04em;
+                color: var(--teal-light);
+            }
+            .about-stat-value.amber {
+                color: var(--amber);
+            }
+
+            /* ─── PAGE BODY ───────────────────────────────────────── */
+            .page-body {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 2rem;
+            }
+
+            /* ─── SECTION ─────────────────────────────────────────── */
+            .about-section {
+                padding: 4rem 0;
+                border-bottom: 1px solid var(--rule);
+            }
+            .about-section:last-child {
+                border-bottom: none;
+            }
+
+            .section-header {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                margin-bottom: 3rem;
+            }
+            .section-label {
+                font-family: var(--font-ui);
+                font-size: 10px;
+                font-weight: 700;
+                letter-spacing: 0.22em;
+                text-transform: uppercase;
+                color: var(--teal-light);
+                white-space: nowrap;
+            }
+            .section-rule {
+                flex: 1;
+                height: 1px;
+                background: linear-gradient(
+                    90deg,
+                    var(--teal-dim),
+                    transparent
+                );
+            }
+            .section-num {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.1em;
+            }
+
+            /* ─── TWO-COL PROSE ───────────────────────────────────── */
+            .two-col-prose {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 4rem;
+            }
+            .prose-block p {
+                font-family: var(--font-body);
+                font-size: 18px;
+                font-weight: 400;
+                line-height: 1.75;
+                color: var(--text-secondary);
+                margin-bottom: 1.5rem;
+            }
+            .prose-block p:last-child {
+                margin-bottom: 0;
+            }
+            .prose-block p strong {
+                color: var(--text-primary);
+                font-weight: 700;
+            }
+            .prose-block p em {
+                color: var(--amber-light);
+                font-style: italic;
+            }
+
+            /* ─── MANIFESTO STATEMENT ─────────────────────────────── */
+            .manifesto-statement {
+                font-family: var(--font-body);
+                font-size: clamp(22px, 3vw, 34px);
+                font-weight: 600;
+                font-style: italic;
+                line-height: 1.45;
+                color: var(--text-primary);
+                max-width: 860px;
+                padding: 3rem 0;
+                border-top: 3px solid var(--teal);
+                border-bottom: 1px solid var(--rule);
+                margin-bottom: 3rem;
+                position: relative;
+            }
+            .manifesto-statement .highlight {
+                background: linear-gradient(
+                    90deg,
+                    var(--amber-light),
+                    var(--teal-light)
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+
+            /* ─── PILLAR CARDS ────────────────────────────────────── */
+            .pillar-cards {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1px;
+                background: var(--rule);
+                border: 1px solid var(--rule);
+            }
+
+            .pillar-card {
+                background: var(--card-bg);
+                padding: 2rem;
+                position: relative;
+            }
+            .pillar-card::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 2px;
+            }
+            .pillar-card.screen::after {
+                background: var(--teal);
+                box-shadow: 0 0 12px rgba(34, 151, 141, 0.5);
+            }
+            .pillar-card.sound::after {
+                background: var(--amber);
+                box-shadow: 0 0 12px rgba(200, 131, 58, 0.5);
+            }
+            .pillar-card.iact::after {
+                background: var(--rust);
+                box-shadow: 0 0 12px rgba(139, 53, 32, 0.5);
+            }
+
+            .pillar-card-header {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                margin-bottom: 1.25rem;
+            }
+            .pillar-card-dot {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                flex-shrink: 0;
+            }
+            .pillar-card.screen .pillar-card-dot {
+                background: var(--teal);
+                box-shadow: 0 0 8px var(--teal);
+            }
+            .pillar-card.sound .pillar-card-dot {
+                background: var(--amber);
+                box-shadow: 0 0 8px var(--amber);
+            }
+            .pillar-card.iact .pillar-card-dot {
+                background: var(--rust);
+                box-shadow: 0 0 8px var(--rust);
+            }
+
+            .pillar-card-name {
+                font-family: var(--font-ui);
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+            }
+            .pillar-card.screen .pillar-card-name {
+                color: var(--teal-light);
+            }
+            .pillar-card.sound .pillar-card-name {
+                color: var(--amber-light);
+            }
+            .pillar-card.iact .pillar-card-name {
+                color: var(--rust);
+            }
+
+            .pillar-card-desc {
+                font-family: var(--font-body);
+                font-size: 16px;
+                font-weight: 400;
+                line-height: 1.65;
+                color: var(--text-secondary);
+                margin-bottom: 1.5rem;
+            }
+
+            .pillar-card-examples {
+                list-style: none;
+                display: flex;
+                flex-direction: column;
+                gap: 0;
+            }
+            .pillar-card-examples li {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.08em;
+                padding: 0.35rem 0;
+                border-bottom: 1px solid rgba(42, 54, 54, 0.5);
+            }
+            .pillar-card-examples li:last-child {
+                border-bottom: none;
+            }
+            .pillar-card-examples li::before {
+                content: "// ";
+                color: var(--teal-dim);
+            }
+
+            /* ─── REFERENCES ──────────────────────────────────────── */
+            .references-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 3rem;
+            }
+
+            .ref-group-label {
+                font-family: var(--font-ui);
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                color: var(--amber);
+                margin-bottom: 1.25rem;
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+            }
+            .ref-group-label::after {
+                content: "";
+                flex: 1;
+                height: 1px;
+                background: linear-gradient(
+                    90deg,
+                    var(--amber-dim),
+                    transparent
+                );
+            }
+
+            .ref-list {
+                list-style: none;
+                display: flex;
+                flex-direction: column;
+                gap: 0;
+            }
+            .ref-list li {
+                padding: 0.6rem 0;
+                border-bottom: 1px solid var(--rule);
+                display: flex;
+                gap: 0.75rem;
+                align-items: baseline;
+            }
+            .ref-list li:last-child {
+                border-bottom: none;
+            }
+            .ref-title {
+                font-family: var(--font-body);
+                font-size: 15px;
+                font-weight: 600;
+                color: var(--text-primary);
+                line-height: 1.3;
+            }
+            .ref-note {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.06em;
+                flex-shrink: 0;
+            }
+
+            /* ─── CONTRIBUTOR ─────────────────────────────────────── */
+            .contributor-block {
+                display: grid;
+                grid-template-columns: auto 1fr;
+                gap: 2rem;
+                align-items: start;
+                padding: 2rem;
+                border: 1px solid var(--rule);
+                background: var(--card-bg);
+                position: relative;
+            }
+            .contributor-block::before,
+            .contributor-block::after {
+                content: "";
+                position: absolute;
+                width: 14px;
+                height: 14px;
+            }
+            .contributor-block::before {
+                top: 0;
+                left: 0;
+                border-top: 1px solid var(--amber);
+                border-left: 1px solid var(--amber);
+            }
+            .contributor-block::after {
+                bottom: 0;
+                right: 0;
+                border-bottom: 1px solid var(--amber);
+                border-right: 1px solid var(--amber);
+            }
+
+            .contributor-avatar {
+                width: 64px;
+                height: 64px;
+                border: 1px solid var(--teal-dim);
+                background: linear-gradient(
+                    135deg,
+                    var(--charcoal-light),
+                    var(--card-bg)
+                );
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                position: relative;
+                overflow: hidden;
+            }
+            .contributor-avatar::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background-image:
+                    linear-gradient(
+                        rgba(34, 151, 141, 0.1) 1px,
+                        transparent 1px
+                    ),
+                    linear-gradient(
+                        90deg,
+                        rgba(34, 151, 141, 0.1) 1px,
+                        transparent 1px
+                    );
+                background-size: 10px 10px;
+            }
+            .contributor-avatar-initials {
+                font-family: var(--font-ui);
+                font-size: 16px;
+                font-weight: 900;
+                color: var(--teal-light);
+                position: relative;
+                z-index: 1;
+                letter-spacing: 0.05em;
+            }
+
+            .contributor-name {
+                font-family: var(--font-ui);
+                font-size: 12px;
+                font-weight: 700;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--text-primary);
+                margin-bottom: 0.35rem;
+            }
+            .contributor-role {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--amber);
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                margin-bottom: 0.85rem;
+            }
+            .contributor-bio {
+                font-family: var(--font-body);
+                font-size: 16px;
+                font-weight: 300;
+                font-style: italic;
+                line-height: 1.65;
+                color: var(--text-secondary);
+            }
+
+            /* ─── NEWSLETTER CTA ──────────────────────────────────── */
+            .newsletter-cta {
+                background:
+                    radial-gradient(
+                        ellipse 60% 100% at 100% 50%,
+                        rgba(34, 151, 141, 0.15) 0%,
+                        transparent 65%
+                    ),
+                    radial-gradient(
+                        ellipse 40% 100% at 0% 50%,
+                        rgba(200, 131, 58, 0.08) 0%,
+                        transparent 65%
+                    ),
+                    var(--charcoal-mid);
+                border-top: 1px solid var(--rule);
+                border-bottom: 1px solid var(--rule);
+                padding: 5rem 2rem;
+            }
+            .newsletter-cta-inner {
+                max-width: 640px;
+                margin: 0 auto;
+                text-align: center;
+            }
+            .newsletter-cta-eyebrow {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                letter-spacing: 0.22em;
+                text-transform: uppercase;
+                color: var(--teal-light);
+                border: 1px solid var(--teal-dim);
+                display: inline-block;
+                padding: 3px 10px;
+                margin-bottom: 1.5rem;
+            }
+            .newsletter-cta-heading {
+                font-family: var(--font-display);
+                font-size: clamp(22px, 3vw, 36px);
+                line-height: 1.2;
+                letter-spacing: 0.02em;
+                color: var(--text-primary);
+                margin-bottom: 1.25rem;
+            }
+            .newsletter-cta-heading span {
+                background: linear-gradient(
+                    90deg,
+                    var(--amber-light),
+                    var(--amber)
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            .newsletter-cta-body {
+                font-family: var(--font-body);
+                font-size: 18px;
+                font-weight: 300;
+                font-style: italic;
+                line-height: 1.65;
+                color: var(--text-secondary);
+                margin-bottom: 2.5rem;
+            }
+            .newsletter-form {
+                display: flex;
+                gap: 0;
+                max-width: 440px;
+                margin: 0 auto;
+            }
+            .newsletter-input {
+                flex: 1;
+                background: rgba(28, 32, 32, 0.9);
+                border: 1px solid var(--card-border);
+                border-right: none;
+                color: var(--text-primary);
+                font-family: var(--font-mono);
+                font-size: 11px;
+                padding: 12px 14px;
+                letter-spacing: 0.08em;
+                outline: none;
+                transition: border-color 0.15s;
+            }
+            .newsletter-input::placeholder {
+                color: var(--text-dim);
+            }
+            .newsletter-input:focus {
+                border-color: var(--teal-dim);
+            }
+
+            /* ─── CTA GLITCH ──────────────────────────────────────── */
+            @keyframes cta-sweep {
+                0% {
+                    left: -75%;
+                }
+                100% {
+                    left: 150%;
+                }
+            }
+            @keyframes cta-glitch-bar {
+                0% {
+                    top: 15%;
+                    height: 2px;
+                    opacity: 0.9;
+                }
+                20% {
+                    top: 55%;
+                    height: 4px;
+                    opacity: 0.6;
+                }
+                40% {
+                    top: 35%;
+                    height: 2px;
+                    opacity: 0.8;
+                }
+                60% {
+                    top: 75%;
+                    height: 5px;
+                    opacity: 0.4;
+                }
+                80% {
+                    top: 25%;
+                    height: 2px;
+                    opacity: 0.6;
+                }
+                100% {
+                    top: 50%;
+                    height: 0;
+                    opacity: 0;
+                }
+            }
+            @keyframes cta-hover-glitch {
+                0% {
+                    clip-path: inset(0 0 0 0);
+                    transform: none;
+                }
+                15% {
+                    clip-path: inset(12% 0 72% 0);
+                    transform: translateX(-5px);
+                }
+                30% {
+                    clip-path: inset(62% 0 12% 0);
+                    transform: translateX(5px);
+                }
+                45% {
+                    clip-path: inset(35% 0 45% 0);
+                    transform: translateX(-3px);
+                }
+                60% {
+                    clip-path: inset(0 0 0 0);
+                    transform: translateX(2px);
+                }
+                75% {
+                    clip-path: inset(80% 0 5% 0);
+                    transform: translateX(-2px);
+                }
+                90% {
+                    clip-path: inset(0 0 0 0);
+                    transform: none;
+                }
+                100% {
+                    clip-path: inset(0 0 0 0);
+                    transform: none;
+                }
+            }
+            @keyframes cta-idle-glitch {
+                0%,
+                89%,
+                100% {
+                    clip-path: inset(0 0 0 0);
+                    transform: none;
+                    box-shadow: none;
+                }
+                90% {
+                    clip-path: inset(10% 0 78% 0);
+                    transform: translateX(-4px);
+                    box-shadow:
+                        4px 0 0 var(--teal-light),
+                        -4px 0 0 var(--rust);
+                }
+                91% {
+                    clip-path: inset(58% 0 14% 0);
+                    transform: translateX(4px);
+                    box-shadow:
+                        -4px 0 0 var(--teal-light),
+                        4px 0 0 var(--rust);
+                }
+                92% {
+                    clip-path: inset(32% 0 42% 0);
+                    transform: translateX(-2px);
+                    box-shadow:
+                        2px 0 0 var(--teal),
+                        -2px 0 0 var(--rust);
+                }
+                93% {
+                    clip-path: inset(0 0 0 0);
+                    transform: none;
+                    box-shadow: 0 0 14px rgba(34, 151, 141, 0.55);
+                }
+                94% {
+                    box-shadow: none;
+                }
+            }
+
+            .newsletter-btn {
+                -webkit-appearance: none;
+                appearance: none;
+                position: relative;
+                overflow: hidden;
+                isolation: isolate;
+                background: linear-gradient(
+                    90deg,
+                    var(--amber),
+                    var(--amber-light)
+                );
+                color: var(--charcoal);
+                border: none;
+                font-family: var(--font-ui);
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                padding: 12px 24px;
+                cursor: pointer;
+                transition: box-shadow 0.15s;
+                white-space: nowrap;
+                animation: cta-idle-glitch 9s 3s infinite;
+            }
+            .newsletter-btn::before {
+                content: "";
+                position: absolute;
+                top: -50%;
+                left: -75%;
+                width: 45%;
+                height: 200%;
+                background: linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.28),
+                    transparent
+                );
+                transform: skewX(-15deg);
+                pointer-events: none;
+                z-index: 2;
+            }
+            .newsletter-btn::after {
+                content: "";
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 50%;
+                height: 0;
+                background: rgba(46, 184, 172, 0.6);
+                opacity: 0;
+                pointer-events: none;
+                z-index: 3;
+            }
+            .newsletter-btn:hover {
+                opacity: 1;
+                box-shadow:
+                    0 0 18px rgba(200, 131, 58, 0.4),
+                    2px 0 0 var(--teal-light),
+                    -2px 0 0 var(--rust);
+                animation:
+                    cta-hover-glitch 0.4s steps(1, end) forwards,
+                    cta-idle-glitch 9s 0.5s infinite;
+            }
+            .newsletter-btn:hover::before {
+                animation: cta-sweep 0.38s ease-out forwards;
+            }
+            .newsletter-btn:hover::after {
+                animation: cta-glitch-bar 0.4s steps(1, end) forwards;
+            }
+
+            /* ─── CONTACT ROW ─────────────────────────────────────── */
+            .contact-row {
+                display: flex;
+                gap: 1px;
+                background: var(--rule);
+                border: 1px solid var(--rule);
+            }
+            .contact-item {
+                flex: 1;
+                background: var(--card-bg);
+                padding: 1.5rem 1.75rem;
+                text-decoration: none;
+                color: inherit;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                transition: background 0.15s;
+            }
+            .contact-item:hover {
+                background: rgba(34, 151, 141, 0.05);
+            }
+            .contact-item:hover .contact-item-label {
+                color: var(--teal-light);
+            }
+            .contact-item-left {
+            }
+            .contact-item-type {
+                font-family: var(--font-mono);
+                font-size: 8px;
+                color: var(--text-dim);
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                margin-bottom: 0.35rem;
+            }
+            .contact-item-label {
+                font-family: var(--font-ui);
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: 0.1em;
+                color: var(--text-primary);
+                transition: color 0.15s;
+            }
+            .contact-item-arrow {
+                font-family: var(--font-mono);
+                font-size: 14px;
+                color: var(--teal-dim);
+                transition:
+                    color 0.15s,
+                    transform 0.15s;
+            }
+            .contact-item:hover .contact-item-arrow {
+                color: var(--teal-light);
+                transform: translateX(3px);
+            }
+
+            /* ─── STATUS BAR ──────────────────────────────────────── */
+            .status-bar {
+                background: var(--charcoal);
+                border-top: 1px solid var(--rule);
+                padding: 0 2rem;
+                height: 36px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .status-bar-left,
+            .status-bar-right {
+                display: flex;
+                align-items: center;
+                gap: 2rem;
+            }
+            .status-item {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.1em;
+                display: flex;
+                align-items: center;
+                gap: 0.4rem;
+            }
+            .status-item .dot {
+                width: 5px;
+                height: 5px;
+                border-radius: 50%;
+                background: var(--teal);
+                animation: pulse 2.5s ease-in-out infinite;
+            }
+            @keyframes pulse {
+                0%,
+                100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.25;
+                }
+            }
+            .status-item span.val {
+                color: var(--text-secondary);
+            }
+
+            /* ─── BOTTOM TICKER ───────────────────────────────────── */
+            .bottom-ticker {
+                background: var(--charcoal-mid);
+                border-top: 1px solid var(--amber-dim);
+                overflow: hidden;
+                white-space: nowrap;
+            }
+            .ticker-inner {
+                display: inline-block;
+                animation: ticker 55s linear infinite;
+                padding: 9px 0;
+            }
+            .ticker-inner span {
+                font-family: var(--font-mono);
+                font-size: 10px;
+                letter-spacing: 0.12em;
+                color: var(--text-dim);
+                text-transform: uppercase;
+                margin-right: 4rem;
+            }
+            .ticker-inner span b {
+                color: var(--amber-dim);
+                margin-right: 0.5rem;
+            }
+            @keyframes ticker {
+                0% {
+                    transform: translateX(0);
+                }
+                100% {
+                    transform: translateX(-50%);
+                }
+            }
+
+            /* ─── RESPONSIVE ──────────────────────────────────────── */
+            @media (max-width: 1024px) {
+                .about-hero-inner {
+                    grid-template-columns: 1fr;
+                }
+                .about-hero-left {
+                    border-right: none;
+                    padding-right: 0;
+                    padding-bottom: 3rem;
+                    border-bottom: 1px solid rgba(34, 151, 141, 0.15);
+                }
+                .about-hero-right {
+                    padding-left: 0;
+                    padding-top: 2.5rem;
+                }
+                .about-hero-slash {
+                    display: none;
+                }
+                .two-col-prose {
+                    grid-template-columns: 1fr;
+                    gap: 2rem;
+                }
+                .pillar-cards {
+                    grid-template-columns: 1fr;
+                }
+                .references-grid {
+                    grid-template-columns: 1fr;
+                    gap: 2.5rem;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .site-nav {
+                    padding: 0 1.25rem;
+                }
+                .nav-links {
+                    display: none;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 1.25rem;
+                    position: absolute;
+                    top: 56px;
+                    left: 0;
+                    right: 0;
+                    background: rgba(28, 32, 32, 0.99);
+                    backdrop-filter: blur(12px);
+                    border-bottom: 1px solid var(--rule);
+                    padding: 1.5rem 1.25rem;
+                    z-index: 199;
+                }
+                .nav-links.open {
+                    display: flex;
+                }
+                .nav-hamburger {
+                    display: flex;
+                }
+                .nav-meta {
+                    display: none;
+                }
+
+                .about-hero {
+                    padding: 3.5rem 1.25rem 3rem;
+                }
+                .about-hero-wordmark {
+                    font-size: clamp(36px, 10vw, 56px);
+                }
+                .about-hero-tagline {
+                    font-size: 18px;
+                }
+                .about-hero-statement {
+                    font-size: 17px;
+                }
+
+                .page-body {
+                    padding: 0 1.25rem;
+                }
+                .about-section {
+                    padding: 3rem 0;
+                }
+
+                .newsletter-form {
+                    flex-direction: column;
+                }
+                .newsletter-input {
+                    border-right: 1px solid var(--card-border);
+                }
+
+                .contact-row {
+                    flex-direction: column;
+                }
+
+                .status-bar {
+                    padding: 0 1.25rem;
+                }
+                .status-bar-right {
+                    display: none;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .about-hero {
+                    padding: 2.5rem 1rem 2.5rem;
+                }
+                .page-body {
+                    padding: 0 1rem;
+                }
+                .about-section {
+                    padding: 2.5rem 0;
+                }
+                .about-hero-meta {
+                    flex-wrap: wrap;
+                    gap: 1.5rem;
+                }
+                .contributor-block {
+                    grid-template-columns: 1fr;
+                }
+                .status-bar {
+                    padding: 0 1rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- ─── NAV ───────────────────────────────────────────── -->
+        <nav class="site-nav">
+            <a href="terribledevice-v2.3-teal.html" class="nav-wordmark"
+                >terribledevice</a
+            >
+            <ul class="nav-links">
+                <li class="nav-pill">
+                    <span class="nav-dot screen"></span><a href="#">SCREEN</a>
+                </li>
+                <li class="nav-pill">
+                    <span class="nav-dot sound"></span><a href="#">SOUND</a>
+                </li>
+                <li class="nav-pill">
+                    <span class="nav-dot iact"></span
+                    ><a href="#">INTERACTIVE</a>
+                </li>
+                <li><a href="terribledevice-v2.3-archive.html">ARCHIVE</a></li>
+                <li><a href="#" class="active">ABOUT</a></li>
+            </ul>
+            <span class="nav-meta">REV.02 // 2026</span>
+            <button
+                class="nav-hamburger"
+                aria-label="Toggle navigation"
+                aria-expanded="false"
+            >
+                <span></span><span></span><span></span>
+            </button>
+        </nav>
+
+        <!-- ─── ABOUT HERO ─────────────────────────────────────── -->
+        <header class="about-hero">
+            <div class="about-hero-bg"></div>
+            <div class="about-hero-grid"></div>
+            <div class="about-hero-slash"></div>
+
+            <div class="about-hero-inner">
+                <div class="about-hero-left">
+                    <div class="about-hero-eyebrow">About // REV.02</div>
+                    <div class="about-hero-wordmark">terrible<br />device</div>
+                    <p class="about-hero-tagline">
+                        Navigating the neon-lit alleys of pop culture — one
+                        film, record, and game at a time.
+                    </p>
+                </div>
+
+                <div class="about-hero-right">
+                    <p class="about-hero-statement">
+                        <strong>terribledevice</strong> is a pop culture blog
+                        anchored in cyberpunk and sci-fi. It covers film, music,
+                        and games — mostly from the 1980s onwards, mostly at the
+                        stranger end of the spectrum.
+                    </p>
+                    <p class="about-hero-statement">
+                        Part criticism, part guided tour. Written for the
+                        curious as much as the already-converted. If you've
+                        never seen the film or heard the record,
+                        <em>that's fine. That's kind of the point.</em>
+                    </p>
+
+                    <div class="about-hero-meta">
+                        <div>
+                            <div class="about-stat-label">Est.</div>
+                            <div class="about-stat-value">2026</div>
+                        </div>
+                        <div>
+                            <div class="about-stat-label">Pillars</div>
+                            <div class="about-stat-value">03</div>
+                        </div>
+                        <div>
+                            <div class="about-stat-label">Focus</div>
+                            <div class="about-stat-value amber">
+                                1980s – NOW
+                            </div>
+                        </div>
+                        <div>
+                            <div class="about-stat-label">Status</div>
+                            <div class="about-stat-value">ONLINE</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ─── PAGE BODY ──────────────────────────────────────── -->
+        <div class="page-body">
+            <!-- ─── WHAT IS THIS ─────────────────────────────────── -->
+            <section class="about-section">
+                <div class="section-header">
+                    <span class="section-label">What Is This</span>
+                    <div class="section-rule"></div>
+                    <span class="section-num">§ 01</span>
+                </div>
+
+                <div class="manifesto-statement">
+                    Sharp, sardonic,
+                    <span class="highlight">occasionally very silly.</span>
+                    Enthusiastic without being breathless. Points at things and
+                    says <em>you should look at this</em> — and then explains
+                    why, whether you've heard of it or not.
+                </div>
+
+                <div class="two-col-prose">
+                    <div class="prose-block">
+                        <p>
+                            The site started as a place to write about the stuff
+                            that doesn't fit neatly anywhere else — the B-movies
+                            that got there first, the electronic records that
+                            aged better than they should have, the games that
+                            used their medium to do something no other medium
+                            could.
+                        </p>
+                        <p>
+                            Cyberpunk and sci-fi are the gravity well, but the
+                            orbit is wide.
+                            <strong
+                                >RoboCop, Total Recall, Fortress, Split
+                                Second</strong
+                            >
+                            — films that understood something about the future
+                            by not trying too hard to look like it. Autechre and
+                            Richard Devine making music that sounds like it came
+                            from inside a machine that's dreaming. Games that
+                            treat failure as a narrative tool rather than an
+                            obstacle.
+                        </p>
+                    </div>
+                    <div class="prose-block">
+                        <p>
+                            The writing is mostly short — one idea, made well,
+                            and then out. Occasionally something demands more
+                            space, and those pieces get it. But the default is:
+                            say the thing, say why it matters, get out of the
+                            way.
+                        </p>
+                        <p>
+                            Nothing here assumes prior knowledge.
+                            <em
+                                >If you haven't seen Akira, we'll tell you why
+                                you should before we tell you what to think
+                                about it.</em
+                            >
+                            The goal is to make the neon-lit alley feel
+                            navigable, not to stand at the entrance and check
+                            credentials.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ─── THE PILLARS ───────────────────────────────────── -->
+            <section class="about-section">
+                <div class="section-header">
+                    <span class="section-label">The Pillars</span>
+                    <div class="section-rule"></div>
+                    <span class="section-num">§ 02</span>
+                </div>
+
+                <div class="pillar-cards">
+                    <div class="pillar-card screen">
+                        <div class="pillar-card-header">
+                            <span class="pillar-card-dot"></span>
+                            <span class="pillar-card-name">Screen</span>
+                        </div>
+                        <p class="pillar-card-desc">
+                            Film, television, anime — anything that moves. Heavy
+                            on cyberpunk and sci-fi but not limited to it.
+                            Interested in the films that predicted something,
+                            the ones that got it wrong in interesting ways, and
+                            the ones nobody's written about properly yet.
+                        </p>
+                        <ul class="pillar-card-examples">
+                            <li>Blade Runner / 2049</li>
+                            <li>Akira, Ghost in the Shell</li>
+                            <li>RoboCop, Total Recall</li>
+                            <li>Johnny Mnemonic, Nemesis</li>
+                            <li>Strange Days, Split Second</li>
+                            <li>The Matrix, Dark City</li>
+                        </ul>
+                    </div>
+
+                    <div class="pillar-card sound">
+                        <div class="pillar-card-header">
+                            <span class="pillar-card-dot"></span>
+                            <span class="pillar-card-name">Sound</span>
+                        </div>
+                        <p class="pillar-card-desc">
+                            Music at the intersection of machine, texture, and
+                            future. Anchored in IDM and glitch, with threads
+                            into post-industrial, ambient, and a lane for
+                            synthwave that earns its place. Interested in
+                            records as habitats — environments you can live
+                            inside for forty minutes.
+                        </p>
+                        <ul class="pillar-card-examples">
+                            <li>Autechre, Richard Devine, Gridlock</li>
+                            <li>Farmers Manual, Fennesz, Dryft</li>
+                            <li>Access to Arasaka, Subheim, Huron</li>
+                            <li>Haujobb, Forma Tadre</li>
+                            <li>Perturbator, Mega Drive, Mitch Murder</li>
+                            <li>Vangelis, The Prodigy, Chemical Brothers</li>
+                        </ul>
+                    </div>
+
+                    <div class="pillar-card iact">
+                        <div class="pillar-card-header">
+                            <span class="pillar-card-dot"></span>
+                            <span class="pillar-card-name">Interactive</span>
+                        </div>
+                        <p class="pillar-card-desc">
+                            Games and interactive fiction as cultural objects.
+                            Interested in what games can do that nothing else
+                            can — especially when they use the medium against
+                            itself. The failure state as narrative. The city as
+                            system. The interface as argument.
+                        </p>
+                        <ul class="pillar-card-examples">
+                            <li>System Shock, Deus Ex</li>
+                            <li>Disco Elysium, Planescape: Torment</li>
+                            <li>Control, Remedy's connected universe</li>
+                            <li>Cyberpunk 2077 (warts and all)</li>
+                            <li>Beneath a Steel Sky</li>
+                            <li>Syndicate, Uplink</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ─── WHO ───────────────────────────────────────────── -->
+            <section class="about-section">
+                <div class="section-header">
+                    <span class="section-label">Who</span>
+                    <div class="section-rule"></div>
+                    <span class="section-num">§ 03</span>
+                </div>
+
+                <div class="contributor-block">
+                    <div class="contributor-avatar">
+                        <span class="contributor-avatar-initials">MV</span>
+                    </div>
+                    <div>
+                        <div class="contributor-name">M. Voss</div>
+                        <div class="contributor-role">Editor / Writer</div>
+                        <p class="contributor-bio">
+                            Writes about the places where technology, culture,
+                            and anxiety overlap. Has strong opinions about
+                            Vangelis, the second act of RoboCop, and whether
+                            Disco Elysium is the best novel of the 2010s.
+                            Probably has seen Akira too many times. Based
+                            somewhere with bad weather and good record shops.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ─── REFERENCES ────────────────────────────────────── -->
+            <section class="about-section">
+                <div class="section-header">
+                    <span class="section-label">In The Neighbourhood</span>
+                    <div class="section-rule"></div>
+                    <span class="section-num">§ 04</span>
+                </div>
+
+                <div class="references-grid">
+                    <div>
+                        <div class="ref-group-label">Visual References</div>
+                        <ul class="ref-list">
+                            <li>
+                                <span class="ref-title"
+                                    >The Designers Republic</span
+                                >
+                                <span class="ref-note">Sheffield, 1986–</span>
+                            </li>
+                            <li>
+                                <span class="ref-title">Wipeout Series UI</span>
+                                <span class="ref-note"
+                                    >Psygnosis, 1995–2012</span
+                                >
+                            </li>
+                            <li>
+                                <span class="ref-title"
+                                    >Warp Records Packaging</span
+                                >
+                                <span class="ref-note"
+                                    >Autechre, Aphex, LFO</span
+                                >
+                            </li>
+                            <li>
+                                <span class="ref-title"
+                                    >Ghost in the Shell HUD Design</span
+                                >
+                                <span class="ref-note"
+                                    >Production I.G, 1995</span
+                                >
+                            </li>
+                            <li>
+                                <span class="ref-title"
+                                    >Blade Runner City Design</span
+                                >
+                                <span class="ref-note"
+                                    >Scott / Trumbull, 1982</span
+                                >
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <div class="ref-group-label">Editorial Neighbours</div>
+                        <ul class="ref-list">
+                            <li>
+                                <span class="ref-title">The Wire</span>
+                                <span class="ref-note"
+                                    >Music criticism that takes genre
+                                    seriously</span
+                                >
+                            </li>
+                            <li>
+                                <span class="ref-title">Sight & Sound</span>
+                                <span class="ref-note"
+                                    >Critical rigour as model</span
+                                >
+                            </li>
+                            <li>
+                                <span class="ref-title">Fact Magazine</span>
+                                <span class="ref-note"
+                                    >Electronic music criticism lineage</span
+                                >
+                            </li>
+                            <li>
+                                <span class="ref-title"
+                                    >Kotaku / Rock Paper Shotgun</span
+                                >
+                                <span class="ref-note"
+                                    >Games criticism that treats games as
+                                    culture</span
+                                >
+                            </li>
+                            <li>
+                                <span class="ref-title"
+                                    >Mark Fisher / k-punk</span
+                                >
+                                <span class="ref-note"
+                                    >Hauntology, futures that didn't
+                                    arrive</span
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ─── NEWSLETTER CTA ─────────────────────────────────── -->
+        <section class="newsletter-cta">
+            <div class="newsletter-cta-inner">
+                <div class="newsletter-cta-eyebrow">
+                    Transmission // Subscribe
+                </div>
+                <h2 class="newsletter-cta-heading">
+                    Stay in the <span>loop</span>
+                </h2>
+                <p class="newsletter-cta-body">
+                    New posts, signal-boosted links, and the occasional dispatch
+                    from the neon-lit edges of pop culture. No noise. No
+                    algorithm. Just the good stuff in your inbox.
+                </p>
+                <form class="newsletter-form" onsubmit="return false;">
+                    <input
+                        class="newsletter-input"
+                        type="email"
+                        placeholder="your@address.here"
+                        aria-label="Email address"
+                    />
+                    <button class="newsletter-btn" type="submit">
+                        Subscribe →
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ─── CONTACT ────────────────────────────────────────── -->
+        <div class="page-body" style="padding-top: 3rem; padding-bottom: 3rem">
+            <div class="section-header" style="margin-bottom: 1.5rem">
+                <span class="section-label">Get In Touch</span>
+                <div class="section-rule"></div>
+            </div>
+            <div class="contact-row">
+                <a href="mailto:hello@terribledevice.com" class="contact-item">
+                    <div class="contact-item-left">
+                        <div class="contact-item-type">Email</div>
+                        <div class="contact-item-label">
+                            hello@terribledevice.com
+                        </div>
+                    </div>
+                    <span class="contact-item-arrow">→</span>
+                </a>
+                <a href="#" class="contact-item">
+                    <div class="contact-item-left">
+                        <div class="contact-item-type">Mastodon</div>
+                        <div class="contact-item-label">@terribledevice</div>
+                    </div>
+                    <span class="contact-item-arrow">→</span>
+                </a>
+                <a href="#" class="contact-item">
+                    <div class="contact-item-left">
+                        <div class="contact-item-type">Bluesky</div>
+                        <div class="contact-item-label">
+                            @terribledevice.bsky.social
+                        </div>
+                    </div>
+                    <span class="contact-item-arrow">→</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- ─── STATUS BAR ─────────────────────────────────────── -->
+        <div class="status-bar">
+            <div class="status-bar-left">
+                <span class="status-item"
+                    ><span class="dot"></span><span>LIVE</span></span
+                >
+                <span class="status-item"
+                    >PAGE // <span class="val">ABOUT</span></span
+                >
+            </div>
+            <div class="status-bar-right">
+                <span class="status-item"
+                    >BUILD // <span class="val">V3-TEAL</span></span
+                >
+            </div>
+        </div>
+
+        <!-- ─── BOTTOM TICKER ──────────────────────────────────── -->
+        <div class="bottom-ticker" aria-hidden="true">
+            <div class="ticker-inner">
+                <span
+                    ><b>TD //</b> NAVIGATING THE NEON-LIT ALLEYS OF POP
+                    CULTURE</span
+                >
+                <span
+                    ><b>SCREEN //</b> BLADE RUNNER — AKIRA — GHOST IN THE SHELL
+                    — ROBOCOP — TOTAL RECALL</span
+                >
+                <span
+                    ><b>SOUND //</b> AUTECHRE — PERTURBATOR — FENNESZ — FORMA
+                    TADRE — MEGA DRIVE</span
+                >
+                <span
+                    ><b>INTERACTIVE //</b> SYSTEM SHOCK — DISCO ELYSIUM —
+                    CONTROL — DEUS EX — SYNDICATE</span
+                >
+                <span
+                    ><b>TD //</b> NAVIGATING THE NEON-LIT ALLEYS OF POP
+                    CULTURE</span
+                >
+                <span
+                    ><b>SCREEN //</b> BLADE RUNNER — AKIRA — GHOST IN THE SHELL
+                    — ROBOCOP — TOTAL RECALL</span
+                >
+                <span
+                    ><b>SOUND //</b> AUTECHRE — PERTURBATOR — FENNESZ — FORMA
+                    TADRE — MEGA DRIVE</span
+                >
+                <span
+                    ><b>INTERACTIVE //</b> SYSTEM SHOCK — DISCO ELYSIUM —
+                    CONTROL — DEUS EX — SYNDICATE</span
+                >
+            </div>
+        </div>
+
+        <script>
+            const hamburger = document.querySelector(".nav-hamburger");
+            const navLinks = document.querySelector(".nav-links");
+            hamburger.addEventListener("click", () => {
+                const isOpen = navLinks.classList.toggle("open");
+                hamburger.classList.toggle("open", isOpen);
+                hamburger.setAttribute("aria-expanded", isOpen);
+            });
+            navLinks.querySelectorAll("a").forEach((link) => {
+                link.addEventListener("click", () => {
+                    navLinks.classList.remove("open");
+                    hamburger.classList.remove("open");
+                    hamburger.setAttribute("aria-expanded", "false");
+                });
+            });
+        </script>
+    </body>
+</html>

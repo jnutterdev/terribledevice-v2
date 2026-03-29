@@ -1,0 +1,2318 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Archive — terribledevice</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;0,900;1,300;1,400;1,600&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+            rel="stylesheet"
+        />
+
+        <style>
+            /* ─── RESET ───────────────────────────────────────────── */
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            html {
+                scroll-behavior: smooth;
+            }
+
+            /* ─── PALETTE ─────────────────────────────────────────── */
+            :root {
+                --charcoal: #1c2020;
+                --charcoal-mid: #222828;
+                --charcoal-light: #2a3232;
+                --card-bg: #1e2424;
+                --card-border: #2e3a3a;
+
+                --teal: #22978d;
+                --teal-light: #2eb8ac;
+                --teal-dim: #155f5a;
+                --teal-faint: #0d3533;
+
+                --amber: #c8833a;
+                --amber-light: #e0a050;
+                --amber-dim: #7a4f22;
+
+                --rust: #8b3520;
+                --rust-faint: #2e1208;
+
+                --text-primary: #dde8e6;
+                --text-secondary: #8aa09e;
+                --text-dim: #4a5e5c;
+
+                --rule: #2a3636;
+
+                --font-display: "Zen Dots", sans-serif;
+                --font-ui: "Orbitron", sans-serif;
+                --font-body: "Barlow Condensed", sans-serif;
+                --font-mono: "Space Mono", monospace;
+            }
+
+            /* ─── BASE ────────────────────────────────────────────── */
+            body {
+                background-color: var(--charcoal);
+                color: var(--text-primary);
+                font-family: var(--font-body);
+                font-size: 16px;
+                line-height: 1.5;
+                min-height: 100vh;
+                overflow-x: hidden;
+            }
+
+            body::before {
+                content: "";
+                position: fixed;
+                inset: 0;
+                background: repeating-linear-gradient(
+                    to bottom,
+                    transparent 0px,
+                    transparent 3px,
+                    rgba(0, 0, 0, 0.06) 3px,
+                    rgba(0, 0, 0, 0.06) 4px
+                );
+                pointer-events: none;
+                z-index: 9999;
+            }
+
+            body::after {
+                content: "";
+                position: fixed;
+                inset: 0;
+                background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+                pointer-events: none;
+                opacity: 0.5;
+                z-index: 9998;
+            }
+
+            /* ─── NAV ─────────────────────────────────────────────── */
+            .site-nav {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 2rem;
+                height: 56px;
+                border-bottom: 1px solid var(--rule);
+                background: rgba(28, 32, 32, 0.97);
+                backdrop-filter: blur(12px);
+                position: sticky;
+                top: 0;
+                z-index: 200;
+            }
+
+            .nav-wordmark {
+                font-family: var(--font-display);
+                font-size: 18px;
+                text-decoration: none;
+                letter-spacing: 0.02em;
+                background: linear-gradient(
+                    90deg,
+                    var(--amber-light) 0%,
+                    var(--amber) 50%,
+                    var(--teal-light) 100%
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                position: relative;
+            }
+            .nav-wordmark::after {
+                content: "";
+                position: absolute;
+                bottom: -3px;
+                left: 0;
+                width: 100%;
+                height: 1px;
+                background: linear-gradient(
+                    90deg,
+                    var(--amber-dim),
+                    var(--teal-dim),
+                    transparent
+                );
+            }
+
+            .nav-links {
+                display: flex;
+                align-items: center;
+                gap: 2rem;
+                list-style: none;
+            }
+            .nav-links a {
+                font-family: var(--font-ui);
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: 0.18em;
+                text-transform: uppercase;
+                text-decoration: none;
+                color: var(--text-secondary);
+                transition: color 0.15s;
+            }
+            .nav-links a:hover {
+                color: var(--teal-light);
+            }
+            .nav-links a.active {
+                color: var(--teal-light);
+            }
+
+            .nav-pill {
+                display: flex;
+                align-items: center;
+                gap: 0.6rem;
+            }
+            .nav-dot {
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+            }
+            .nav-dot.screen {
+                background: var(--teal);
+                box-shadow: 0 0 6px var(--teal);
+            }
+            .nav-dot.sound {
+                background: var(--amber);
+                box-shadow: 0 0 6px var(--amber);
+            }
+            .nav-dot.iact {
+                background: var(--rust);
+                box-shadow: 0 0 6px var(--rust);
+            }
+
+            .nav-meta {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.1em;
+            }
+
+            .nav-hamburger {
+                display: none;
+                flex-direction: column;
+                gap: 5px;
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 6px 4px;
+            }
+            .nav-hamburger span {
+                display: block;
+                width: 22px;
+                height: 2px;
+                background: var(--text-secondary);
+                transition: background 0.15s;
+            }
+            .nav-hamburger:hover span {
+                background: var(--teal-light);
+            }
+
+            /* ─── ARCHIVE HEADER ──────────────────────────────────── */
+            .archive-header {
+                position: relative;
+                overflow: hidden;
+                border-bottom: 1px solid var(--rule);
+                padding: 3.5rem 2rem 0;
+            }
+
+            .archive-header-bg {
+                position: absolute;
+                inset: 0;
+                background:
+                    radial-gradient(
+                        ellipse 50% 100% at 100% 0%,
+                        rgba(34, 151, 141, 0.14) 0%,
+                        transparent 65%
+                    ),
+                    radial-gradient(
+                        ellipse 30% 80% at 0% 100%,
+                        rgba(139, 53, 32, 0.18) 0%,
+                        transparent 60%
+                    ),
+                    var(--charcoal);
+            }
+            .archive-header-grid {
+                position: absolute;
+                inset: 0;
+                background-image:
+                    linear-gradient(
+                        rgba(34, 151, 141, 0.04) 1px,
+                        transparent 1px
+                    ),
+                    linear-gradient(
+                        90deg,
+                        rgba(34, 151, 141, 0.04) 1px,
+                        transparent 1px
+                    );
+                background-size: 52px 52px;
+            }
+
+            .archive-header-inner {
+                position: relative;
+                z-index: 10;
+                max-width: 1300px;
+                margin: 0 auto;
+            }
+
+            .archive-eyebrow {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                color: var(--teal-light);
+                border: 1px solid var(--teal-dim);
+                display: inline-block;
+                padding: 3px 9px;
+                margin-bottom: 1.5rem;
+            }
+
+            .archive-title-row {
+                display: flex;
+                align-items: flex-end;
+                justify-content: space-between;
+                gap: 2rem;
+                margin-bottom: 2.5rem;
+                flex-wrap: wrap;
+            }
+
+            .archive-title {
+                font-family: var(--font-display);
+                font-size: clamp(32px, 5vw, 62px);
+                line-height: 1;
+                letter-spacing: 0.02em;
+                color: var(--text-primary);
+            }
+
+            .archive-counts {
+                display: flex;
+                gap: 2rem;
+                flex-shrink: 0;
+                padding-bottom: 0.4rem;
+            }
+            .archive-count-item {
+                text-align: right;
+            }
+            .archive-count-label {
+                font-family: var(--font-mono);
+                font-size: 8px;
+                color: var(--text-dim);
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                margin-bottom: 0.2rem;
+            }
+            .archive-count-value {
+                font-family: var(--font-ui);
+                font-size: 20px;
+                font-weight: 900;
+                letter-spacing: -0.02em;
+            }
+            .archive-count-value.teal {
+                color: var(--teal-light);
+            }
+            .archive-count-value.amber {
+                color: var(--amber);
+            }
+            .archive-count-value.rust {
+                color: var(--rust);
+            }
+            .archive-count-value.dim {
+                color: var(--text-secondary);
+            }
+
+            /* ─── FILTER BAR ──────────────────────────────────────── */
+            .filter-bar {
+                display: flex;
+                align-items: stretch;
+                gap: 0;
+                border-top: 1px solid var(--rule);
+                position: relative;
+                z-index: 10;
+            }
+
+            .filter-tabs {
+                display: flex;
+                gap: 0;
+                flex: 1;
+            }
+
+            .filter-tab {
+                font-family: var(--font-ui);
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: 0.18em;
+                text-transform: uppercase;
+                padding: 0 1.5rem;
+                height: 48px;
+                background: none;
+                border: none;
+                border-right: 1px solid var(--rule);
+                color: var(--text-dim);
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 0.6rem;
+                transition:
+                    color 0.15s,
+                    background 0.15s;
+                position: relative;
+            }
+            .filter-tab::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 2px;
+                background: transparent;
+                transition: background 0.15s;
+            }
+            .filter-tab:hover {
+                color: var(--text-secondary);
+                background: rgba(255, 255, 255, 0.02);
+            }
+
+            .filter-tab.active {
+                color: var(--text-primary);
+            }
+            .filter-tab.active[data-filter="all"]::after {
+                background: var(--text-secondary);
+            }
+            .filter-tab.active[data-filter="screen"]::after {
+                background: var(--teal);
+            }
+            .filter-tab.active[data-filter="sound"]::after {
+                background: var(--amber);
+            }
+            .filter-tab.active[data-filter="iact"]::after {
+                background: var(--rust);
+            }
+
+            .filter-tab[data-filter="all"].active {
+                color: var(--text-primary);
+            }
+            .filter-tab[data-filter="screen"].active {
+                color: var(--teal-light);
+            }
+            .filter-tab[data-filter="sound"].active {
+                color: var(--amber-light);
+            }
+            .filter-tab[data-filter="iact"].active {
+                color: var(--rust);
+            }
+
+            .filter-dot {
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                flex-shrink: 0;
+            }
+            .filter-dot.screen {
+                background: var(--teal);
+                box-shadow: 0 0 5px var(--teal);
+            }
+            .filter-dot.sound {
+                background: var(--amber);
+                box-shadow: 0 0 5px var(--amber);
+            }
+            .filter-dot.iact {
+                background: var(--rust);
+                box-shadow: 0 0 5px var(--rust);
+            }
+
+            .filter-tab-count {
+                font-family: var(--font-mono);
+                font-size: 8px;
+                color: var(--text-dim);
+                letter-spacing: 0.04em;
+            }
+
+            .filter-search-wrap {
+                display: flex;
+                align-items: center;
+                border-left: 1px solid var(--rule);
+                padding: 0 1rem;
+                gap: 0.5rem;
+            }
+            .filter-search-label {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.1em;
+            }
+            .filter-search {
+                background: none;
+                border: none;
+                color: var(--text-primary);
+                font-family: var(--font-mono);
+                font-size: 11px;
+                letter-spacing: 0.06em;
+                width: 180px;
+                outline: none;
+                padding: 0;
+            }
+            .filter-search::placeholder {
+                color: var(--text-dim);
+            }
+
+            /* ─── PAGE LAYOUT ─────────────────────────────────────── */
+            .archive-body {
+                max-width: 1300px;
+                margin: 0 auto;
+                padding: 0 2rem;
+                display: grid;
+                grid-template-columns: 220px 1fr;
+                gap: 0;
+                align-items: start;
+            }
+
+            /* ─── LEFT FACETS ─────────────────────────────────────── */
+            .archive-facets {
+                border-right: 1px solid var(--rule);
+                padding: 3rem 2rem 3rem 0;
+                position: sticky;
+                top: 56px;
+            }
+
+            .facet-block {
+                margin-bottom: 2.5rem;
+            }
+
+            .facet-label {
+                font-family: var(--font-ui);
+                font-size: 8px;
+                font-weight: 700;
+                letter-spacing: 0.22em;
+                text-transform: uppercase;
+                color: var(--teal-light);
+                margin-bottom: 0.85rem;
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+            }
+            .facet-label::after {
+                content: "";
+                flex: 1;
+                height: 1px;
+                background: linear-gradient(
+                    90deg,
+                    var(--teal-dim),
+                    transparent
+                );
+            }
+
+            .facet-list {
+                list-style: none;
+                display: flex;
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .facet-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.45rem 0;
+                border-bottom: 1px solid rgba(42, 54, 54, 0.5);
+                cursor: pointer;
+                transition: padding-left 0.15s;
+            }
+            .facet-item:last-child {
+                border-bottom: none;
+            }
+            .facet-item:hover {
+                padding-left: 4px;
+            }
+            .facet-item:hover .facet-name {
+                color: var(--teal-light);
+            }
+            .facet-item.active .facet-name {
+                color: var(--text-primary);
+            }
+
+            .facet-name {
+                font-family: var(--font-body);
+                font-size: 14px;
+                font-weight: 400;
+                color: var(--text-secondary);
+                transition: color 0.15s;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            .facet-pip {
+                width: 5px;
+                height: 5px;
+                border-radius: 50%;
+                flex-shrink: 0;
+            }
+            .facet-pip.screen {
+                background: var(--teal);
+            }
+            .facet-pip.sound {
+                background: var(--amber);
+            }
+            .facet-pip.iact {
+                background: var(--rust);
+            }
+
+            .facet-count {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.04em;
+            }
+
+            /* ─── ARCHIVE LIST ────────────────────────────────────── */
+            .archive-list-wrap {
+                padding: 3rem 0 3rem 2.5rem;
+            }
+
+            .archive-list-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 0;
+                padding-bottom: 0.75rem;
+                border-bottom: 1px solid var(--rule);
+            }
+
+            .archive-list-meta {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.1em;
+            }
+            .archive-list-meta span {
+                color: var(--teal-light);
+            }
+
+            .archive-sort {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            .archive-sort-label {
+                font-family: var(--font-mono);
+                font-size: 8px;
+                color: var(--text-dim);
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+            }
+            .archive-sort select {
+                background: none;
+                border: 1px solid var(--rule);
+                color: var(--text-secondary);
+                font-family: var(--font-mono);
+                font-size: 9px;
+                letter-spacing: 0.08em;
+                padding: 3px 6px;
+                outline: none;
+                cursor: pointer;
+            }
+            .archive-sort select option {
+                background: var(--charcoal);
+            }
+
+            /* ─── YEAR GROUP ──────────────────────────────────────── */
+            .year-group {
+                margin-top: 2.5rem;
+            }
+            .year-group:first-child {
+                margin-top: 1.5rem;
+            }
+
+            .year-marker {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                margin-bottom: 0;
+                padding-bottom: 0.6rem;
+                border-bottom: 1px solid var(--rule);
+            }
+            .year-marker-value {
+                font-family: var(--font-ui);
+                font-size: 11px;
+                font-weight: 900;
+                letter-spacing: 0.12em;
+                color: var(--charcoal-light);
+            }
+            .year-marker-rule {
+                flex: 1;
+                height: 1px;
+                background: var(--rule);
+            }
+            .year-marker-count {
+                font-family: var(--font-mono);
+                font-size: 8px;
+                color: var(--text-dim);
+                letter-spacing: 0.1em;
+            }
+
+            /* ─── ARCHIVE ENTRY ───────────────────────────────────── */
+            .archive-entry {
+                display: grid;
+                grid-template-columns: 40px 18px 1fr auto;
+                gap: 0 1rem;
+                align-items: baseline;
+                padding: 0.9rem 0;
+                border-bottom: 1px solid rgba(42, 54, 54, 0.5);
+                text-decoration: none;
+                color: inherit;
+                transition: background 0.12s;
+                position: relative;
+            }
+            .archive-entry:last-child {
+                border-bottom: none;
+            }
+            .archive-entry:hover {
+                background: rgba(34, 151, 141, 0.03);
+                margin: 0 -1rem;
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            .archive-entry:hover .entry-title {
+                color: var(--teal-light);
+            }
+
+            .archive-entry.hidden {
+                display: none;
+            }
+
+            .entry-index {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.06em;
+                text-align: right;
+            }
+
+            .entry-pip {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding-top: 2px;
+            }
+            .entry-pip-dot {
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                flex-shrink: 0;
+            }
+            .entry-pip-dot.screen {
+                background: var(--teal);
+                box-shadow: 0 0 5px rgba(34, 151, 141, 0.6);
+            }
+            .entry-pip-dot.sound {
+                background: var(--amber);
+                box-shadow: 0 0 5px rgba(200, 131, 58, 0.6);
+            }
+            .entry-pip-dot.iact {
+                background: var(--rust);
+                box-shadow: 0 0 5px rgba(139, 53, 32, 0.6);
+            }
+
+            .entry-content {
+            }
+
+            .entry-pillar {
+                font-family: var(--font-ui);
+                font-size: 7px;
+                font-weight: 700;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                margin-bottom: 0.2rem;
+            }
+            .entry-pillar.screen {
+                color: var(--teal);
+            }
+            .entry-pillar.sound {
+                color: var(--amber);
+            }
+            .entry-pillar.iact {
+                color: var(--rust);
+            }
+
+            .entry-title {
+                font-family: var(--font-body);
+                font-size: 17px;
+                font-weight: 700;
+                line-height: 1.3;
+                color: var(--text-primary);
+                transition: color 0.15s;
+            }
+
+            .entry-excerpt {
+                font-family: var(--font-body);
+                font-size: 13px;
+                font-weight: 300;
+                font-style: italic;
+                color: var(--text-dim);
+                line-height: 1.4;
+                margin-top: 0.2rem;
+                max-width: 560px;
+            }
+
+            .entry-meta {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 0.3rem;
+                flex-shrink: 0;
+                padding-top: 2px;
+            }
+            .entry-date {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.06em;
+                white-space: nowrap;
+            }
+            .entry-words {
+                font-family: var(--font-mono);
+                font-size: 8px;
+                color: var(--teal-dim);
+                letter-spacing: 0.06em;
+                white-space: nowrap;
+            }
+            .entry-tag {
+                font-family: var(--font-mono);
+                font-size: 7px;
+                color: var(--text-dim);
+                border: 1px solid var(--rule);
+                padding: 1px 5px;
+                letter-spacing: 0.04em;
+                white-space: nowrap;
+            }
+
+            /* ─── EMPTY STATE ─────────────────────────────────────── */
+            .archive-empty {
+                display: none;
+                padding: 4rem 0;
+                text-align: center;
+            }
+            .archive-empty.visible {
+                display: block;
+            }
+            .archive-empty-label {
+                font-family: var(--font-ui);
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                color: var(--text-dim);
+                margin-bottom: 0.75rem;
+            }
+            .archive-empty-sub {
+                font-family: var(--font-body);
+                font-size: 15px;
+                font-style: italic;
+                color: var(--text-dim);
+            }
+
+            /* ─── STATUS BAR ──────────────────────────────────────── */
+            .status-bar {
+                background: var(--charcoal);
+                border-top: 1px solid var(--rule);
+                padding: 0 2rem;
+                height: 36px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .status-bar-left,
+            .status-bar-right {
+                display: flex;
+                align-items: center;
+                gap: 2rem;
+            }
+            .status-item {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.1em;
+                display: flex;
+                align-items: center;
+                gap: 0.4rem;
+            }
+            .status-item .dot {
+                width: 5px;
+                height: 5px;
+                border-radius: 50%;
+                background: var(--teal);
+                animation: pulse 2.5s ease-in-out infinite;
+            }
+            @keyframes pulse {
+                0%,
+                100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.25;
+                }
+            }
+            .status-item span.val {
+                color: var(--text-secondary);
+            }
+
+            /* ─── BOTTOM TICKER ───────────────────────────────────── */
+            .bottom-ticker {
+                background: var(--charcoal-mid);
+                border-top: 1px solid var(--amber-dim);
+                overflow: hidden;
+                white-space: nowrap;
+            }
+            .ticker-inner {
+                display: inline-block;
+                animation: ticker 55s linear infinite;
+                padding: 9px 0;
+            }
+            .ticker-inner span {
+                font-family: var(--font-mono);
+                font-size: 10px;
+                letter-spacing: 0.12em;
+                color: var(--text-dim);
+                text-transform: uppercase;
+                margin-right: 4rem;
+            }
+            .ticker-inner span b {
+                color: var(--amber-dim);
+                margin-right: 0.5rem;
+            }
+            @keyframes ticker {
+                0% {
+                    transform: translateX(0);
+                }
+                100% {
+                    transform: translateX(-50%);
+                }
+            }
+
+            /* ─── RESPONSIVE ──────────────────────────────────────── */
+            @media (max-width: 1024px) {
+                .archive-body {
+                    grid-template-columns: 1fr;
+                }
+                .archive-facets {
+                    position: static;
+                    border-right: none;
+                    padding: 2rem 0 0;
+                    border-bottom: 1px solid var(--rule);
+                }
+                .facet-block {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 0.5rem;
+                    align-items: center;
+                }
+                .facet-label {
+                    margin-bottom: 0;
+                    white-space: nowrap;
+                }
+                .facet-label::after {
+                    display: none;
+                }
+                .facet-list {
+                    flex-direction: row;
+                    gap: 0.4rem;
+                }
+                .facet-item {
+                    border-bottom: none;
+                    border: 1px solid var(--rule);
+                    padding: 0.3rem 0.75rem;
+                }
+                .facet-item:hover {
+                    padding-left: 0.75rem;
+                }
+                .archive-list-wrap {
+                    padding-left: 0;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .site-nav {
+                    padding: 0 1.25rem;
+                }
+                .nav-links {
+                    display: none;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 1.25rem;
+                    position: absolute;
+                    top: 56px;
+                    left: 0;
+                    right: 0;
+                    background: rgba(28, 32, 32, 0.99);
+                    backdrop-filter: blur(12px);
+                    border-bottom: 1px solid var(--rule);
+                    padding: 1.5rem 1.25rem;
+                    z-index: 199;
+                }
+                .nav-links.open {
+                    display: flex;
+                }
+                .nav-hamburger {
+                    display: flex;
+                }
+                .nav-meta {
+                    display: none;
+                }
+
+                .archive-header {
+                    padding: 2.5rem 1.25rem 0;
+                }
+                .archive-body {
+                    padding: 0 1.25rem;
+                }
+                .archive-counts {
+                    gap: 1.25rem;
+                }
+                .archive-count-value {
+                    font-size: 16px;
+                }
+
+                .filter-bar {
+                    flex-direction: column;
+                }
+                .filter-tabs {
+                    overflow-x: auto;
+                    border-bottom: 1px solid var(--rule);
+                }
+                .filter-search-wrap {
+                    border-left: none;
+                    border-top: 1px solid var(--rule);
+                    padding: 0.75rem 0;
+                }
+                .filter-search {
+                    width: 100%;
+                }
+
+                .archive-entry {
+                    grid-template-columns: 32px 14px 1fr;
+                    grid-template-rows: auto auto;
+                }
+                .entry-meta {
+                    grid-column: 3;
+                    grid-row: 2;
+                    flex-direction: row;
+                    align-items: center;
+                    padding-top: 0.25rem;
+                }
+                .entry-words {
+                    display: none;
+                }
+                .entry-tag {
+                    display: none;
+                }
+
+                .status-bar {
+                    padding: 0 1.25rem;
+                }
+                .status-bar-right {
+                    display: none;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .archive-header {
+                    padding: 2rem 1rem 0;
+                }
+                .archive-body {
+                    padding: 0 1rem;
+                }
+                .archive-title {
+                    font-size: 28px;
+                }
+                .archive-counts {
+                    display: none;
+                }
+                .status-bar {
+                    padding: 0 1rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- ─── NAV ───────────────────────────────────────────── -->
+        <nav class="site-nav">
+            <a href="terribledevice-v2.3-teal.html" class="nav-wordmark"
+                >terribledevice</a
+            >
+            <ul class="nav-links">
+                <li class="nav-pill">
+                    <span class="nav-dot screen"></span><a href="#">SCREEN</a>
+                </li>
+                <li class="nav-pill">
+                    <span class="nav-dot sound"></span><a href="#">SOUND</a>
+                </li>
+                <li class="nav-pill">
+                    <span class="nav-dot iact"></span
+                    ><a href="#">INTERACTIVE</a>
+                </li>
+                <li><a href="#" class="active">ARCHIVE</a></li>
+                <li><a href="terribledevice-v2.3-about.html">ABOUT</a></li>
+            </ul>
+            <span class="nav-meta">REV.02 // 2026</span>
+            <button
+                class="nav-hamburger"
+                aria-label="Toggle navigation"
+                aria-expanded="false"
+            >
+                <span></span><span></span><span></span>
+            </button>
+        </nav>
+
+        <!-- ─── ARCHIVE HEADER ────────────────────────────────── -->
+        <header class="archive-header">
+            <div class="archive-header-bg"></div>
+            <div class="archive-header-grid"></div>
+
+            <div class="archive-header-inner">
+                <div class="archive-eyebrow">Archive // All Entries</div>
+
+                <div class="archive-title-row">
+                    <h1 class="archive-title">Index</h1>
+
+                    <div class="archive-counts">
+                        <div class="archive-count-item">
+                            <div class="archive-count-label">Total</div>
+                            <div class="archive-count-value dim" id="count-all">
+                                28
+                            </div>
+                        </div>
+                        <div class="archive-count-item">
+                            <div class="archive-count-label">Screen</div>
+                            <div
+                                class="archive-count-value teal"
+                                id="count-screen"
+                            >
+                                12
+                            </div>
+                        </div>
+                        <div class="archive-count-item">
+                            <div class="archive-count-label">Sound</div>
+                            <div
+                                class="archive-count-value amber"
+                                id="count-sound"
+                            >
+                                9
+                            </div>
+                        </div>
+                        <div class="archive-count-item">
+                            <div class="archive-count-label">Interactive</div>
+                            <div
+                                class="archive-count-value rust"
+                                id="count-iact"
+                            >
+                                7
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FILTER BAR -->
+                <div class="filter-bar">
+                    <div class="filter-tabs">
+                        <button class="filter-tab active" data-filter="all">
+                            All
+                            <span class="filter-tab-count">28</span>
+                        </button>
+                        <button class="filter-tab" data-filter="screen">
+                            <span class="filter-dot screen"></span>
+                            Screen
+                            <span class="filter-tab-count">12</span>
+                        </button>
+                        <button class="filter-tab" data-filter="sound">
+                            <span class="filter-dot sound"></span>
+                            Sound
+                            <span class="filter-tab-count">9</span>
+                        </button>
+                        <button class="filter-tab" data-filter="iact">
+                            <span class="filter-dot iact"></span>
+                            Interactive
+                            <span class="filter-tab-count">7</span>
+                        </button>
+                    </div>
+                    <div class="filter-search-wrap">
+                        <span class="filter-search-label">SEARCH //</span>
+                        <input
+                            class="filter-search"
+                            type="search"
+                            placeholder="title, tag, keyword…"
+                            id="search-input"
+                            autocomplete="off"
+                        />
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ─── ARCHIVE BODY ───────────────────────────────────── -->
+        <div class="archive-body">
+            <!-- FACETS SIDEBAR -->
+            <aside class="archive-facets">
+                <div class="facet-block">
+                    <div class="facet-label">Year</div>
+                    <ul class="facet-list">
+                        <li class="facet-item active" data-year="all">
+                            <span class="facet-name">All years</span>
+                            <span class="facet-count">28</span>
+                        </li>
+                        <li class="facet-item" data-year="2026">
+                            <span class="facet-name">2026</span>
+                            <span class="facet-count">18</span>
+                        </li>
+                        <li class="facet-item" data-year="2025">
+                            <span class="facet-name">2025</span>
+                            <span class="facet-count">10</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="facet-block">
+                    <div class="facet-label">Tags</div>
+                    <ul class="facet-list">
+                        <li class="facet-item" data-tag="cyberpunk">
+                            <span class="facet-name">cyberpunk</span>
+                            <span class="facet-count">11</span>
+                        </li>
+                        <li class="facet-item" data-tag="film">
+                            <span class="facet-name">film</span>
+                            <span class="facet-count">9</span>
+                        </li>
+                        <li class="facet-item" data-tag="anime">
+                            <span class="facet-name">anime</span>
+                            <span class="facet-count">5</span>
+                        </li>
+                        <li class="facet-item" data-tag="IDM">
+                            <span class="facet-name">IDM</span>
+                            <span class="facet-count">6</span>
+                        </li>
+                        <li class="facet-item" data-tag="hauntology">
+                            <span class="facet-name">hauntology</span>
+                            <span class="facet-count">4</span>
+                        </li>
+                        <li class="facet-item" data-tag="game design">
+                            <span class="facet-name">game design</span>
+                            <span class="facet-count">7</span>
+                        </li>
+                        <li class="facet-item" data-tag="synthwave">
+                            <span class="facet-name">synthwave</span>
+                            <span class="facet-count">3</span>
+                        </li>
+                        <li class="facet-item" data-tag="noir">
+                            <span class="facet-name">noir</span>
+                            <span class="facet-count">4</span>
+                        </li>
+                        <li class="facet-item" data-tag="ambient">
+                            <span class="facet-name">ambient</span>
+                            <span class="facet-count">4</span>
+                        </li>
+                        <li class="facet-item" data-tag="worldbuilding">
+                            <span class="facet-name">worldbuilding</span>
+                            <span class="facet-count">5</span>
+                        </li>
+                        <li class="facet-item" data-tag="80s">
+                            <span class="facet-name">80s</span>
+                            <span class="facet-count">8</span>
+                        </li>
+                        <li class="facet-item" data-tag="afrofuturism">
+                            <span class="facet-name">afrofuturism</span>
+                            <span class="facet-count">2</span>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- ARCHIVE LIST -->
+            <div class="archive-list-wrap">
+                <div class="archive-list-header">
+                    <span class="archive-list-meta"
+                        >Showing
+                        <span id="visible-count">28</span> entries</span
+                    >
+                    <div class="archive-sort">
+                        <span class="archive-sort-label">Sort //</span>
+                        <select id="sort-select">
+                            <option value="newest">Newest first</option>
+                            <option value="oldest">Oldest first</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="archive-empty" id="empty-state">
+                    <div class="archive-empty-label">No entries found</div>
+                    <div class="archive-empty-sub">
+                        Try adjusting your filters or search term.
+                    </div>
+                </div>
+
+                <!-- ── 2026 ─────────────────────────────────────────── -->
+                <div class="year-group" data-year-group="2026">
+                    <div class="year-marker">
+                        <span class="year-marker-value">2026</span>
+                        <div class="year-marker-rule"></div>
+                        <span class="year-marker-count">18 entries</span>
+                    </div>
+
+                    <a
+                        href="terribledevice-article.html"
+                        class="archive-entry"
+                        data-pillar="screen"
+                        data-year="2026"
+                        data-tags="cyberpunk film hauntology worldbuilding 80s noir"
+                    >
+                        <span class="entry-index">001</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot screen"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar screen">Screen</div>
+                            <div class="entry-title">
+                                The Imagined City: How Cyberpunk Became Its Own
+                                Nostalgia
+                            </div>
+                            <div class="entry-excerpt">
+                                Forty years after Neuromancer, the genre that
+                                once predicted the future now mourns it.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2026-03-28</span>
+                            <span class="entry-words">4,200 wds</span>
+                            <span class="entry-tag">cyberpunk</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="iact"
+                        data-year="2026"
+                        data-tags="game design cyberpunk worldbuilding"
+                    >
+                        <span class="entry-index">002</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot iact"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar iact">Interactive</div>
+                            <div class="entry-title">
+                                Control and the New Weird in Game Design
+                            </div>
+                            <div class="entry-excerpt">
+                                The Federal Bureau of Control is not a
+                                government agency. It's a haunted house.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2026-03-25</span>
+                            <span class="entry-words">3,600 wds</span>
+                            <span class="entry-tag">game design</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="sound"
+                        data-year="2026"
+                        data-tags="IDM ambient hauntology"
+                    >
+                        <span class="entry-index">003</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot sound"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar sound">Sound</div>
+                            <div class="entry-title">
+                                Autechre and the Grammar of Machine Time
+                            </div>
+                            <div class="entry-excerpt">
+                                Thirty years of deconstructed rhythm, and what
+                                it's actually about.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2026-03-22</span>
+                            <span class="entry-words">5,200 wds</span>
+                            <span class="entry-tag">IDM</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="sound"
+                        data-year="2026"
+                        data-tags="IDM hauntology ambient"
+                    >
+                        <span class="entry-index">004</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot sound"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar sound">Sound</div>
+                            <div class="entry-title">
+                                Burial's Untrue and the Archaeology of the
+                                Dancefloor
+                            </div>
+                            <div class="entry-excerpt">
+                                What does it mean to make music that mourns a
+                                rave that you didn't go to?
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2026-03-21</span>
+                            <span class="entry-words">3,100 wds</span>
+                            <span class="entry-tag">hauntology</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="screen"
+                        data-year="2026"
+                        data-tags="anime cyberpunk worldbuilding 80s"
+                    >
+                        <span class="entry-index">005</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot screen"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar screen">Screen</div>
+                            <div class="entry-title">
+                                Akira at 35: The City as Protagonist
+                            </div>
+                            <div class="entry-excerpt">
+                                Neo-Tokyo doesn't just contain the story — it
+                                drives it.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2026-03-15</span>
+                            <span class="entry-words">4,100 wds</span>
+                            <span class="entry-tag">anime</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="screen"
+                        data-year="2026"
+                        data-tags="film anime cyberpunk"
+                    >
+                        <span class="entry-index">006</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot screen"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar screen">Screen</div>
+                            <div class="entry-title">
+                                Ghost in the Shell (1995): The Body That Wasn't
+                                There
+                            </div>
+                            <div class="entry-excerpt">
+                                Motoko Kusanagi doesn't have an identity crisis.
+                                She has an identity audit.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2026-03-14</span>
+                            <span class="entry-words">5,400 wds</span>
+                            <span class="entry-tag">anime</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="sound"
+                        data-year="2026"
+                        data-tags="synthwave ambient 80s"
+                    >
+                        <span class="entry-index">007</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot sound"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar sound">Sound</div>
+                            <div class="entry-title">
+                                Vangelis and the Sound of a Future That Never
+                                Came
+                            </div>
+                            <div class="entry-excerpt">
+                                The Blade Runner OST promised us something we're
+                                still waiting for.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2026-03-10</span>
+                            <span class="entry-words">3,300 wds</span>
+                            <span class="entry-tag">synthwave</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="iact"
+                        data-year="2026"
+                        data-tags="game design cyberpunk worldbuilding"
+                    >
+                        <span class="entry-index">008</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot iact"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar iact">Interactive</div>
+                            <div class="entry-title">
+                                System Shock and the Architecture of Dread
+                            </div>
+                            <div class="entry-excerpt">
+                                SHODAN is terrifying not because she's powerful
+                                — because she's everywhere.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2026-03-18</span>
+                            <span class="entry-words">4,000 wds</span>
+                            <span class="entry-tag">game design</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="screen"
+                        data-year="2026"
+                        data-tags="film cyberpunk noir 80s"
+                    >
+                        <span class="entry-index">009</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot screen"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar screen">Screen</div>
+                            <div class="entry-title">
+                                RoboCop (1987): Corporate Death as Comedy
+                            </div>
+                            <div class="entry-excerpt">
+                                Verhoeven understood American capitalism better
+                                than most Americans. He found it hilarious.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2026-03-05</span>
+                            <span class="entry-words">2,800 wds</span>
+                            <span class="entry-tag">film</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="iact"
+                        data-year="2026"
+                        data-tags="game design worldbuilding cyberpunk"
+                    >
+                        <span class="entry-index">010</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot iact"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar iact">Interactive</div>
+                            <div class="entry-title">
+                                Disco Elysium and the Failure-State as Narrative
+                                Engine
+                            </div>
+                            <div class="entry-excerpt">
+                                The game that understood failure isn't the
+                                opposite of success — it's a different kind of
+                                story.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2026-03-07</span>
+                            <span class="entry-words">4,800 wds</span>
+                            <span class="entry-tag">game design</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="sound"
+                        data-year="2026"
+                        data-tags="IDM ambient afrofuturism"
+                    >
+                        <span class="entry-index">011</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot sound"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar sound">Sound</div>
+                            <div class="entry-title">
+                                Drexciya: Afrofuturism Beneath the Waves
+                            </div>
+                            <div class="entry-excerpt">
+                                The mythology was never a gimmick. It was the
+                                whole point.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2026-02-28</span>
+                            <span class="entry-words">4,600 wds</span>
+                            <span class="entry-tag">afrofuturism</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="screen"
+                        data-year="2026"
+                        data-tags="film noir cyberpunk 80s"
+                    >
+                        <span class="entry-index">012</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot screen"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar screen">Screen</div>
+                            <div class="entry-title">
+                                Strange Days (1995): The Camera That Eats Its
+                                Operator
+                            </div>
+                            <div class="entry-excerpt">
+                                Kathryn Bigelow made a film about watching that
+                                implicates the audience in real time.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2026-02-22</span>
+                            <span class="entry-words">5,100 wds</span>
+                            <span class="entry-tag">film</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="screen"
+                        data-year="2026"
+                        data-tags="film cyberpunk worldbuilding"
+                    >
+                        <span class="entry-index">013</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot screen"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar screen">Screen</div>
+                            <div class="entry-title">
+                                The Matrix Resurrections: A Film About Sequels
+                            </div>
+                            <div class="entry-excerpt">
+                                Lana Wachowski made a movie about being forced
+                                to make a movie. It's weirder than it sounds.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2026-02-14</span>
+                            <span class="entry-words">2,700 wds</span>
+                            <span class="entry-tag">film</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="iact"
+                        data-year="2026"
+                        data-tags="game design worldbuilding cyberpunk"
+                    >
+                        <span class="entry-index">014</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot iact"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar iact">Interactive</div>
+                            <div class="entry-title">
+                                Cyberpunk 2077 After the Patch: What Remains
+                            </div>
+                            <div class="entry-excerpt">
+                                The bugs are gone. The emptiness at the centre
+                                of Night City is still there.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2026-02-07</span>
+                            <span class="entry-words">3,900 wds</span>
+                            <span class="entry-tag">cyberpunk</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="sound"
+                        data-year="2026"
+                        data-tags="IDM ambient"
+                    >
+                        <span class="entry-index">015</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot sound"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar sound">Sound</div>
+                            <div class="entry-title">
+                                Forma Tadre's Automate: Post-Industrial and
+                                Proud of It
+                            </div>
+                            <div class="entry-excerpt">
+                                The record that proved machines could sound
+                                lonely.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2026-01-30</span>
+                            <span class="entry-words">2,400 wds</span>
+                            <span class="entry-tag">IDM</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="screen"
+                        data-year="2026"
+                        data-tags="film cyberpunk noir 80s"
+                    >
+                        <span class="entry-index">016</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot screen"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar screen">Screen</div>
+                            <div class="entry-title">
+                                Total Recall: The Unreliable Body and the
+                                Optional Mind
+                            </div>
+                            <div class="entry-excerpt">
+                                Verhoeven again. Still funnier than he should be
+                                about this.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2026-01-21</span>
+                            <span class="entry-words">3,100 wds</span>
+                            <span class="entry-tag">film</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="iact"
+                        data-year="2026"
+                        data-tags="game design worldbuilding cyberpunk"
+                    >
+                        <span class="entry-index">017</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot iact"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar iact">Interactive</div>
+                            <div class="entry-title">
+                                Planescape: Torment and the Question It Never
+                                Answers
+                            </div>
+                            <div class="entry-excerpt">
+                                What can change the nature of a man? The game
+                                asks this fourteen times. None of the answers
+                                are wrong.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2026-01-12</span>
+                            <span class="entry-words">6,200 wds</span>
+                            <span class="entry-tag">game design</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="sound"
+                        data-year="2026"
+                        data-tags="synthwave 80s ambient"
+                    >
+                        <span class="entry-index">018</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot sound"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar sound">Sound</div>
+                            <div class="entry-title">
+                                Perturbator's Dangerous Days: Synthwave Taken
+                                Seriously
+                            </div>
+                            <div class="entry-excerpt">
+                                The album that made a convincing case that
+                                retrowave could be something more than
+                                nostalgia.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2026-01-05</span>
+                            <span class="entry-words">2,900 wds</span>
+                            <span class="entry-tag">synthwave</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- ── 2025 ─────────────────────────────────────────── -->
+                <div class="year-group" data-year-group="2025">
+                    <div class="year-marker">
+                        <span class="year-marker-value">2025</span>
+                        <div class="year-marker-rule"></div>
+                        <span class="year-marker-count">10 entries</span>
+                    </div>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="screen"
+                        data-year="2025"
+                        data-tags="film cyberpunk noir"
+                    >
+                        <span class="entry-index">019</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot screen"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar screen">Screen</div>
+                            <div class="entry-title">
+                                Blade Runner 2049 and the Ethics of Memory
+                            </div>
+                            <div class="entry-excerpt">
+                                What does it mean to remember something that
+                                never happened to you?
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2025-12-18</span>
+                            <span class="entry-words">3,800 wds</span>
+                            <span class="entry-tag">film</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="sound"
+                        data-year="2025"
+                        data-tags="IDM ambient"
+                    >
+                        <span class="entry-index">020</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot sound"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar sound">Sound</div>
+                            <div class="entry-title">
+                                Access to Arasaka: Why Dark Ambient Still
+                                Matters
+                            </div>
+                            <div class="entry-excerpt">
+                                Building soundscapes out of collapsed
+                                infrastructure and rusted signal.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2025-11-30</span>
+                            <span class="entry-words">2,200 wds</span>
+                            <span class="entry-tag">ambient</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="iact"
+                        data-year="2025"
+                        data-tags="game design cyberpunk worldbuilding"
+                    >
+                        <span class="entry-index">021</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot iact"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar iact">Interactive</div>
+                            <div class="entry-title">
+                                Beneath a Steel Sky: The Optimistic Dystopia
+                            </div>
+                            <div class="entry-excerpt">
+                                Union City is awful. The game still manages to
+                                be funny about it.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2025-11-14</span>
+                            <span class="entry-words">2,600 wds</span>
+                            <span class="entry-tag">cyberpunk</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="screen"
+                        data-year="2025"
+                        data-tags="film cyberpunk 80s worldbuilding"
+                    >
+                        <span class="entry-index">022</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot screen"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar screen">Screen</div>
+                            <div class="entry-title">
+                                Johnny Mnemonic: The Most Honest Cyberpunk Film
+                            </div>
+                            <div class="entry-excerpt">
+                                It's a mess. That's why it works. The future was
+                                never going to be clean.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2025-10-29</span>
+                            <span class="entry-words">3,200 wds</span>
+                            <span class="entry-tag">film</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="sound"
+                        data-year="2025"
+                        data-tags="IDM ambient"
+                    >
+                        <span class="entry-index">023</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot sound"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar sound">Sound</div>
+                            <div class="entry-title">
+                                Richard Devine's Asect:Dsect and the Joy of
+                                Broken Systems
+                            </div>
+                            <div class="entry-excerpt">
+                                Music that sounds like your computer is dying
+                                but has made peace with it.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2025-10-10</span>
+                            <span class="entry-words">1,900 wds</span>
+                            <span class="entry-tag">IDM</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="screen"
+                        data-year="2025"
+                        data-tags="film noir cyberpunk worldbuilding"
+                    >
+                        <span class="entry-index">024</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot screen"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar screen">Screen</div>
+                            <div class="entry-title">
+                                Dark City (1998): The Film That Did It First
+                            </div>
+                            <div class="entry-excerpt">
+                                The Matrix got the credit. Dark City got there a
+                                year earlier and did it better.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2025-09-22</span>
+                            <span class="entry-words">3,500 wds</span>
+                            <span class="entry-tag">noir</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="iact"
+                        data-year="2025"
+                        data-tags="game design cyberpunk worldbuilding"
+                    >
+                        <span class="entry-index">025</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot iact"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar iact">Interactive</div>
+                            <div class="entry-title">
+                                Deus Ex: The Game That Invented Conspiracy
+                                Realism
+                            </div>
+                            <div class="entry-excerpt">
+                                It predicted everything. It was joking about all
+                                of it. We weren't sure which parts.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2025-09-05</span>
+                            <span class="entry-words">4,400 wds</span>
+                            <span class="entry-tag">cyberpunk</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="sound"
+                        data-year="2025"
+                        data-tags="IDM ambient hauntology"
+                    >
+                        <span class="entry-index">026</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot sound"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar sound">Sound</div>
+                            <div class="entry-title">
+                                Haujobb's Solutions for a Small Planet:
+                                Industrial That Breathes
+                            </div>
+                            <div class="entry-excerpt">
+                                The rare post-industrial record that doesn't
+                                mistake claustrophobia for depth.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2025-08-18</span>
+                            <span class="entry-words">2,100 wds</span>
+                            <span class="entry-tag">IDM</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="screen"
+                        data-year="2025"
+                        data-tags="film cyberpunk noir 80s"
+                    >
+                        <span class="entry-index">027</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot screen"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar screen">Screen</div>
+                            <div class="entry-title">
+                                Fortress (1992): The Prison Film as Dystopia
+                                Blueprint
+                            </div>
+                            <div class="entry-excerpt">
+                                Low budget, high concept, surprisingly prescient
+                                about private incarceration infrastructure.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2025-07-30</span>
+                            <span class="entry-words">2,300 wds</span>
+                            <span class="entry-tag">film</span>
+                        </div>
+                    </a>
+
+                    <a
+                        href="#"
+                        class="archive-entry"
+                        data-pillar="sound"
+                        data-year="2025"
+                        data-tags="IDM ambient afrofuturism"
+                    >
+                        <span class="entry-index">028</span>
+                        <span class="entry-pip"
+                            ><span class="entry-pip-dot sound"></span
+                        ></span>
+                        <div class="entry-content">
+                            <div class="entry-pillar sound">Sound</div>
+                            <div class="entry-title">
+                                Fennesz's Endless Summer: The Warmest Glitch
+                            </div>
+                            <div class="entry-excerpt">
+                                Distortion used as a form of nostalgia. The
+                                signal degrading and somehow becoming more
+                                beautiful.
+                            </div>
+                        </div>
+                        <div class="entry-meta">
+                            <span class="entry-date">2025-07-12</span>
+                            <span class="entry-words">2,500 wds</span>
+                            <span class="entry-tag">ambient</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <!-- /archive-list-wrap -->
+        </div>
+        <!-- /archive-body -->
+
+        <!-- ─── STATUS BAR ─────────────────────────────────────── -->
+        <div class="status-bar">
+            <div class="status-bar-left">
+                <span class="status-item"
+                    ><span class="dot"></span><span>LIVE</span></span
+                >
+                <span class="status-item"
+                    >PAGE // <span class="val">ARCHIVE</span></span
+                >
+                <span class="status-item"
+                    >ENTRIES //
+                    <span class="val" id="status-count">28</span></span
+                >
+            </div>
+            <div class="status-bar-right">
+                <span class="status-item"
+                    >BUILD // <span class="val">V3-TEAL</span></span
+                >
+            </div>
+        </div>
+
+        <!-- ─── BOTTOM TICKER ──────────────────────────────────── -->
+        <div class="bottom-ticker" aria-hidden="true">
+            <div class="ticker-inner">
+                <span
+                    ><b>TD //</b> NAVIGATING THE NEON-LIT ALLEYS OF POP
+                    CULTURE</span
+                >
+                <span
+                    ><b>SCREEN //</b> BLADE RUNNER — AKIRA — GHOST IN THE SHELL
+                    — ROBOCOP — TOTAL RECALL — DARK CITY</span
+                >
+                <span
+                    ><b>SOUND //</b> AUTECHRE — PERTURBATOR — FENNESZ — FORMA
+                    TADRE — HAUJOBB — DREXCIYA</span
+                >
+                <span
+                    ><b>INTERACTIVE //</b> SYSTEM SHOCK — DISCO ELYSIUM —
+                    CONTROL — DEUS EX — PLANESCAPE</span
+                >
+                <span
+                    ><b>TD //</b> NAVIGATING THE NEON-LIT ALLEYS OF POP
+                    CULTURE</span
+                >
+                <span
+                    ><b>SCREEN //</b> BLADE RUNNER — AKIRA — GHOST IN THE SHELL
+                    — ROBOCOP — TOTAL RECALL — DARK CITY</span
+                >
+                <span
+                    ><b>SOUND //</b> AUTECHRE — PERTURBATOR — FENNESZ — FORMA
+                    TADRE — HAUJOBB — DREXCIYA</span
+                >
+                <span
+                    ><b>INTERACTIVE //</b> SYSTEM SHOCK — DISCO ELYSIUM —
+                    CONTROL — DEUS EX — PLANESCAPE</span
+                >
+            </div>
+        </div>
+
+        <script>
+            // ─── NAV HAMBURGER ───────────────────────────────────
+            const hamburger = document.querySelector(".nav-hamburger");
+            const navLinks = document.querySelector(".nav-links");
+            hamburger.addEventListener("click", () => {
+                const isOpen = navLinks.classList.toggle("open");
+                hamburger.classList.toggle("open", isOpen);
+                hamburger.setAttribute("aria-expanded", isOpen);
+            });
+            navLinks.querySelectorAll("a").forEach((link) => {
+                link.addEventListener("click", () => {
+                    navLinks.classList.remove("open");
+                    hamburger.classList.remove("open");
+                    hamburger.setAttribute("aria-expanded", "false");
+                });
+            });
+
+            // ─── FILTER + SEARCH STATE ───────────────────────────
+            let activeFilter = "all";
+            let activeSearch = "";
+            let activeYear = "all";
+            let activeTag = null;
+
+            const entries = Array.from(
+                document.querySelectorAll(".archive-entry"),
+            );
+            const yearGroups = Array.from(
+                document.querySelectorAll(".year-group"),
+            );
+            const visibleCount = document.getElementById("visible-count");
+            const statusCount = document.getElementById("status-count");
+            const emptyState = document.getElementById("empty-state");
+
+            function applyFilters() {
+                let visible = 0;
+
+                entries.forEach((entry) => {
+                    const pillar = entry.dataset.pillar;
+                    const year = entry.dataset.year;
+                    const tags = entry.dataset.tags || "";
+                    const title = entry
+                        .querySelector(".entry-title")
+                        .textContent.toLowerCase();
+                    const excerpt = entry.querySelector(".entry-excerpt")
+                        ? entry
+                              .querySelector(".entry-excerpt")
+                              .textContent.toLowerCase()
+                        : "";
+
+                    const matchesPillar =
+                        activeFilter === "all" || pillar === activeFilter;
+                    const matchesYear =
+                        activeYear === "all" || year === activeYear;
+                    const matchesTag = !activeTag || tags.includes(activeTag);
+                    const matchesSearch =
+                        !activeSearch ||
+                        title.includes(activeSearch) ||
+                        excerpt.includes(activeSearch);
+
+                    const show =
+                        matchesPillar &&
+                        matchesYear &&
+                        matchesTag &&
+                        matchesSearch;
+                    entry.classList.toggle("hidden", !show);
+                    if (show) visible++;
+                });
+
+                // hide/show year group headers if all entries in that group are hidden
+                yearGroups.forEach((group) => {
+                    const groupEntries =
+                        group.querySelectorAll(".archive-entry");
+                    const anyVisible = Array.from(groupEntries).some(
+                        (e) => !e.classList.contains("hidden"),
+                    );
+                    group.style.display = anyVisible ? "" : "none";
+                });
+
+                visibleCount.textContent = visible;
+                statusCount.textContent = visible;
+                emptyState.classList.toggle("visible", visible === 0);
+            }
+
+            // ─── PILLAR FILTER TABS ──────────────────────────────
+            document.querySelectorAll(".filter-tab").forEach((tab) => {
+                tab.addEventListener("click", () => {
+                    document
+                        .querySelectorAll(".filter-tab")
+                        .forEach((t) => t.classList.remove("active"));
+                    tab.classList.add("active");
+                    activeFilter = tab.dataset.filter;
+                    applyFilters();
+                });
+            });
+
+            // ─── SEARCH ──────────────────────────────────────────
+            document
+                .getElementById("search-input")
+                .addEventListener("input", (e) => {
+                    activeSearch = e.target.value.trim().toLowerCase();
+                    applyFilters();
+                });
+
+            // ─── YEAR FACETS ─────────────────────────────────────
+            document.querySelectorAll("[data-year]").forEach((item) => {
+                item.addEventListener("click", () => {
+                    document
+                        .querySelectorAll("[data-year]")
+                        .forEach((i) => i.classList.remove("active"));
+                    item.classList.add("active");
+                    activeYear = item.dataset.year;
+                    applyFilters();
+                });
+            });
+
+            // ─── TAG FACETS ───────────────────────────────────────
+            document.querySelectorAll("[data-tag]").forEach((item) => {
+                item.addEventListener("click", () => {
+                    if (activeTag === item.dataset.tag) {
+                        // toggle off
+                        item.classList.remove("active");
+                        activeTag = null;
+                    } else {
+                        document
+                            .querySelectorAll("[data-tag]")
+                            .forEach((i) => i.classList.remove("active"));
+                        item.classList.add("active");
+                        activeTag = item.dataset.tag;
+                    }
+                    applyFilters();
+                });
+            });
+
+            // ─── SORT ─────────────────────────────────────────────
+            document
+                .getElementById("sort-select")
+                .addEventListener("change", (e) => {
+                    const order = e.target.value;
+                    const listWrap =
+                        document.querySelector(".archive-list-wrap");
+
+                    yearGroups.forEach((group) => {
+                        const entriesInGroup = Array.from(
+                            group.querySelectorAll(".archive-entry"),
+                        );
+                        entriesInGroup.sort((a, b) => {
+                            const da =
+                                a.querySelector(".entry-date").textContent;
+                            const db =
+                                b.querySelector(".entry-date").textContent;
+                            return order === "newest"
+                                ? db.localeCompare(da)
+                                : da.localeCompare(db);
+                        });
+                        entriesInGroup.forEach((e) => group.appendChild(e));
+                    });
+
+                    if (order === "oldest") {
+                        const groups = Array.from(yearGroups);
+                        groups
+                            .reverse()
+                            .forEach((g) => listWrap.appendChild(g));
+                    } else {
+                        yearGroups.forEach((g) => listWrap.appendChild(g));
+                    }
+                });
+        </script>
+    </body>
+</html>

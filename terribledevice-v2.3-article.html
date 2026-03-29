@@ -1,0 +1,2040 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>The Imagined City — terribledevice</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;0,900;1,300;1,400;1,600&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+            rel="stylesheet"
+        />
+
+        <style>
+            /* ─── RESET ───────────────────────────────────────────── */
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            html {
+                scroll-behavior: smooth;
+            }
+
+            /* ─── PALETTE ─────────────────────────────────────────── */
+            :root {
+                --charcoal: #1c2020;
+                --charcoal-mid: #222828;
+                --charcoal-light: #2a3232;
+                --card-bg: #1e2424;
+                --card-border: #2e3a3a;
+
+                --teal: #22978d;
+                --teal-light: #2eb8ac;
+                --teal-dim: #155f5a;
+                --teal-faint: #0d3533;
+
+                --amber: #c8833a;
+                --amber-light: #e0a050;
+                --amber-dim: #7a4f22;
+
+                --rust: #8b3520;
+
+                --text-primary: #dde8e6;
+                --text-secondary: #8aa09e;
+                --text-dim: #4a5e5c;
+
+                --rule: #2a3636;
+
+                --font-display: "Zen Dots", sans-serif;
+                --font-ui: "Orbitron", sans-serif;
+                --font-body: "Barlow Condensed", sans-serif;
+                --font-mono: "Space Mono", monospace;
+            }
+
+            /* ─── BASE ────────────────────────────────────────────── */
+            body {
+                background-color: var(--charcoal);
+                color: var(--text-primary);
+                font-family: var(--font-body);
+                font-size: 16px;
+                line-height: 1.5;
+                min-height: 100vh;
+                overflow-x: hidden;
+            }
+
+            /* ─── SCANLINE ────────────────────────────────────────── */
+            body::before {
+                content: "";
+                position: fixed;
+                inset: 0;
+                background: repeating-linear-gradient(
+                    to bottom,
+                    transparent 0px,
+                    transparent 3px,
+                    rgba(0, 0, 0, 0.06) 3px,
+                    rgba(0, 0, 0, 0.06) 4px
+                );
+                pointer-events: none;
+                z-index: 9999;
+            }
+
+            /* ─── NOISE ───────────────────────────────────────────── */
+            body::after {
+                content: "";
+                position: fixed;
+                inset: 0;
+                background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+                pointer-events: none;
+                opacity: 0.5;
+                z-index: 9998;
+            }
+
+            /* ─── NAV ─────────────────────────────────────────────── */
+            .site-nav {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 2rem;
+                height: 56px;
+                border-bottom: 1px solid var(--rule);
+                background: rgba(28, 32, 32, 0.97);
+                backdrop-filter: blur(12px);
+                position: sticky;
+                top: 0;
+                z-index: 200;
+            }
+
+            .nav-wordmark {
+                font-family: var(--font-display);
+                font-size: 18px;
+                text-decoration: none;
+                letter-spacing: 0.02em;
+                background: linear-gradient(
+                    90deg,
+                    var(--amber-light) 0%,
+                    var(--amber) 50%,
+                    var(--teal-light) 100%
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                position: relative;
+            }
+            .nav-wordmark::after {
+                content: "";
+                position: absolute;
+                bottom: -3px;
+                left: 0;
+                width: 100%;
+                height: 1px;
+                background: linear-gradient(
+                    90deg,
+                    var(--amber-dim),
+                    var(--teal-dim),
+                    transparent
+                );
+            }
+
+            .nav-links {
+                display: flex;
+                align-items: center;
+                gap: 2rem;
+                list-style: none;
+            }
+            .nav-links a {
+                font-family: var(--font-ui);
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: 0.18em;
+                text-transform: uppercase;
+                text-decoration: none;
+                color: var(--text-secondary);
+                transition: color 0.15s;
+            }
+            .nav-links a:hover {
+                color: var(--teal-light);
+            }
+
+            .nav-pill {
+                display: flex;
+                align-items: center;
+                gap: 0.6rem;
+            }
+            .nav-dot {
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+            }
+            .nav-dot.screen {
+                background: var(--teal);
+                box-shadow: 0 0 6px var(--teal);
+            }
+            .nav-dot.sound {
+                background: var(--amber);
+                box-shadow: 0 0 6px var(--amber);
+            }
+            .nav-dot.iact {
+                background: var(--rust);
+                box-shadow: 0 0 6px var(--rust);
+            }
+
+            .nav-meta {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.1em;
+            }
+
+            .nav-hamburger {
+                display: none;
+                flex-direction: column;
+                gap: 5px;
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 6px 4px;
+            }
+            .nav-hamburger span {
+                display: block;
+                width: 22px;
+                height: 2px;
+                background: var(--text-secondary);
+                transition: background 0.15s;
+            }
+            .nav-hamburger:hover span {
+                background: var(--teal-light);
+            }
+
+            /* ─── ARTICLE HERO ────────────────────────────────────── */
+            .article-hero {
+                position: relative;
+                overflow: hidden;
+                border-bottom: 1px solid var(--rule);
+                padding: 5rem 2rem 4rem;
+            }
+
+            .article-hero-bg {
+                position: absolute;
+                inset: 0;
+                background:
+                    radial-gradient(
+                        ellipse 70% 100% at 100% 0%,
+                        rgba(34, 151, 141, 0.22) 0%,
+                        transparent 65%
+                    ),
+                    radial-gradient(
+                        ellipse 40% 60% at 0% 100%,
+                        rgba(139, 53, 32, 0.28) 0%,
+                        transparent 60%
+                    ),
+                    var(--charcoal);
+            }
+
+            .article-hero-grid {
+                position: absolute;
+                inset: 0;
+                background-image:
+                    linear-gradient(
+                        rgba(34, 151, 141, 0.04) 1px,
+                        transparent 1px
+                    ),
+                    linear-gradient(
+                        90deg,
+                        rgba(34, 151, 141, 0.04) 1px,
+                        transparent 1px
+                    );
+                background-size: 52px 52px;
+            }
+
+            .article-hero-inner {
+                position: relative;
+                z-index: 10;
+                max-width: 860px;
+                margin: 0 auto;
+            }
+
+            .article-breadcrumb {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                margin-bottom: 2.5rem;
+            }
+            .breadcrumb-back {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                text-decoration: none;
+                transition: color 0.15s;
+            }
+            .breadcrumb-back:hover {
+                color: var(--teal-light);
+            }
+            .breadcrumb-sep {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+            }
+            .breadcrumb-pillar {
+                font-family: var(--font-ui);
+                font-size: 8px;
+                font-weight: 700;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                color: var(--teal-light);
+                border: 1px solid var(--teal-dim);
+                padding: 3px 9px;
+            }
+
+            .article-hero-number {
+                font-family: var(--font-ui);
+                font-size: 120px;
+                font-weight: 900;
+                line-height: 0.85;
+                letter-spacing: -0.05em;
+                color: var(--charcoal-light);
+                position: absolute;
+                top: -1rem;
+                right: 0;
+                pointer-events: none;
+                user-select: none;
+                opacity: 0.7;
+            }
+
+            .article-hero-title {
+                font-family: var(--font-display);
+                font-size: clamp(28px, 4vw, 52px);
+                line-height: 1.1;
+                letter-spacing: 0.02em;
+                color: var(--text-primary);
+                margin-bottom: 1.5rem;
+                max-width: 720px;
+            }
+            .article-hero-title .accent {
+                background: linear-gradient(
+                    90deg,
+                    var(--amber-light),
+                    var(--amber),
+                    var(--teal-light)
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+
+            .article-hero-deck {
+                font-family: var(--font-body);
+                font-size: 20px;
+                font-weight: 300;
+                font-style: italic;
+                line-height: 1.65;
+                color: var(--text-secondary);
+                max-width: 640px;
+                margin-bottom: 2.5rem;
+            }
+
+            .article-hero-meta {
+                display: flex;
+                align-items: center;
+                gap: 0;
+                flex-wrap: wrap;
+                border-top: 1px solid var(--rule);
+                padding-top: 1.5rem;
+            }
+
+            .meta-block {
+                padding-right: 2rem;
+                margin-right: 2rem;
+                border-right: 1px solid var(--rule);
+            }
+            .meta-block:last-child {
+                border-right: none;
+                margin-right: 0;
+                padding-right: 0;
+            }
+            .meta-label {
+                font-family: var(--font-mono);
+                font-size: 8px;
+                color: var(--text-dim);
+                letter-spacing: 0.16em;
+                text-transform: uppercase;
+                margin-bottom: 0.3rem;
+            }
+            .meta-value {
+                font-family: var(--font-mono);
+                font-size: 11px;
+                color: var(--text-secondary);
+                letter-spacing: 0.08em;
+            }
+            .meta-value.teal {
+                color: var(--teal-light);
+            }
+            .meta-value.amber {
+                color: var(--amber);
+            }
+
+            /* ─── ARTICLE BODY LAYOUT ─────────────────────────────── */
+            .article-body {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 2rem;
+                display: grid;
+                grid-template-columns: 1fr 280px;
+                gap: 0;
+                align-items: start;
+            }
+
+            /* ─── READING COLUMN ──────────────────────────────────── */
+            .reading-column {
+                padding: 4rem 4rem 4rem 0;
+                border-right: 1px solid var(--rule);
+                max-width: 720px;
+            }
+
+            /* Lede / first paragraph */
+            .article-lede {
+                font-family: var(--font-body);
+                font-size: 22px;
+                font-weight: 400;
+                line-height: 1.65;
+                color: var(--text-primary);
+                margin-bottom: 2rem;
+                padding-bottom: 2rem;
+                border-bottom: 1px solid var(--rule);
+            }
+            .article-lede::first-letter {
+                font-family: var(--font-ui);
+                font-size: 4.5em;
+                font-weight: 900;
+                line-height: 0.75;
+                float: left;
+                margin-right: 0.1em;
+                margin-top: 0.08em;
+                color: var(--teal-light);
+            }
+
+            /* Body paragraphs */
+            .article-body-text p {
+                font-family: var(--font-body);
+                font-size: 19px;
+                font-weight: 400;
+                line-height: 1.75;
+                color: var(--text-secondary);
+                margin-bottom: 1.75rem;
+            }
+
+            .article-body-text p strong {
+                color: var(--text-primary);
+                font-weight: 700;
+            }
+
+            .article-body-text p em {
+                color: var(--text-primary);
+                font-style: italic;
+            }
+
+            /* Section header */
+            .article-section-header {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                margin: 3rem 0 2rem;
+            }
+            .article-section-label {
+                font-family: var(--font-ui);
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: 0.22em;
+                text-transform: uppercase;
+                color: var(--teal-light);
+                white-space: nowrap;
+            }
+            .article-section-rule {
+                flex: 1;
+                height: 1px;
+                background: linear-gradient(
+                    90deg,
+                    var(--teal-dim),
+                    transparent
+                );
+            }
+            .article-section-num {
+                font-family: var(--font-mono);
+                font-size: 8px;
+                color: var(--text-dim);
+                letter-spacing: 0.1em;
+            }
+
+            /* Pull quote */
+            .pull-quote {
+                margin: 3rem 0;
+                padding: 1.75rem 2rem;
+                border-left: 3px solid var(--teal);
+                background: rgba(34, 151, 141, 0.05);
+                position: relative;
+            }
+            .pull-quote::before {
+                content: '"';
+                font-family: var(--font-body);
+                font-size: 80px;
+                line-height: 0.6;
+                color: var(--teal-dim);
+                position: absolute;
+                top: 1.5rem;
+                left: 1.5rem;
+                pointer-events: none;
+            }
+            .pull-quote-text {
+                font-family: var(--font-body);
+                font-size: 22px;
+                font-weight: 600;
+                font-style: italic;
+                line-height: 1.5;
+                color: var(--text-primary);
+                padding-left: 2rem;
+                position: relative;
+                z-index: 1;
+            }
+            .pull-quote-attribution {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                margin-top: 1rem;
+                padding-left: 2rem;
+            }
+
+            /* Amber pull quote variant */
+            .pull-quote.amber {
+                border-left-color: var(--amber);
+                background: rgba(200, 131, 58, 0.05);
+            }
+            .pull-quote.amber::before {
+                color: var(--amber-dim);
+            }
+            .pull-quote.amber .pull-quote-text {
+                color: var(--amber-light);
+            }
+
+            /* Annotation / footnote inline */
+            .annotation {
+                display: block;
+                font-family: var(--font-mono);
+                font-size: 10px;
+                color: var(--text-dim);
+                letter-spacing: 0.08em;
+                border-left: 2px solid var(--rule);
+                padding: 0.5rem 0.75rem;
+                margin: 1.75rem 0;
+                font-style: italic;
+            }
+
+            /* Inline tag */
+            .inline-tag {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                border: 1px solid var(--rule);
+                padding: 2px 6px;
+                letter-spacing: 0.06em;
+                vertical-align: middle;
+                margin: 0 2px;
+            }
+
+            /* Article image / media block */
+            .article-media {
+                margin: 2.5rem 0;
+                border: 1px solid var(--rule);
+                position: relative;
+            }
+            .article-media-placeholder {
+                background: linear-gradient(
+                    135deg,
+                    var(--charcoal-light) 0%,
+                    var(--card-bg) 100%
+                );
+                height: 320px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                overflow: hidden;
+            }
+            .article-media-placeholder::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background-image:
+                    linear-gradient(
+                        rgba(34, 151, 141, 0.08) 1px,
+                        transparent 1px
+                    ),
+                    linear-gradient(
+                        90deg,
+                        rgba(34, 151, 141, 0.08) 1px,
+                        transparent 1px
+                    );
+                background-size: 40px 40px;
+            }
+            .article-media-label {
+                font-family: var(--font-ui);
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                color: var(--text-dim);
+                position: relative;
+                z-index: 1;
+            }
+            .hud-corner {
+                position: absolute;
+                width: 14px;
+                height: 14px;
+                pointer-events: none;
+            }
+            .hud-corner.tl {
+                top: 0;
+                left: 0;
+                border-top: 1px solid var(--amber-dim);
+                border-left: 1px solid var(--amber-dim);
+            }
+            .hud-corner.tr {
+                top: 0;
+                right: 0;
+                border-top: 1px solid var(--amber-dim);
+                border-right: 1px solid var(--amber-dim);
+            }
+            .hud-corner.bl {
+                bottom: 0;
+                left: 0;
+                border-bottom: 1px solid var(--amber-dim);
+                border-left: 1px solid var(--amber-dim);
+            }
+            .hud-corner.br {
+                bottom: 0;
+                right: 0;
+                border-bottom: 1px solid var(--amber-dim);
+                border-right: 1px solid var(--amber-dim);
+            }
+
+            .article-media-caption {
+                padding: 0.75rem 1rem;
+                border-top: 1px solid var(--rule);
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.08em;
+                font-style: italic;
+            }
+
+            /* Article footer */
+            .article-footer {
+                margin-top: 4rem;
+                padding-top: 2rem;
+                border-top: 1px solid var(--rule);
+            }
+            .article-footer-tags {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                flex-wrap: wrap;
+                margin-bottom: 2rem;
+            }
+            .footer-tag-label {
+                font-family: var(--font-ui);
+                font-size: 8px;
+                font-weight: 700;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                color: var(--text-dim);
+                margin-right: 0.25rem;
+            }
+            .footer-tag {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                border: 1px solid var(--rule);
+                padding: 3px 8px;
+                text-decoration: none;
+                letter-spacing: 0.06em;
+                transition:
+                    color 0.15s,
+                    border-color 0.15s;
+            }
+            .footer-tag:hover {
+                color: var(--teal-light);
+                border-color: var(--teal-dim);
+            }
+
+            .article-nav {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1px;
+                background: var(--rule);
+                border: 1px solid var(--rule);
+            }
+            .article-nav-item {
+                background: var(--card-bg);
+                padding: 1.25rem;
+                text-decoration: none;
+                color: inherit;
+                display: block;
+                position: relative;
+                transition: background 0.15s;
+            }
+            .article-nav-item:hover {
+                background: rgba(34, 151, 141, 0.04);
+            }
+            .article-nav-item.next {
+                text-align: right;
+            }
+            .article-nav-direction {
+                font-family: var(--font-mono);
+                font-size: 8px;
+                color: var(--text-dim);
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                margin-bottom: 0.5rem;
+            }
+            .article-nav-title {
+                font-family: var(--font-body);
+                font-size: 15px;
+                font-weight: 700;
+                color: var(--text-primary);
+                line-height: 1.3;
+                transition: color 0.15s;
+            }
+            .article-nav-item:hover .article-nav-title {
+                color: var(--teal-light);
+            }
+            .article-nav-pillar {
+                font-family: var(--font-ui);
+                font-size: 8px;
+                font-weight: 700;
+                letter-spacing: 0.18em;
+                text-transform: uppercase;
+                margin-top: 0.4rem;
+            }
+            .article-nav-pillar.screen {
+                color: var(--teal);
+            }
+            .article-nav-pillar.sound {
+                color: var(--amber);
+            }
+            .article-nav-pillar.iact {
+                color: var(--rust);
+            }
+
+            /* ─── SIDEBAR ─────────────────────────────────────────── */
+            .article-sidebar {
+                padding: 4rem 0 4rem 2.5rem;
+                position: sticky;
+                top: 56px;
+            }
+
+            .sidebar-block {
+                margin-bottom: 2.5rem;
+            }
+
+            .sidebar-label {
+                font-family: var(--font-ui);
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: 0.22em;
+                text-transform: uppercase;
+                color: var(--teal-light);
+                margin-bottom: 1rem;
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+            }
+            .sidebar-label::after {
+                content: "";
+                flex: 1;
+                height: 1px;
+                background: linear-gradient(
+                    90deg,
+                    var(--teal-dim),
+                    transparent
+                );
+            }
+
+            /* TOC */
+            .toc-list {
+                list-style: none;
+                display: flex;
+                flex-direction: column;
+                gap: 0;
+            }
+            .toc-item {
+                border-bottom: 1px solid var(--rule);
+            }
+            .toc-item:last-child {
+                border-bottom: none;
+            }
+            .toc-link {
+                display: flex;
+                align-items: baseline;
+                gap: 0.75rem;
+                padding: 0.6rem 0;
+                text-decoration: none;
+                color: var(--text-secondary);
+                font-family: var(--font-body);
+                font-size: 13px;
+                font-weight: 400;
+                line-height: 1.4;
+                transition:
+                    color 0.15s,
+                    padding-left 0.15s;
+            }
+            .toc-link:hover {
+                color: var(--teal-light);
+                padding-left: 4px;
+            }
+            .toc-num {
+                font-family: var(--font-mono);
+                font-size: 8px;
+                color: var(--text-dim);
+                letter-spacing: 0.06em;
+                flex-shrink: 0;
+            }
+
+            /* newsletter */
+            .newsletter-block {
+                background: linear-gradient(
+                    135deg,
+                    rgba(34, 151, 141, 0.1) 0%,
+                    rgba(200, 131, 58, 0.06) 100%
+                );
+                border: 1px solid var(--teal-faint);
+                padding: 1.25rem;
+                position: relative;
+            }
+            .newsletter-block p {
+                font-family: var(--font-body);
+                font-size: 13px;
+                font-weight: 300;
+                font-style: italic;
+                color: var(--text-secondary);
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            }
+            .newsletter-form {
+                display: flex;
+                flex-direction: column;
+                gap: 0.4rem;
+            }
+            .newsletter-input {
+                background: rgba(28, 32, 32, 0.9);
+                border: 1px solid var(--card-border);
+                color: var(--text-primary);
+                font-family: var(--font-mono);
+                font-size: 10px;
+                padding: 9px 10px;
+                letter-spacing: 0.08em;
+                outline: none;
+                transition: border-color 0.15s;
+            }
+            .newsletter-input::placeholder {
+                color: var(--text-dim);
+            }
+            .newsletter-input:focus {
+                border-color: var(--teal-dim);
+            }
+
+            /* ─── CTA GLITCH ──────────────────────────────────────── */
+            @keyframes cta-sweep {
+                0% {
+                    left: -75%;
+                }
+                100% {
+                    left: 150%;
+                }
+            }
+            @keyframes cta-glitch-bar {
+                0% {
+                    top: 15%;
+                    height: 2px;
+                    opacity: 0.9;
+                }
+                20% {
+                    top: 55%;
+                    height: 4px;
+                    opacity: 0.6;
+                }
+                40% {
+                    top: 35%;
+                    height: 2px;
+                    opacity: 0.8;
+                }
+                60% {
+                    top: 75%;
+                    height: 5px;
+                    opacity: 0.4;
+                }
+                80% {
+                    top: 25%;
+                    height: 2px;
+                    opacity: 0.6;
+                }
+                100% {
+                    top: 50%;
+                    height: 0;
+                    opacity: 0;
+                }
+            }
+            @keyframes cta-hover-glitch {
+                0% {
+                    clip-path: inset(0 0 0 0);
+                    transform: none;
+                }
+                15% {
+                    clip-path: inset(12% 0 72% 0);
+                    transform: translateX(-5px);
+                }
+                30% {
+                    clip-path: inset(62% 0 12% 0);
+                    transform: translateX(5px);
+                }
+                45% {
+                    clip-path: inset(35% 0 45% 0);
+                    transform: translateX(-3px);
+                }
+                60% {
+                    clip-path: inset(0 0 0 0);
+                    transform: translateX(2px);
+                }
+                75% {
+                    clip-path: inset(80% 0 5% 0);
+                    transform: translateX(-2px);
+                }
+                90% {
+                    clip-path: inset(0 0 0 0);
+                    transform: none;
+                }
+                100% {
+                    clip-path: inset(0 0 0 0);
+                    transform: none;
+                }
+            }
+            @keyframes cta-idle-glitch {
+                0%,
+                89%,
+                100% {
+                    clip-path: inset(0 0 0 0);
+                    transform: none;
+                    box-shadow: none;
+                }
+                90% {
+                    clip-path: inset(10% 0 78% 0);
+                    transform: translateX(-4px);
+                    box-shadow:
+                        4px 0 0 var(--teal-light),
+                        -4px 0 0 var(--rust);
+                }
+                91% {
+                    clip-path: inset(58% 0 14% 0);
+                    transform: translateX(4px);
+                    box-shadow:
+                        -4px 0 0 var(--teal-light),
+                        4px 0 0 var(--rust);
+                }
+                92% {
+                    clip-path: inset(32% 0 42% 0);
+                    transform: translateX(-2px);
+                    box-shadow:
+                        2px 0 0 var(--teal),
+                        -2px 0 0 var(--rust);
+                }
+                93% {
+                    clip-path: inset(0 0 0 0);
+                    transform: none;
+                    box-shadow: 0 0 14px rgba(34, 151, 141, 0.55);
+                }
+                94% {
+                    box-shadow: none;
+                }
+            }
+
+            .newsletter-btn {
+                -webkit-appearance: none;
+                appearance: none;
+                position: relative;
+                overflow: hidden;
+                isolation: isolate;
+                display: block;
+                width: 100%;
+                background: linear-gradient(
+                    90deg,
+                    var(--amber),
+                    var(--amber-light)
+                );
+                color: var(--charcoal);
+                border: none;
+                font-family: var(--font-ui);
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                padding: 10px;
+                cursor: pointer;
+                transition: box-shadow 0.15s;
+            }
+            .newsletter-btn::before {
+                content: "";
+                position: absolute;
+                top: -50%;
+                left: -75%;
+                width: 45%;
+                height: 200%;
+                background: linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.28),
+                    transparent
+                );
+                transform: skewX(-15deg);
+                pointer-events: none;
+                z-index: 2;
+            }
+            .newsletter-btn::after {
+                content: "";
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 50%;
+                height: 0;
+                background: rgba(46, 184, 172, 0.6);
+                opacity: 0;
+                pointer-events: none;
+                z-index: 3;
+            }
+            .newsletter-btn:hover {
+                opacity: 1;
+                box-shadow:
+                    0 0 18px rgba(200, 131, 58, 0.4),
+                    2px 0 0 var(--teal-light),
+                    -2px 0 0 var(--rust);
+                animation: cta-hover-glitch 0.4s steps(1, end) forwards;
+            }
+            .newsletter-btn:hover::before {
+                animation: cta-sweep 0.38s ease-out forwards;
+            }
+            .newsletter-btn:hover::after {
+                animation: cta-glitch-bar 0.4s steps(1, end) forwards;
+            }
+
+            /* related posts */
+            .related-post {
+                padding: 0.85rem 0;
+                border-bottom: 1px solid var(--rule);
+                text-decoration: none;
+                color: inherit;
+                display: block;
+                transition: padding-left 0.15s;
+            }
+            .related-post:first-child {
+                padding-top: 0;
+            }
+            .related-post:last-child {
+                border-bottom: none;
+            }
+            .related-post:hover {
+                padding-left: 5px;
+            }
+            .related-post:hover .rp-title {
+                color: var(--teal-light);
+            }
+
+            .rp-pillar {
+                font-family: var(--font-ui);
+                font-size: 7px;
+                font-weight: 700;
+                letter-spacing: 0.18em;
+                text-transform: uppercase;
+                margin-bottom: 0.2rem;
+            }
+            .rp-pillar.screen {
+                color: var(--teal);
+            }
+            .rp-pillar.sound {
+                color: var(--amber);
+            }
+            .rp-pillar.iact {
+                color: var(--rust);
+            }
+
+            .rp-title {
+                font-family: var(--font-body);
+                font-size: 13px;
+                font-weight: 600;
+                color: var(--text-primary);
+                line-height: 1.3;
+                transition: color 0.15s;
+            }
+            .rp-meta {
+                font-family: var(--font-mono);
+                font-size: 8px;
+                color: var(--text-dim);
+                margin-top: 0.2rem;
+                letter-spacing: 0.06em;
+            }
+
+            /* manifest */
+            .manifest {
+                background: rgba(28, 32, 32, 0.7);
+                border: 1px solid var(--rule);
+                padding: 0.85rem;
+            }
+            .manifest-row {
+                display: flex;
+                justify-content: space-between;
+                padding: 0.3rem 0;
+                border-bottom: 1px solid rgba(42, 54, 54, 0.5);
+            }
+            .manifest-row:last-child {
+                border-bottom: none;
+            }
+            .manifest-key {
+                font-family: var(--font-mono);
+                font-size: 8px;
+                color: var(--text-dim);
+                letter-spacing: 0.08em;
+            }
+            .manifest-val {
+                font-family: var(--font-mono);
+                font-size: 8px;
+                color: var(--teal-light);
+                letter-spacing: 0.06em;
+            }
+            .manifest-val.amber {
+                color: var(--amber);
+            }
+
+            /* ─── RELATED STRIP ───────────────────────────────────── */
+            .related-strip {
+                border-top: 1px solid var(--rule);
+                padding: 3rem 2rem;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            .related-strip-header {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                margin-bottom: 2rem;
+            }
+            .related-strip-label {
+                font-family: var(--font-ui);
+                font-size: 10px;
+                font-weight: 700;
+                letter-spacing: 0.22em;
+                text-transform: uppercase;
+                color: var(--teal-light);
+            }
+            .related-strip-rule {
+                flex: 1;
+                height: 1px;
+                background: linear-gradient(
+                    90deg,
+                    var(--teal-dim),
+                    transparent
+                );
+            }
+
+            .related-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1px;
+                background: var(--rule);
+                border: 1px solid var(--rule);
+            }
+            .related-card {
+                background: var(--card-bg);
+                padding: 1.5rem;
+                text-decoration: none;
+                color: inherit;
+                display: block;
+                position: relative;
+                transition: background 0.15s;
+            }
+            .related-card:hover {
+                background: rgba(34, 151, 141, 0.04);
+            }
+            .related-card::before,
+            .related-card::after {
+                content: "";
+                position: absolute;
+                width: 10px;
+                height: 10px;
+                opacity: 0;
+                transition: opacity 0.15s;
+            }
+            .related-card::before {
+                top: 7px;
+                left: 7px;
+                border-top: 1px solid var(--amber);
+                border-left: 1px solid var(--amber);
+            }
+            .related-card::after {
+                bottom: 7px;
+                right: 7px;
+                border-bottom: 1px solid var(--amber);
+                border-right: 1px solid var(--amber);
+            }
+            .related-card:hover::before,
+            .related-card:hover::after {
+                opacity: 1;
+            }
+
+            .rc-pillar {
+                font-family: var(--font-ui);
+                font-size: 8px;
+                font-weight: 700;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                margin-bottom: 0.5rem;
+            }
+            .rc-pillar.screen {
+                color: var(--teal-light);
+            }
+            .rc-pillar.sound {
+                color: var(--amber-light);
+            }
+            .rc-pillar.iact {
+                color: var(--rust);
+            }
+
+            .rc-title {
+                font-family: var(--font-body);
+                font-size: 16px;
+                font-weight: 700;
+                line-height: 1.3;
+                color: var(--text-primary);
+                margin-bottom: 0.5rem;
+                transition: color 0.15s;
+            }
+            .related-card:hover .rc-title {
+                color: var(--teal-light);
+            }
+
+            .rc-excerpt {
+                font-family: var(--font-body);
+                font-size: 13px;
+                font-weight: 300;
+                font-style: italic;
+                color: var(--text-secondary);
+                line-height: 1.5;
+                margin-bottom: 0.75rem;
+            }
+            .rc-meta {
+                font-family: var(--font-mono);
+                font-size: 8px;
+                color: var(--text-dim);
+                letter-spacing: 0.07em;
+            }
+
+            /* ─── STATUS BAR ──────────────────────────────────────── */
+            .status-bar {
+                background: var(--charcoal);
+                border-top: 1px solid var(--rule);
+                padding: 0 2rem;
+                height: 36px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .status-bar-left,
+            .status-bar-right {
+                display: flex;
+                align-items: center;
+                gap: 2rem;
+            }
+            .status-item {
+                font-family: var(--font-mono);
+                font-size: 9px;
+                color: var(--text-dim);
+                letter-spacing: 0.1em;
+                display: flex;
+                align-items: center;
+                gap: 0.4rem;
+            }
+            .status-item .dot {
+                width: 5px;
+                height: 5px;
+                border-radius: 50%;
+                background: var(--teal);
+                animation: pulse 2.5s ease-in-out infinite;
+            }
+            @keyframes pulse {
+                0%,
+                100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.25;
+                }
+            }
+            .status-item span.val {
+                color: var(--text-secondary);
+            }
+
+            /* ─── BOTTOM TICKER ───────────────────────────────────── */
+            .bottom-ticker {
+                background: var(--charcoal-mid);
+                border-top: 1px solid var(--amber-dim);
+                overflow: hidden;
+                white-space: nowrap;
+            }
+            .ticker-inner {
+                display: inline-block;
+                animation: ticker 55s linear infinite;
+                padding: 9px 0;
+            }
+            .ticker-inner span {
+                font-family: var(--font-mono);
+                font-size: 10px;
+                letter-spacing: 0.12em;
+                color: var(--text-dim);
+                text-transform: uppercase;
+                margin-right: 4rem;
+            }
+            .ticker-inner span b {
+                color: var(--amber-dim);
+                margin-right: 0.5rem;
+            }
+            @keyframes ticker {
+                0% {
+                    transform: translateX(0);
+                }
+                100% {
+                    transform: translateX(-50%);
+                }
+            }
+
+            /* ─── RESPONSIVE ──────────────────────────────────────── */
+            @media (max-width: 1024px) {
+                .article-body {
+                    grid-template-columns: 1fr;
+                }
+                .reading-column {
+                    border-right: none;
+                    padding-right: 0;
+                    max-width: 100%;
+                }
+                .article-sidebar {
+                    position: static;
+                    padding-left: 0;
+                    padding-top: 0;
+                    border-top: 1px solid var(--rule);
+                }
+                .related-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .site-nav {
+                    padding: 0 1.25rem;
+                }
+                .nav-links {
+                    display: none;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 1.25rem;
+                    position: absolute;
+                    top: 56px;
+                    left: 0;
+                    right: 0;
+                    background: rgba(28, 32, 32, 0.99);
+                    backdrop-filter: blur(12px);
+                    border-bottom: 1px solid var(--rule);
+                    padding: 1.5rem 1.25rem;
+                    z-index: 199;
+                }
+                .nav-links.open {
+                    display: flex;
+                }
+                .nav-hamburger {
+                    display: flex;
+                }
+                .nav-meta {
+                    display: none;
+                }
+
+                .article-hero {
+                    padding: 3rem 1.25rem 2.5rem;
+                }
+                .article-hero-number {
+                    display: none;
+                }
+                .article-hero-title {
+                    font-size: clamp(24px, 7vw, 36px);
+                }
+                .article-hero-deck {
+                    font-size: 17px;
+                }
+                .article-hero-meta {
+                    gap: 0;
+                }
+                .meta-block {
+                    padding-right: 1.25rem;
+                    margin-right: 1.25rem;
+                }
+
+                .article-body {
+                    padding: 0 1.25rem;
+                }
+                .reading-column {
+                    padding: 2.5rem 0;
+                }
+                .article-lede {
+                    font-size: 19px;
+                }
+                .article-body-text p {
+                    font-size: 17px;
+                }
+
+                .article-nav {
+                    grid-template-columns: 1fr;
+                }
+                .article-nav-item.next {
+                    text-align: left;
+                }
+
+                .related-strip {
+                    padding: 2rem 1.25rem;
+                }
+                .status-bar {
+                    padding: 0 1.25rem;
+                }
+                .status-bar-right {
+                    display: none;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .article-hero {
+                    padding: 2.5rem 1rem 2rem;
+                }
+                .article-body {
+                    padding: 0 1rem;
+                }
+                .reading-column {
+                    padding: 2rem 0;
+                }
+                .pull-quote {
+                    padding: 1.25rem;
+                }
+                .pull-quote-text {
+                    font-size: 18px;
+                    padding-left: 1.25rem;
+                }
+                .pull-quote-attribution {
+                    padding-left: 1.25rem;
+                }
+                .pull-quote::before {
+                    left: 1rem;
+                    top: 1rem;
+                    font-size: 60px;
+                }
+                .article-hero-meta {
+                    flex-direction: column;
+                    gap: 1rem;
+                }
+                .meta-block {
+                    border-right: none;
+                    padding-right: 0;
+                    margin-right: 0;
+                }
+                .related-strip {
+                    padding: 2rem 1rem;
+                }
+                .status-bar {
+                    padding: 0 1rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- ─── NAV ───────────────────────────────────────────── -->
+        <nav class="site-nav">
+            <a href="terribledevice-v2.3-teal.html" class="nav-wordmark"
+                >terribledevice</a
+            >
+
+            <ul class="nav-links">
+                <li class="nav-pill">
+                    <span class="nav-dot screen"></span>
+                    <a href="#" class="active">SCREEN</a>
+                </li>
+                <li class="nav-pill">
+                    <span class="nav-dot sound"></span>
+                    <a href="#">SOUND</a>
+                </li>
+                <li class="nav-pill">
+                    <span class="nav-dot iact"></span>
+                    <a href="#">INTERACTIVE</a>
+                </li>
+                <li><a href="#">ARCHIVE</a></li>
+                <li><a href="#">ABOUT</a></li>
+            </ul>
+
+            <span class="nav-meta">REV.02 // 2026</span>
+            <button
+                class="nav-hamburger"
+                aria-label="Toggle navigation"
+                aria-expanded="false"
+            >
+                <span></span><span></span><span></span>
+            </button>
+        </nav>
+
+        <!-- ─── ARTICLE HERO ───────────────────────────────────── -->
+        <header class="article-hero">
+            <div class="article-hero-bg"></div>
+            <div class="article-hero-grid"></div>
+            <div class="article-hero-number" aria-hidden="true">01</div>
+
+            <div class="article-hero-inner">
+                <div class="article-breadcrumb">
+                    <a
+                        href="terribledevice-v2.3-teal.html"
+                        class="breadcrumb-back"
+                        >← Home</a
+                    >
+                    <span class="breadcrumb-sep">//</span>
+                    <span class="breadcrumb-pillar">SCREEN</span>
+                </div>
+
+                <h1 class="article-hero-title">
+                    The <span class="accent">Imagined</span> City:<br />
+                    How Cyberpunk Became<br />
+                    Its Own Nostalgia
+                </h1>
+
+                <p class="article-hero-deck">
+                    Forty years after Neuromancer, the genre that once predicted
+                    the future now mourns it — and the most interesting work is
+                    happening in the gap between what was promised and what
+                    arrived.
+                </p>
+
+                <div class="article-hero-meta">
+                    <div class="meta-block">
+                        <div class="meta-label">Author</div>
+                        <div class="meta-value amber">M. VOSS</div>
+                    </div>
+                    <div class="meta-block">
+                        <div class="meta-label">Published</div>
+                        <div class="meta-value">2026-03-28</div>
+                    </div>
+                    <div class="meta-block">
+                        <div class="meta-label">Pillar</div>
+                        <div class="meta-value teal">SCREEN</div>
+                    </div>
+                    <div class="meta-block">
+                        <div class="meta-label">Length</div>
+                        <div class="meta-value">4,200 WDS // 18 MIN</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ─── ARTICLE BODY ───────────────────────────────────── -->
+        <div class="article-body">
+            <!-- READING COLUMN -->
+            <main class="reading-column">
+                <p class="article-lede">
+                    There's a moment in Blade Runner 2049 where K stands in the
+                    ruins of Las Vegas — amber light, dead bees, Sinatra on a
+                    broken jukebox — and you realise the film isn't really about
+                    the future at all. It's a film about what it feels like to
+                    arrive somewhere too late. Cyberpunk, it turns out, has been
+                    making that film for a while now.
+                </p>
+
+                <div class="article-body-text">
+                    <p>
+                        The genre was always about extrapolation — take the
+                        present, turn the dial, see what breaks. William
+                        Gibson's Neuromancer (1984) gave us the console cowboy
+                        jacking into the matrix, the megacorporations, the
+                        neon-soaked sprawl. Ridley Scott's Blade Runner arrived
+                        two years earlier and handed us the definitive visual
+                        grammar: rain-slicked streets, advertisement blimps, a
+                        city so dense it had forgotten it had a sky. These
+                        weren't predictions so much as
+                        <strong>pressure tests</strong> — what happens to people
+                        when the systems they live inside become too large, too
+                        fast, too indifferent to notice them?
+                    </p>
+
+                    <p>
+                        The interesting thing is that the systems arrived. Not
+                        exactly as described, but close enough to be
+                        uncomfortable. The megacorporations are real. The
+                        surveillance infrastructure is real. The information
+                        overload, the erosion of privacy, the sense that the
+                        city runs on logic you're not authorised to read — all
+                        real. What didn't arrive was the aesthetic. Nobody got
+                        the trenchcoats and the rain. What we got instead was
+                        something flatter, more banal, and in its own way more
+                        unsettling.
+                    </p>
+
+                    <div class="pull-quote">
+                        <div class="pull-quote-text">
+                            The future arrived, just without the decor. And
+                            somehow that's the more frightening version.
+                        </div>
+                        <div class="pull-quote-attribution">
+                            — The Imagined City, §01
+                        </div>
+                    </div>
+
+                    <p>
+                        So the genre adapted. Or tried to. The cyberpunk of the
+                        2010s and 2020s is defined less by extrapolation than by
+                        <em>elegy</em> — a mourning for the future that was
+                        supposed to come. Ghost in the Shell (2017), for all its
+                        problems, is interesting precisely because it's a remake
+                        that can't decide whether it's updating the source
+                        material or preserving it in amber. Cyberpunk 2077 is a
+                        game obsessed with the iconography of the genre's own
+                        past — Akira, Neuromancer, early Warp Records sleeve art
+                        — to the point where Night City feels less like a city
+                        and more like a mood board.
+                    </p>
+
+                    <div class="article-media">
+                        <div class="article-media-placeholder">
+                            <span class="hud-corner tl"></span>
+                            <span class="hud-corner tr"></span>
+                            <span class="hud-corner bl"></span>
+                            <span class="hud-corner br"></span>
+                            <span class="article-media-label"
+                                >STILL // BLADE RUNNER 2049 (VILLENEUVE,
+                                2017)</span
+                            >
+                        </div>
+                        <div class="article-media-caption">
+                            The Las Vegas sequence. Warm amber replaces the cold
+                            blue of the original — a deliberate inversion that
+                            reads as a genre reckoning.
+                        </div>
+                    </div>
+
+                    <p>
+                        This isn't necessarily a failure. Nostalgia is a
+                        legitimate mode — hauntology, as Mark Fisher argued, is
+                        what happens when a culture loses its ability to imagine
+                        a future that isn't recycled from the past. The question
+                        isn't whether cyberpunk is nostalgic. It's whether it
+                        knows it is.
+                    </p>
+                </div>
+
+                <div class="article-section-header">
+                    <span class="article-section-label"
+                        >The City That Wasn't</span
+                    >
+                    <div class="article-section-rule"></div>
+                    <span class="article-section-num">§ 02</span>
+                </div>
+
+                <div class="article-body-text">
+                    <p>
+                        What's genuinely strange about the cyberpunk city —
+                        Neo-Tokyo, Night City, Midgar, the Sprawl — is that it
+                        functions as both setting and argument. The city isn't
+                        where the story happens. The city
+                        <strong>is</strong> the story. Its density, its
+                        layering, its indifference to the individual moving
+                        through it — these aren't background details. They're
+                        the engine.
+                    </p>
+
+                    <p>
+                        Akira (1988) understood this instinctively. Neo-Tokyo
+                        doesn't just contain Kaneda and Tetsuo's story — it
+                        <em>produces</em> it. The city is a system under so much
+                        pressure that it generates its own catastrophes. The
+                        government can't control Tetsuo because the government
+                        can't control Neo-Tokyo, and Neo-Tokyo can't control
+                        itself. The scale is the point. When something goes
+                        wrong at that scale, it doesn't go wrong in a small,
+                        containable way.
+                    </p>
+
+                    <span class="annotation">
+                        // Cross-reference: RoboCop (Verhoeven, 1987) — Delta
+                        City as the same argument, played for satire. Old
+                        Detroit as body, New Detroit as brand.
+                    </span>
+
+                    <div class="pull-quote amber">
+                        <div class="pull-quote-text">
+                            Akira's Neo-Tokyo doesn't just contain the story —
+                            it generates it. The city is a system under so much
+                            pressure that catastrophe becomes inevitable.
+                        </div>
+                        <div class="pull-quote-attribution">
+                            — The Imagined City, §02
+                        </div>
+                    </div>
+
+                    <p>
+                        The films and games that followed largely inherited this
+                        logic without always understanding it. Night City in
+                        Cyberpunk 2077 is extraordinarily dense, extraordinarily
+                        detailed, and — underneath all of it — surprisingly
+                        inert. It's a city that looks like it should be
+                        generating chaos at every level, but somehow the chaos
+                        is always scripted, always containable, always in
+                        service of the main quest. The pressure isn't real. The
+                        system doesn't push back.
+                    </p>
+
+                    <p>
+                        The best cyberpunk cities — the ones that still feel
+                        vital — are the ones where the logic of the place has
+                        genuine consequences. Where the city isn't just
+                        atmosphere. Where you can feel the pressure.
+                    </p>
+                </div>
+
+                <div class="article-section-header">
+                    <span class="article-section-label"
+                        >What's Actually Good Right Now</span
+                    >
+                    <div class="article-section-rule"></div>
+                    <span class="article-section-num">§ 03</span>
+                </div>
+
+                <div class="article-body-text">
+                    <p>
+                        The most interesting cyberpunk work happening right now
+                        tends to be the stuff operating at the genre's margins —
+                        smaller, stranger, less concerned with proving its
+                        credentials. <strong>Disco Elysium</strong> is, among
+                        other things, a cyberpunk game that doesn't announce
+                        itself as one. The city of Revachol is a
+                        post-revolutionary ruin, its politics encoded into its
+                        architecture, its economics legible in its streets. The
+                        failure state is the point. You play a detective who
+                        might not survive the case, in a city that might not
+                        survive the century, and somehow the game makes you care
+                        about both.
+                    </p>
+
+                    <p>
+                        On the music side, it's worth noting that the most vital
+                        work in the genre's sonic neighbourhood — Perturbator,
+                        Mega Drive, Haujobb, Forma Tadre — isn't trying to
+                        predict anything. It's building habitats. Environments
+                        you can live inside for forty minutes. The future as a
+                        place you might want to visit, even if you wouldn't want
+                        to stay.
+                    </p>
+
+                    <p>
+                        That might be where cyberpunk ends up, actually. Not
+                        prediction, not elegy, but <em>habitat</em>. A set of
+                        conditions in which certain kinds of stories make sense.
+                        The genre as infrastructure rather than argument.
+                    </p>
+
+                    <p>There are worse things to become.</p>
+                </div>
+
+                <!-- ARTICLE FOOTER -->
+                <footer class="article-footer">
+                    <div class="article-footer-tags">
+                        <span class="footer-tag-label">Tagged</span>
+                        <a href="#" class="footer-tag">cyberpunk</a>
+                        <a href="#" class="footer-tag">film</a>
+                        <a href="#" class="footer-tag">anime</a>
+                        <a href="#" class="footer-tag">hauntology</a>
+                        <a href="#" class="footer-tag">worldbuilding</a>
+                        <a href="#" class="footer-tag">80s</a>
+                        <a href="#" class="footer-tag">noir</a>
+                    </div>
+
+                    <nav class="article-nav" aria-label="Article navigation">
+                        <a href="#" class="article-nav-item prev">
+                            <div class="article-nav-direction">← Previous</div>
+                            <div class="article-nav-title">
+                                Ghost in the Shell (1995): The Body That Wasn't
+                                There
+                            </div>
+                            <div class="article-nav-pillar screen">SCREEN</div>
+                        </a>
+                        <a href="#" class="article-nav-item next">
+                            <div class="article-nav-direction">Next →</div>
+                            <div class="article-nav-title">
+                                Burial's Untrue and the Archaeology of the
+                                Dancefloor
+                            </div>
+                            <div class="article-nav-pillar sound">SOUND</div>
+                        </a>
+                    </nav>
+                </footer>
+            </main>
+
+            <!-- ARTICLE SIDEBAR -->
+            <aside class="article-sidebar">
+                <!-- TABLE OF CONTENTS -->
+                <div class="sidebar-block">
+                    <div class="sidebar-label">Contents</div>
+                    <ul class="toc-list">
+                        <li class="toc-item">
+                            <a href="#" class="toc-link">
+                                <span class="toc-num">01</span>
+                                The Future That Arrived Without Decor
+                            </a>
+                        </li>
+                        <li class="toc-item">
+                            <a href="#" class="toc-link">
+                                <span class="toc-num">02</span>
+                                The City That Wasn't
+                            </a>
+                        </li>
+                        <li class="toc-item">
+                            <a href="#" class="toc-link">
+                                <span class="toc-num">03</span>
+                                What's Actually Good Right Now
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- NEWSLETTER -->
+                <div class="sidebar-block">
+                    <div class="sidebar-label">Transmission</div>
+                    <div class="newsletter-block">
+                        <span class="hud-corner tl"></span>
+                        <span class="hud-corner br"></span>
+                        <p>
+                            New essays, signal-boosted links, and the occasional
+                            dispatch. No noise.
+                        </p>
+                        <form class="newsletter-form" onsubmit="return false;">
+                            <input
+                                class="newsletter-input"
+                                type="email"
+                                placeholder="your@address.here"
+                                aria-label="Email address"
+                            />
+                            <button class="newsletter-btn" type="submit">
+                                Subscribe →
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- RELATED -->
+                <div class="sidebar-block">
+                    <div class="sidebar-label">Related</div>
+                    <a href="#" class="related-post">
+                        <div class="rp-pillar screen">SCREEN</div>
+                        <div class="rp-title">
+                            Akira at 35: The City as Protagonist
+                        </div>
+                        <div class="rp-meta">2026-03-15 // 4,100 WDS</div>
+                    </a>
+                    <a href="#" class="related-post">
+                        <div class="rp-pillar iact">INTERACTIVE</div>
+                        <div class="rp-title">
+                            Disco Elysium and the Failure-State as Narrative
+                            Engine
+                        </div>
+                        <div class="rp-meta">2026-03-07 // 4,800 WDS</div>
+                    </a>
+                    <a href="#" class="related-post">
+                        <div class="rp-pillar sound">SOUND</div>
+                        <div class="rp-title">
+                            Vangelis and the Sound of a Future That Never Came
+                        </div>
+                        <div class="rp-meta">2026-03-10 // 3,300 WDS</div>
+                    </a>
+                    <a href="#" class="related-post">
+                        <div class="rp-pillar screen">SCREEN</div>
+                        <div class="rp-title">
+                            Strange Days (1995): The Camera That Eats Its
+                            Operator
+                        </div>
+                        <div class="rp-meta">2026-02-22 // 5,100 WDS</div>
+                    </a>
+                </div>
+
+                <!-- MANIFEST -->
+                <div class="sidebar-block">
+                    <div class="sidebar-label">File</div>
+                    <div class="manifest">
+                        <div class="manifest-row">
+                            <span class="manifest-key">ENTRY</span>
+                            <span class="manifest-val">001</span>
+                        </div>
+                        <div class="manifest-row">
+                            <span class="manifest-key">PILLAR</span>
+                            <span class="manifest-val">SCREEN</span>
+                        </div>
+                        <div class="manifest-row">
+                            <span class="manifest-key">WORDS</span>
+                            <span class="manifest-val amber">4,200</span>
+                        </div>
+                        <div class="manifest-row">
+                            <span class="manifest-key">AUTHOR</span>
+                            <span class="manifest-val">M. VOSS</span>
+                        </div>
+                        <div class="manifest-row">
+                            <span class="manifest-key">DATE</span>
+                            <span class="manifest-val">2026-03-28</span>
+                        </div>
+                        <div class="manifest-row">
+                            <span class="manifest-key">REVISION</span>
+                            <span class="manifest-val">1.0</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- ─── RELATED STRIP ──────────────────────────────────── -->
+        <section class="related-strip" aria-label="More articles">
+            <div class="related-strip-header">
+                <span class="related-strip-label">More from Screen</span>
+                <div class="related-strip-rule"></div>
+            </div>
+            <div class="related-grid">
+                <a href="#" class="related-card">
+                    <div class="rc-pillar screen">SCREEN</div>
+                    <div class="rc-title">
+                        Ghost in the Shell (1995): The Body That Wasn't There
+                    </div>
+                    <div class="rc-excerpt">
+                        Motoko Kusanagi doesn't have an identity crisis. She has
+                        an identity audit.
+                    </div>
+                    <div class="rc-meta">2026-03-14 // 5,400 WDS</div>
+                </a>
+                <a href="#" class="related-card">
+                    <div class="rc-pillar screen">SCREEN</div>
+                    <div class="rc-title">
+                        Akira at 35: The City as Protagonist
+                    </div>
+                    <div class="rc-excerpt">
+                        Neo-Tokyo doesn't just contain the story — it drives it.
+                    </div>
+                    <div class="rc-meta">2026-03-15 // 4,100 WDS</div>
+                </a>
+                <a href="#" class="related-card">
+                    <div class="rc-pillar screen">SCREEN</div>
+                    <div class="rc-title">
+                        Strange Days (1995): The Camera That Eats Its Operator
+                    </div>
+                    <div class="rc-excerpt">
+                        Kathryn Bigelow made a film about watching that
+                        implicates the audience in real time.
+                    </div>
+                    <div class="rc-meta">2026-02-22 // 5,100 WDS</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- ─── STATUS BAR ─────────────────────────────────────── -->
+        <div class="status-bar">
+            <div class="status-bar-left">
+                <span class="status-item"
+                    ><span class="dot"></span><span>LIVE</span></span
+                >
+                <span class="status-item"
+                    >ENTRY // <span class="val">001</span></span
+                >
+                <span class="status-item"
+                    >PILLAR // <span class="val">SCREEN</span></span
+                >
+            </div>
+            <div class="status-bar-right">
+                <span class="status-item"
+                    >BUILD // <span class="val">V3-TEAL</span></span
+                >
+            </div>
+        </div>
+
+        <!-- ─── BOTTOM TICKER ──────────────────────────────────── -->
+        <div class="bottom-ticker" aria-hidden="true">
+            <div class="ticker-inner">
+                <span
+                    ><b>TD //</b> NAVIGATING THE NEON-LIT ALLEYS OF POP
+                    CULTURE</span
+                >
+                <span
+                    ><b>SCREEN //</b> BLADE RUNNER — AKIRA — GHOST IN THE SHELL
+                    — STRANGE DAYS — THE MATRIX</span
+                >
+                <span
+                    ><b>SOUND //</b> AUTECHRE — BURIAL — DREXCIYA — VANGELIS —
+                    THE CHEMICAL BROTHERS</span
+                >
+                <span
+                    ><b>INTERACTIVE //</b> SYSTEM SHOCK — CONTROL — DISCO
+                    ELYSIUM — PLANESCAPE — CYBERPUNK 2077</span
+                >
+                <span
+                    ><b>TD //</b> NAVIGATING THE NEON-LIT ALLEYS OF POP
+                    CULTURE</span
+                >
+                <span
+                    ><b>SCREEN //</b> BLADE RUNNER — AKIRA — GHOST IN THE SHELL
+                    — STRANGE DAYS — THE MATRIX</span
+                >
+                <span
+                    ><b>SOUND //</b> AUTECHRE — BURIAL — DREXCIYA — VANGELIS —
+                    THE CHEMICAL BROTHERS</span
+                >
+                <span
+                    ><b>INTERACTIVE //</b> SYSTEM SHOCK — CONTROL — DISCO
+                    ELYSIUM — PLANESCAPE — CYBERPUNK 2077</span
+                >
+            </div>
+        </div>
+
+        <script>
+            const hamburger = document.querySelector(".nav-hamburger");
+            const navLinks = document.querySelector(".nav-links");
+            hamburger.addEventListener("click", () => {
+                const isOpen = navLinks.classList.toggle("open");
+                hamburger.classList.toggle("open", isOpen);
+                hamburger.setAttribute("aria-expanded", isOpen);
+            });
+            navLinks.querySelectorAll("a").forEach((link) => {
+                link.addEventListener("click", () => {
+                    navLinks.classList.remove("open");
+                    hamburger.classList.remove("open");
+                    hamburger.setAttribute("aria-expanded", "false");
+                });
+            });
+        </script>
+    </body>
+</html>
