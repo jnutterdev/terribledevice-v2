@@ -1,113 +1,131 @@
-# terribledevice — V3 Design Mockup
+# terribledevice — Design Mockup
 
-> *Navigating the neon-lit alleys of pop culture.*
+> _Navigating the neon-lit alleys of pop culture._
 
-A static HTML design mockup for **terribledevice**, a cyberpunk/sci-fi pop culture criticism blog. V3 is the charcoal/teal/amber direction — warmer and more editorial than the other variants, closer to a critical journal than a game UI.
+A static HTML design mockup for **terribledevice**, a cyberpunk/sci-fi pop culture blog. V3 (charcoal/teal/amber) is the chosen design direction — warm, editorial, closer to a critical journal than a game UI.
 
 ---
 
 ## Files
 
-| File | Description |
-|------|-------------|
-| `terribledevice-v3-teal.html` | V3 homepage mockup — open directly in a browser |
-| `terribledevice-v5-hybrid.html` | V5 hybrid mockup (magenta + amber) for A/B comparison |
+| File                                     | Description                               |
+| ---------------------------------------- | ----------------------------------------- |
+| `terribledevice-v2.3-teal.html`          | V3 homepage — primary direction           |
+| `terribledevice-v2.3-article.html`       | Article page template                     |
+| `terribledevice-v2.3-archive.html`       | Archive / index page with working filters |
+| `terribledevice-v2.3-about.html`         | About page                                |
+| `terribledevice-v2.3-teal-original.html` | V3 original (pre-refinement reference)    |
+| `terribledevice-v2.4-magenta.html`       | V4 magenta/yellow variant (A/B reference) |
+| `terribledevice-v2.5-hybrid.html`        | V5 hybrid — magenta base + amber accent   |
+| `SITE_BRIEF.md`                          | Full editorial and design brief           |
+| `README.md`                              | This file                                 |
 
 ---
 
-## V3 Design Brief
+## Tech Stack
+
+| Layer         | Choice                       | Notes                                                           |
+| ------------- | ---------------------------- | --------------------------------------------------------------- |
+| **Framework** | [Astro](https://astro.build) | Static site generation, content collections, zero JS by default |
+| **CMS**       | [Tina CMS](https://tina.io)  | Git-backed content management, visual editing                   |
+| **Hosting**   | Self-hosted (Apache)         | Own server, full control                                        |
+| **CI/CD**     | GitHub Actions               | Build and deploy on push to `main`                              |
+
+### Why Astro
+
+Content-first, fast by default, and the component model maps cleanly onto the design system already built in the mockups. Content Collections will handle the three pillars (Screen / Sound / Interactive) as typed schemas.
+
+### Why Tina CMS
+
+Git-backed — content lives in the repo as Markdown, no external database. Visual editing layer for writing posts without touching code. Works well with Astro's content collections.
+
+### Deployment Flow
+
+```
+push to main
+  → GitHub Actions triggers
+  → Astro build (npm run build)
+  → rsync / scp dist/ to Apache server
+  → Apache serves static files
+```
+
+---
+
+## V3 Design System
 
 ### Palette
 
-| Token | Hex | Role |
-|-------|-----|------|
-| `--charcoal` | `#1c2020` | Base background — warm dark, not pure black |
-| `--teal` | `#22978d` | Primary accent — interactive states, screen pillar |
-| `--teal-light` | `#2eb8ac` | Active labels, hover states, section headers |
-| `--amber` | `#c8833a` | Secondary accent — CTAs, sound pillar, annotations |
-| `--amber-light` | `#e0a050` | Highlight, wordmark gradient end |
-| `--rust` | `#8b3520` | Interactive pillar, hero gradient bleed |
-| `--text-primary` | `#dde8e6` | Body copy |
-| `--text-secondary` | `#8aa09e` | Decks, excerpts, captions |
-| `--text-dim` | `#4a5e5c` | Metadata, labels, manifest values |
+| Token              | Hex       | Role                                               |
+| ------------------ | --------- | -------------------------------------------------- |
+| `--charcoal`       | `#1c2020` | Base background — warm dark, not pure black        |
+| `--teal`           | `#22978d` | Primary accent — Screen pillar, interactive states |
+| `--teal-light`     | `#2eb8ac` | Active labels, hover states, section headers       |
+| `--amber`          | `#c8833a` | Secondary accent — Sound pillar, CTAs, annotations |
+| `--amber-light`    | `#e0a050` | Highlights, wordmark gradient, hover titles        |
+| `--rust`           | `#8b3520` | Interactive pillar, hero gradient bleed            |
+| `--text-primary`   | `#dde8e6` | Body copy                                          |
+| `--text-secondary` | `#8aa09e` | Decks, excerpts, italic passages                   |
+| `--text-dim`       | `#4a5e5c` | Metadata, labels, manifest values                  |
+| `--rule`           | `#2a3636` | Borders, dividers, grid lines                      |
 
 ### Typography
 
-| Role | Font | Notes |
-|------|------|-------|
-| Wordmark | Zen Dots | Display only — amber → teal gradient treatment |
-| UI / labels / nav | Orbitron 700–900 | All-caps, tracked, structural elements |
-| Body / headlines | Barlow Condensed | 300–900 weight range; italic for decks and excerpts |
-| Metadata / mono | Space Mono | Dates, word counts, manifest, tags |
-
-### Hero Background
-
-Layered radial gradients — no flat colours:
-- Teal pool bleeding in from the top-right
-- Rust/burnt orange bleeding from the bottom-left
-- Subtle amber tint from above
-- Sits over a `52px` teal grid at 5% opacity
-
-### Layout Structure
-
-```
-┌─ sticky nav ──────────────────────────────────────────┐
-├─ hero (2-col → 1-col on tablet) ──────────────────────┤
-│  LEFT: featured essay + CTA                           │
-│  RIGHT: 3 secondary article cards                     │
-├─ main (1fr) ──────────────── sidebar (320px) ─────────┤
-│  by pillar (3-col grid)    │  newsletter              │
-│  editor's picks (3-col)    │  recent posts            │
-│  recent list               │  tag index               │
-│                            │  coordinates manifest    │
-├─ status bar ──────────────────────────────────────────┤
-└─ bottom ticker ───────────────────────────────────────┘
-```
+| Role             | Font             | Weight   | Usage                                                 |
+| ---------------- | ---------------- | -------- | ----------------------------------------------------- |
+| Wordmark         | Zen Dots         | 400      | Display only — amber → teal gradient                  |
+| UI / structural  | Orbitron         | 700, 900 | Nav, labels, pillar headers, CTAs — all-caps, tracked |
+| Editorial / body | Barlow Condensed | 300–900  | Headlines, body copy, excerpts — italic for decks     |
+| Metadata         | Space Mono       | 400, 700 | Dates, word counts, manifest, annotations             |
 
 ### Content Pillars
 
-Each pillar has a dedicated accent colour used consistently across dots, labels, cards, and nav:
-
-- **Screen** → teal
-- **Sound** → amber
-- **Interactive** → rust
-
-### Interactive Details
-
-- **HUD corner brackets** appear on article card hover (amber, 1px)
-- **Sidebar posts** slide-indent on hover with teal title colour change
-- **Tags** border and text shift to teal on hover
-- **CTA buttons** fire a multi-stage glitch sequence on hover:
-  - Diagonal shimmer sweep (`::before`)
-  - Clip-path slice glitch (5-step keyframe, steps timing)
-  - RGB split via coloured `box-shadow` offsets (teal left, rust right)
-  - Teal noise bar flicker (`::after`)
-- **Hero CTA** also runs a periodic idle glitch every 9 seconds unprompted
+| Pillar          | Accent | Scope                                      |
+| --------------- | ------ | ------------------------------------------ |
+| **Screen**      | Teal   | Film, television, anime                    |
+| **Sound**       | Amber  | Music, IDM, electronic, ambient, synthwave |
+| **Interactive** | Rust   | Games, interactive fiction                 |
 
 ### Responsive Breakpoints
 
-| Breakpoint | Changes |
-|------------|---------|
-| `≤ 1024px` | Hero collapses to single column; sidebar moves below content; pillar grid and editor's picks go single column; diagonal slash hidden |
-| `≤ 768px` | Nav links hidden behind hamburger (animates to ✕ on open); hero secondary cards hidden; status bar right side hidden |
-| `≤ 480px` | Tighter padding throughout; word counts hidden from article list; datecode watermark removed; CTA goes full width |
+| Breakpoint | Changes                                                                     |
+| ---------- | --------------------------------------------------------------------------- |
+| `≤ 1024px` | Hero single column; sidebar below content; pillar grid stacks; slash hidden |
+| `≤ 768px`  | Hamburger nav; hero secondary cards hidden; status bar trimmed              |
+| `≤ 480px`  | Tighter padding; word counts hidden; datecode removed; CTA full width       |
+
+### Interactive Details
+
+- **CTA glitch** — shimmer sweep + clip-path slice + RGB split box-shadow + noise bar on hover; hero CTA also fires an idle glitch every 9s
+- **HUD corners** — amber L-brackets on article card hover
+- **Sidebar posts** — 6px indent slide on hover
+- **Hamburger** — animates to ✕ on open, closes on link click
 
 ---
 
-## Design References
+## Next Steps
 
-- **The Designers Republic / Wipeout HUD** — dense information annotation, diagonal compositions, data-as-decoration
-- **IDM / industrial sleeve art** — Autechre, Aphex Twin, early Warp Records
-- **Cyberpunk UI lineage** — Ghost in the Shell, Akira, Blade Runner — filtered through editorial rather than game aesthetics
+### Design
 
----
+- [ ] Refine nav links across all pages (currently `#` placeholders on pillar links)
+- [ ] 404 page
+- [ ] Mobile nav pill-style pillar switcher
 
-## Status
+### Build
 
-`DRAFT` — homepage mockup only. Next steps:
+- [ ] Scaffold Astro project
+- [ ] Set up Tina CMS content collections (one per pillar)
+- [ ] Port design system to Astro component library
+- [ ] Implement homepage, article, archive, and about page templates
+- [ ] Configure GitHub Actions workflow for build + deploy to Apache
+- [ ] Set up Apache vhost and SSL
 
-- [ ] Article page template (long-form reading column, pull quotes, hero treatment)
-- [ ] Archive / index page
-- [ ] Mobile nav refinements
-- [ ] Real content integration
-- [ ] CSS custom property theming (swap palettes via `:root` overrides)
+### Content
+
+- [ ] Real content integration — first 3–5 posts
+- [ ] Newsletter integration (Buttondown / similar)
+
+### Polish
+
+- [ ] Font subsetting — reduce Orbitron and Zen Dots payload
+- [ ] Accessibility audit — contrast ratios, focus states, screen reader structure
+- [ ] Performance pass — critical CSS, image optimisation

@@ -188,7 +188,55 @@ Hero CTA also runs a **periodic idle glitch** every `9s` unprompted — clip-pat
 
 ---
 
-## 04 // CONTENT STRATEGY
+## 04 // TECH STACK
+
+### Framework — Astro
+
+Static site generation via [Astro](https://astro.build). Content-first, fast by default, zero JS shipped unless explicitly added. Content Collections will map directly onto the three pillars (Screen / Sound / Interactive) as typed Markdown schemas — each pillar is its own collection with shared frontmatter fields (title, deck, date, author, word count, tags, pillar).
+
+### CMS — Tina CMS
+
+[Tina CMS](https://tina.io) for content management. Git-backed — all posts live in the repo as Markdown files, no external database. Provides a visual editing interface for writing and editing posts without touching code. Integrates cleanly with Astro's content collections.
+
+### Hosting — Self-hosted (Apache)
+
+Deployed to a self-hosted Apache server. Astro builds a fully static `dist/` directory — Apache serves flat files, no Node process required in production.
+
+### CI/CD — GitHub Actions
+
+Automated build and deploy pipeline triggered on push to `main`:
+
+```
+push to main
+  → GitHub Actions triggers
+  → npm run build (Astro)
+  → rsync dist/ to Apache server via SSH
+  → Apache serves updated static files
+```
+
+Secrets (SSH key, server address) stored as GitHub Actions repository secrets.
+
+### Astro Component Mapping
+
+| Mockup element         | Astro component                        |
+| ---------------------- | -------------------------------------- |
+| Site nav               | `<Nav />`                              |
+| Article hero           | `<ArticleHero />`                      |
+| Article card           | `<ArticleCard />`                      |
+| Pillar column grid     | `<PillarGrid />`                       |
+| Archive entry          | `<ArchiveEntry />`                     |
+| Newsletter block       | `<Newsletter />`                       |
+| Manifest sidebar block | `<Manifest />`                         |
+| Bottom ticker          | `<Ticker />`                           |
+| Status bar             | `<StatusBar />`                        |
+| Homepage layout        | `src/layouts/HomeLayout.astro`         |
+| Article layout         | `src/layouts/ArticleLayout.astro`      |
+| Archive layout         | `src/layouts/ArchiveLayout.astro`      |
+| CSS design tokens      | `src/styles/tokens.css` (`:root` vars) |
+
+---
+
+## 05 // CONTENT STRATEGY
 
 ### Newsletter — _Transmission_
 
@@ -208,7 +256,7 @@ Flat taxonomy — no categories beyond the three pillars. Tags are thematic and 
 
 ---
 
-## 05 // VARIANT HISTORY
+## 06 // VARIANT HISTORY
 
 | Version   | Palette                       | Notes                                           |
 | --------- | ----------------------------- | ----------------------------------------------- |
@@ -222,20 +270,38 @@ V3 chosen as primary direction: editorial maturity over genre-obvious aggression
 
 ---
 
-## 06 // NEXT STEPS
+## 07 // NEXT STEPS
 
-- [ ] Article page template — long-form reading column, hero treatment, pull quotes, footnotes
-- [ ] Archive / index page — filterable by pillar and tag
-- [ ] About page — editorial statement, contributor bios
-- [ ] Mobile nav refinements — consider pill-style pillar switcher on small screens
-- [ ] Real content integration — first 3–5 essays
-- [ ] CSS custom property theming — palette swap via `:root` override for future variant testing
-- [ ] Performance pass — font subsetting, critical CSS, lazy load
+**Design**
+
+- [ ] Refine nav links across all pages (currently `#` placeholders on pillar links)
+- [ ] 404 page — good opportunity for a glitch-heavy one-off design
+- [ ] Mobile nav pill-style pillar switcher
+
+**Build**
+
+- [ ] Scaffold Astro project
+- [ ] Set up Tina CMS content collections — one per pillar, shared frontmatter schema
+- [ ] Port design system CSS tokens to `src/styles/tokens.css`
+- [ ] Build Astro component library from mockup elements
+- [ ] Implement page templates (homepage, article, archive, about)
+- [ ] Configure GitHub Actions workflow — build + rsync to Apache
+- [ ] Set up Apache vhost, SSL certificate
+
+**Content**
+
+- [ ] First 3–5 posts — one per pillar to seed the index
+- [ ] Newsletter integration (Buttondown or similar)
+
+**Polish**
+
+- [ ] Font subsetting — reduce Orbitron and Zen Dots payload
 - [ ] Accessibility audit — contrast ratios, focus states, screen reader structure
+- [ ] Performance pass — critical CSS inlining, image optimisation
 
 ---
 
-## 07 // REFERENCES
+## 08 // REFERENCES
 
 ### Visual
 
